@@ -1,4 +1,6 @@
 import org.gradle.api.provider.Provider
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.withType
 import org.gradle.plugin.use.PluginDependency
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
