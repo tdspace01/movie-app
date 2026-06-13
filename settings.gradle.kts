@@ -1,5 +1,17 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
+include(":feature:moviedetail:")
+
+
+include(":feature:favourite:")
+
+
+include(":feature:home:")
+
+
+include(":feature:splash:")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
