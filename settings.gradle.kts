@@ -1,5 +1,11 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
+include(":domain")
+
+
+include(":data")
+
+
 include(":feature:moviedetail:")
 
 
