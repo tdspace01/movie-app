@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.example.movieapp.home"
 }
+
+dependencies{
+    implementation(project(":core:navigation"))
+}
