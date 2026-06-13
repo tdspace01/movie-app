@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.example.movieapp.splash"
 }
+
+dependencies{
+    implementation(project(":core:navigation"))
+}

@@ -1,23 +1,5 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
-include(":domain")
-
-
-include(":data")
-
-
-include(":feature:moviedetail:")
-
-
-include(":feature:favourite:")
-
-
-include(":feature:home:")
-
-
-include(":feature:splash:")
-
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -50,3 +32,9 @@ include(":core:network:")
 include(":core:navigation:")
 include(":core:designsystem:")
 include(":core:common")
+include(":domain")
+include(":data")
+include(":feature:moviedetail:")
+include(":feature:favourite:")
+include(":feature:home:")
+include(":feature:splash:")
