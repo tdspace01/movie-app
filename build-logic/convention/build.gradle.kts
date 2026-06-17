@@ -1,6 +1,4 @@
 import org.gradle.api.provider.Provider
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
 import org.gradle.plugin.use.PluginDependency
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -21,11 +19,13 @@ tasks.withType<KotlinCompile>().configureEach {
         jvmTarget.set(JvmTarget.JVM_17)
     }
 }
+
 dependencies {
     compileOnly(libs.plugins.android.application.toDep())
     compileOnly(libs.plugins.android.library.toDep())
     compileOnly(libs.plugins.kotlin.android.toDep())
     compileOnly(libs.plugins.kotlin.compose.toDep())
+    compileOnly(libs.plugins.google.ksp.toDep())
 }
 
 fun Provider<PluginDependency>.toDep() = map {
@@ -46,17 +46,9 @@ gradlePlugin {
             id = "convention.compose"
             implementationClass = "ComposeConventionPlugin"
         }
-        register("koin") {
-            id = "convention.koin"
-            implementationClass = "KoinConventionPlugin"
-        }
-        register("retrofit") {
-            id = "convention.retrofit"
-            implementationClass = "RetrofitConventionPlugin"
-        }
-        register("navigation") {
-            id = "convention.navigation"
-            implementationClass = "NavigationConventionPlugin"
+        register("kotlinLibrary") {
+            id = "convention.kotlin.library"
+            implementationClass = "KotlinLibraryConventionPlugin"
         }
     }
 }
