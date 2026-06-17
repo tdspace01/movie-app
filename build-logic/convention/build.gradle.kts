@@ -46,17 +46,9 @@ gradlePlugin {
             id = "convention.compose"
             implementationClass = "ComposeConventionPlugin"
         }
-        register("kotlinLibrary") {
-            id = "convention.kotlin.library"
-            implementationClass = "KotlinLibraryConventionPlugin"
-        }
         register("kotlinLibrary"){
             id = "convention.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
-        }
-        register("test"){
-            id = "convention.test"
-            implementationClass = "TestConventionPlugin"
         }
     }
 }

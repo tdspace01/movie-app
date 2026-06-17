@@ -1,8 +1,6 @@
 plugins {
     id("convention.android.library")
     id("convention.compose")
-    id("convention.koin")
-    id("convention.test")
 }
 
 android {
