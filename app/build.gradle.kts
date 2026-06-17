@@ -26,4 +26,11 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(project(":data"))
+    implementation(project(":feature:home"))
+    implementation(project(":core:network"))
+    implementation(project(":feature:splash"))
+    implementation(project(":core:navigation"))
+    implementation(project(":feature:favourite"))
+    implementation(project(":feature:moviedetail"))
 }

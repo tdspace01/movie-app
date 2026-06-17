@@ -1,8 +1,12 @@
 plugins {
     id("convention.android.library")
-    id("convention.compose")
 }
 
 android{
     namespace = "com.example.movieapp.network"
+}
+
+dependencies{
+    implementation(project(":domain"))
+    implementation(project(":core:common"))
 }
