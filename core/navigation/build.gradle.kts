@@ -1,7 +1,6 @@
 plugins {
     id("convention.android.library")
-    id("convention.navigation")
-    id("convention.test")
+    id("convention.compose")
 }
 
 android{

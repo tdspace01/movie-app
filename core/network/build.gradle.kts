@@ -1,7 +1,6 @@
 plugins {
     id("convention.android.library")
-    id("convention.retrofit")
-    id("convention.test")
+    id("convention.compose")
 }
 
 android{

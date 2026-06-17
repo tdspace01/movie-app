@@ -7,7 +7,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.example.movieapp.buildlogic"
+group = "com.example.testbuildlogic.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -49,14 +49,6 @@ gradlePlugin {
         register("kotlinLibrary") {
             id = "convention.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
-        }
-        register("kotlinLibrary"){
-            id = "convention.kotlin.library"
-            implementationClass = "KotlinLibraryConventionPlugin"
-        }
-        register("test"){
-            id = "convention.test"
-            implementationClass = "TestConventionPlugin"
         }
     }
 }
