@@ -5,14 +5,14 @@ import kotlinx.coroutines.flow.map
 
 sealed class Resource<out T> {
     data class Success<out T>(val data: T) : Resource<T>()
-    data class Error(val message: String) : Resource<Nothing>()
+    data class Error(val errorType: NetworkError, val message: String? = null) : Resource<Nothing>()
     data class Loading(val isLoading: Boolean) : Resource<Nothing>()
 }
 
 fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> {
     return when (this) {
         is Resource.Success -> Resource.Success(transform(data))
-        is Resource.Error -> Resource.Error(message)
+        is Resource.Error -> Resource.Error(errorType,message)
         is Resource.Loading -> Resource.Loading(isLoading)
     }
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("convention.android.library")
+    id("convention.android.network")
 }
 
 android{
@@ -7,6 +7,6 @@ android{
 }
 
 dependencies{
-    implementation(project(":domain"))
+    implementation(project(":core:domain"))
     implementation(project(":core:common"))
 }

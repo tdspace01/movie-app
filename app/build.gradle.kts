@@ -26,7 +26,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(project(":data"))
+    implementation(project(":core:data"))
     implementation(project(":feature:home"))
     implementation(project(":core:network"))
     implementation(project(":feature:splash"))
