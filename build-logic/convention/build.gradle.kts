@@ -53,5 +53,9 @@ gradlePlugin {
             id = "convention.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
         }
+        register("androidNetwork"){
+            id = "convention.android.network"
+            implementationClass = "AndroidNetworkConventionPlugin"
+        }
     }
 }
