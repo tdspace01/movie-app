@@ -1,4 +1,4 @@
-package com.example.movieapp.domain.repository
+package com.example.movieapp.domain.repository.network
 
 import com.example.movieapp.common.networkstatus.NetworkStatus
 import kotlinx.coroutines.flow.Flow

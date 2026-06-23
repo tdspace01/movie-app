@@ -1,6 +1,6 @@
 package com.example.movieapp.network.networkmodule
 
-import com.example.movieapp.domain.repository.NetworkObserver
+import com.example.movieapp.domain.repository.network.NetworkObserver
 import com.example.movieapp.network.BuildConfig
 import com.example.movieapp.network.interceptor.AuthInterceptor
 import com.example.movieapp.network.networkobserver.NetworkObserverImpl

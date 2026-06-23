@@ -9,7 +9,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.annotation.RequiresPermission
 import com.example.movieapp.common.networkstatus.NetworkStatus
-import com.example.movieapp.domain.repository.NetworkObserver
+import com.example.movieapp.domain.repository.network.NetworkObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

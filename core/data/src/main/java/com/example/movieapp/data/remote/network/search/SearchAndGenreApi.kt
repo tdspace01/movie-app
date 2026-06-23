@@ -1,8 +1,8 @@
-package com.example.movieapp.data.remote.network
+package com.example.movieapp.data.remote.network.search
 
-import com.example.movieapp.data.remote.model.response_dto.GenreListResponseDto
-import com.example.movieapp.data.remote.model.response_dto.PopularMovieResponseDto
-import com.example.movieapp.data.remote.model.response_dto.SearchMovieResponseDto
+import com.example.movieapp.data.remote.model.response_dto.movie.MovieResponseDto
+import com.example.movieapp.data.remote.model.response_dto.search.GenreListResponseDto
+import com.example.movieapp.data.remote.model.response_dto.search.SearchMovieResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -21,5 +21,5 @@ interface SearchAndGenreApi {
     suspend fun discoverByGenre(
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int = 1,
-    ): Response<PopularMovieResponseDto>
+    ): Response<MovieResponseDto>
 }

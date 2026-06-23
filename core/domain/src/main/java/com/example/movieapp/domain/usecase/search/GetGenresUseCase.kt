@@ -1,11 +1,11 @@
-package com.example.movieapp.domain.usecase
+package com.example.movieapp.domain.usecase.search
 
 import com.example.movieapp.common.resource.Resource
-import com.example.movieapp.domain.model.Genre
-import com.example.movieapp.domain.repository.GenreRepository
+import com.example.movieapp.domain.model.search.Genre
+import com.example.movieapp.domain.repository.search.GenreRepository
 import kotlinx.coroutines.flow.Flow
 
-class GenresUseCase(
+class GetGenresUseCase(
     private val repository: GenreRepository
 ) : BaseNoParamUseCase<List<Genre>>() {
     override operator fun invoke(): Flow<Resource<List<Genre>>> {
