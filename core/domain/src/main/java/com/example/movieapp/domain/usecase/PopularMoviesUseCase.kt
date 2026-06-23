@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class PopularMoviesUseCase(
     private val repository: PopularMovieRepository
-){
-    operator fun invoke(): Flow<Resource<List<PopularMovie>>>{
+) : BaseNoParamUseCase<List<PopularMovie>>() {
+    override operator fun invoke(): Flow<Resource<List<PopularMovie>>> {
         return repository.getMovies()
     }
 }

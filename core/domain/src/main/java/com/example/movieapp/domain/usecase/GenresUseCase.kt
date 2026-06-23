@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class GenresUseCase(
     private val repository: GenreRepository
-) {
-    operator fun invoke(): Flow<Resource<List<Genre>>>{
+) : BaseNoParamUseCase<List<Genre>>() {
+    override operator fun invoke(): Flow<Resource<List<Genre>>> {
         return repository.getGenres()
     }
 }

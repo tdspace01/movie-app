@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class SearchMoviesUseCase(
     private val repository: SearchMovieRepository
-) {
-    operator fun invoke(query: String): Flow<Resource<List<PopularMovie>>>{
-        return repository.searchMovies(query)
+) : BaseUseCase<String, List<PopularMovie>>() {
+    override operator fun invoke(params: String): Flow<Resource<List<PopularMovie>>> {
+        return repository.searchMovies(params)
     }
 }

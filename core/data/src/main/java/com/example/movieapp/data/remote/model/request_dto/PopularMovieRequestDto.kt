@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class PopularMovieRequestDto (
-    @SerialName("id") val id:Int,
-    @SerialName("title") val title: String,
+    val id:Int,
+    val title: String,
     @SerialName("poster_path") val posterPath: String? = null,
-    @SerialName("overview") val overview: String,
+    val overview: String,
     @SerialName("vote_average") val voteAverage: Double,
     @SerialName("release_date") val releaseDate: String,
 )

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GenreRequestDto(
-    @SerialName("id") val id: Int,
-    @SerialName("name") val name: String,
+     val id: Int,
+     val name: String,
 )
