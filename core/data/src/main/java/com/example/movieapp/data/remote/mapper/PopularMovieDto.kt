@@ -11,6 +11,6 @@ fun PopularMovieRequestDto.toDomain(): PopularMovie {
         posterUrl = this.posterPath?.let{"$baseImageUrl$it"},
         overview = this.overview,
         rating = this.voteAverage,
-        releaseDate = this.releaseDate ?: "Unknown date",
+        releaseDate = this.releaseDate,
     )
 }
