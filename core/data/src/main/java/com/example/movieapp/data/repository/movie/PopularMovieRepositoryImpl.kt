@@ -6,34 +6,34 @@ import com.example.movieapp.data.local.dao.FavouriteMovieDao
 import com.example.movieapp.data.local.mapper.toDomain
 import com.example.movieapp.data.local.mapper.toEntity
 import com.example.movieapp.data.remote.mapper.toDomain
-import com.example.movieapp.data.remote.network.movie.MovieApi
-import com.example.movieapp.domain.model.movie.Movie
-import com.example.movieapp.domain.repository.movie.MovieRepository
+import com.example.movieapp.data.remote.network.movie.PopularMovieApi
+import com.example.movieapp.domain.model.movie.PopularMovie
+import com.example.movieapp.domain.repository.movie.PopularMovieRepository
 import com.example.movieapp.network.apicall.apiCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class MovieRepositoryImpl(
-    private val popularMovieApi: MovieApi,
+class PopularMovieRepositoryImpl(
+    private val popularMovieApi: PopularMovieApi,
     private val favoriteMovieDao: FavouriteMovieDao
-) : MovieRepository {
+) : PopularMovieRepository {
 
-    override fun getMovies(): Flow<Resource<List<Movie>>> {
+    override fun getMovies(): Flow<Resource<List<PopularMovie>>> {
         return apiCall { popularMovieApi.getPopularMovies(page = 1) }
             .asResource { apiResponse ->
                 apiResponse.results.map { dto -> dto.toDomain() }
             }
     }
 
-    override suspend fun insertFavourite(movie: Movie) {
+    override suspend fun insertFavourite(movie: PopularMovie) {
         favoriteMovieDao.insertFavourite(movie.toEntity())
     }
 
-    override suspend fun deleteFavourite(movie: Movie) {
+    override suspend fun deleteFavourite(movie: PopularMovie) {
         favoriteMovieDao.deleteFavourite(movie.toEntity())
     }
 
-    override fun getAllFavourites(): Flow<List<Movie>> {
+    override fun getAllFavourites(): Flow<List<PopularMovie>> {
         return favoriteMovieDao.getAllFavourites().map { entities ->
             entities.map { it.toDomain() }
         }

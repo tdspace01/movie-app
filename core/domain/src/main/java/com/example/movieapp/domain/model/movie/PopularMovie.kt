@@ -1,6 +1,6 @@
 package com.example.movieapp.domain.model.movie
 
-data class Movie(
+data class PopularMovie(
     val id:Int,
     val title: String,
     val posterUrl: String?,

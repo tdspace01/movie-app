@@ -4,7 +4,7 @@ import com.example.movieapp.common.resource.Resource
 import com.example.movieapp.common.resource.asResource
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.data.remote.network.search.SearchAndGenreApi
-import com.example.movieapp.domain.model.movie.Movie
+import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.domain.repository.search.SearchMovieRepository
 import com.example.movieapp.network.apicall.apiCall
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlin.collections.map
 class SearchMovieRepositoryImpl(
     private val searchAndGenreApi: SearchAndGenreApi
 ) : SearchMovieRepository {
-    override fun searchMovies(query: String): Flow<Resource<List<Movie>>> {
+    override fun searchMovies(query: String): Flow<Resource<List<PopularMovie>>> {
         return apiCall { searchAndGenreApi.searchMovies(query = query) }
             .asResource { apiResponse ->
                 apiResponse.results.map { dto -> dto.toDomain() }

@@ -1,18 +1,20 @@
 package com.example.movieapp.data.di.datamodule
 
 import com.example.movieapp.data.repository.movie.MovieDetailRepositoryImpl
-import com.example.movieapp.data.repository.movie.MovieRepositoryImpl
+import com.example.movieapp.data.repository.movie.PopularMovieRepositoryImpl
 import com.example.movieapp.data.repository.search.GenreRepositoryImpl
+import com.example.movieapp.data.repository.search.MovieByGenreRepositoryImpl
 import com.example.movieapp.data.repository.search.SearchMovieRepositoryImpl
 import com.example.movieapp.domain.repository.movie.MovieDetailRepository
-import com.example.movieapp.domain.repository.movie.MovieRepository
+import com.example.movieapp.domain.repository.movie.PopularMovieRepository
 import com.example.movieapp.domain.repository.search.GenreRepository
+import com.example.movieapp.domain.repository.search.MoviesByGenreRepository
 import com.example.movieapp.domain.repository.search.SearchMovieRepository
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<MovieRepository> {
-        MovieRepositoryImpl(
+    single<PopularMovieRepository> {
+        PopularMovieRepositoryImpl(
             popularMovieApi = get(),
             favoriteMovieDao = get()
         )
@@ -28,5 +30,9 @@ val dataModule = module {
 
     single<MovieDetailRepository> {
         MovieDetailRepositoryImpl(movieDetailRepository = get())
+    }
+
+    single<MoviesByGenreRepository> {
+        MovieByGenreRepositoryImpl(searchAndGenreApi = get())
     }
 }
