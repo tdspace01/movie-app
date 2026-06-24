@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 fun HomeScreen(
     onNavigateToDetail:(Int)-> Unit
 ){
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text("Im home")
