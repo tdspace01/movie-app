@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 fun MovieDetailScreen(
     onNavigateBack:()-> Unit
 ){
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text("Im movie detail screen")
