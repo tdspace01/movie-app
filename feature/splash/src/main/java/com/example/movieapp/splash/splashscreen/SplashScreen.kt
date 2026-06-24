@@ -26,16 +26,13 @@ fun SplashScreen(
         }
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Image(
             painter = painterResource(com.example.movieapp.splash.R.drawable.splash_logo),
             contentDescription = null,
-            modifier = Modifier
-                .width(80.dp)
-                .height(40.dp)
+            modifier = Modifier.width(80.dp).height(40.dp)
         )
     }
 }
