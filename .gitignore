@@ -19,3 +19,4 @@ build
 captures/
 .cxx/
 .gradle/
+.gitignore
