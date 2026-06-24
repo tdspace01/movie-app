@@ -8,11 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun MovieDetailScreen(
-
-){
-    Box(modifier = Modifier
-        .fillMaxSize(),
+fun MovieDetailScreen(){
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text("Im movie detail screen")

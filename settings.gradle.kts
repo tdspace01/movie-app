@@ -1,23 +1,5 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode
 
-include(":domain")
-
-
-include(":data")
-
-
-include(":feature:moviedetail:")
-
-
-include(":feature:favourite:")
-
-
-include(":feature:home:")
-
-
-include(":feature:splash:")
-
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -45,8 +27,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "movieapp"
 include(":app")
+include(":data")
+include(":domain")
 include(":core:ui")
-include(":core:network:")
-include(":core:navigation:")
-include(":core:designsystem:")
 include(":core:common")
+include(":core:network:")
+include(":feature:home:")
+include(":feature:splash:")
+include(":core:navigation:")
+include(":feature:favourite:")
+include(":core:designsystem:")
+include(":feature:moviedetail:")
