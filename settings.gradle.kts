@@ -27,13 +27,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "movieapp"
 include(":app")
-include(":core:data")
+include(":data")
+include(":domain")
+include(":core:ui")
 include(":core:common")
-include(":core:domain")
 include(":feature:home:")
 include(":core:network:")
 include(":feature:splash:")
 include(":core:navigation:")
-include(":core:designsystem:")
 include(":feature:favourite:")
+include(":core:designsystem:")
 include(":feature:moviedetail:")

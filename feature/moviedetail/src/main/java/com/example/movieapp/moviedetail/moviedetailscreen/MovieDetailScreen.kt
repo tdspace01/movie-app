@@ -1,4 +1,4 @@
-package com.example.movieapp.moviedetail.moviedetailscreen
+package com.example.movieapp.moviedetail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,9 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun MovieDetailScreen(
-    onNavigateBack:()-> Unit
-){
+fun MovieDetailScreen(){
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
