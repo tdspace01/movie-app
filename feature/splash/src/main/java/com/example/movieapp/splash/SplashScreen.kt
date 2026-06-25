@@ -1,4 +1,4 @@
-package com.example.movieapp.home
+package com.example.movieapp.splash
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeScreen(){
+fun SplashScreen(){
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
-        Text("Im home")
+        Text("Im splash")
     }
 }
