@@ -8,10 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SplashScreen(
-){
-    Box(modifier = Modifier
-        .fillMaxSize(),
+fun SplashScreen(){
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text("Im splash")
