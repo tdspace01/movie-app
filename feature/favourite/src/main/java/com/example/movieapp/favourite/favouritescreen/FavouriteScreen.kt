@@ -1,4 +1,4 @@
-package com.example.movieapp.favourite
+package com.example.movieapp.favourite.favouritescreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FavouriteScreen(){
+fun FavouriteScreen(
+    onNavigateToDetails:(Int)-> Unit
+){
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
