@@ -7,7 +7,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.example.testbuildlogic.buildlogic"
+group = "com.example.movieapp.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -46,7 +46,7 @@ gradlePlugin {
             id = "convention.compose"
             implementationClass = "ComposeConventionPlugin"
         }
-        register("kotlinLibrary") {
+        register("kotlinLibrary"){
             id = "convention.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
         }
