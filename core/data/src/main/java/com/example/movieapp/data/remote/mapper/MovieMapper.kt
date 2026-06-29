@@ -1,11 +1,11 @@
 package com.example.movieapp.data.remote.mapper
 
-import com.example.movieapp.data.remote.model.request_dto.movie.PopularMovieRequestDto
+import com.example.movieapp.data.remote.model.request_dto.movie.PopularMovieDto
 import com.example.movieapp.domain.model.movie.PopularMovie
 
 private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 var globalGenreMap: Map<Int, String> = emptyMap()
-fun PopularMovieRequestDto.toDomain(genreMap: Map<Int, String> = emptyMap()): PopularMovie {
+fun PopularMovieDto.toDomain(genreMap: Map<Int, String> = emptyMap()): PopularMovie {
     val activeMap = genreMap.ifEmpty { globalGenreMap }
     val genreNames = genreIds.mapNotNull { activeMap[it] }
 
