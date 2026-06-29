@@ -1,5 +1,6 @@
 package com.example.movieapp.data.di
 
+import com.example.movieapp.data.di.dataSourceModule.dataSourceModule
 import com.example.movieapp.data.di.datamodule.dataModule
 import com.example.movieapp.data.di.localmodule.localDataModule
 import com.example.movieapp.data.di.remotemodule.remoteModule
@@ -9,10 +10,11 @@ import org.koin.dsl.module
 
 val coreDataModule = module {
     includes(
-        networkModule,
-        remoteModule,
         dataModule,
+        remoteModule,
         useCaseModule,
-        localDataModule
+        networkModule,
+        localDataModule,
+        dataSourceModule
     )
 }

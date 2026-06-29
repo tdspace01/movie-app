@@ -1,10 +1,12 @@
 package com.example.movieapp.data.di.datamodule
 
+import com.example.movieapp.data.repository.movie.FavouriteMovieRepositoryImpl
 import com.example.movieapp.data.repository.movie.MovieDetailRepositoryImpl
 import com.example.movieapp.data.repository.movie.PopularMovieRepositoryImpl
 import com.example.movieapp.data.repository.search.GenreRepositoryImpl
 import com.example.movieapp.data.repository.search.MovieByGenreRepositoryImpl
 import com.example.movieapp.data.repository.search.SearchMovieRepositoryImpl
+import com.example.movieapp.domain.repository.movie.FavouriteMovieRepository
 import com.example.movieapp.domain.repository.movie.MovieDetailRepository
 import com.example.movieapp.domain.repository.movie.PopularMovieRepository
 import com.example.movieapp.domain.repository.search.GenreRepository
@@ -14,25 +16,26 @@ import org.koin.dsl.module
 
 val dataModule = module {
     single<PopularMovieRepository> {
-        PopularMovieRepositoryImpl(
-            popularMovieApi = get(),
-            favoriteMovieDao = get()
-        )
+        PopularMovieRepositoryImpl(remoteDataSource = get())
+    }
+
+    single<FavouriteMovieRepository> {
+        FavouriteMovieRepositoryImpl(localDataSource = get())
     }
 
     single<GenreRepository> {
-        GenreRepositoryImpl(searchAndGenreApi = get())
+        GenreRepositoryImpl(remoteDataSource = get())
     }
 
     single<SearchMovieRepository> {
-        SearchMovieRepositoryImpl(searchAndGenreApi = get())
+        SearchMovieRepositoryImpl(remoteDataSource = get())
     }
 
     single<MovieDetailRepository> {
-        MovieDetailRepositoryImpl(movieDetailRepository = get())
+        MovieDetailRepositoryImpl(remoteDataSource = get())
     }
 
     single<MoviesByGenreRepository> {
-        MovieByGenreRepositoryImpl(searchAndGenreApi = get())
+        MovieByGenreRepositoryImpl(remoteDataSource = get())
     }
 }

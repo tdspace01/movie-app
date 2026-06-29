@@ -6,12 +6,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface PopularMovieRepository{
     fun getMovies(): Flow<Resource<List<PopularMovie>>>
-
-    suspend fun insertFavourite(movie: PopularMovie)
-
-    suspend fun deleteFavourite(movie:PopularMovie)
-
-    fun getAllFavourites(): Flow<List<PopularMovie>>
-
-    fun isMovieFavourite(movieId:Int):Flow<Boolean>
 }
