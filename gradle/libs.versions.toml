@@ -18,6 +18,7 @@ appcompat = "1.7.1"
 material = "1.14.0"
 ksp = "2.2.10-2.0.2"
 kotlinxSerialization = "1.8.0"
+coil = "2.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" } # <-- Added Dependency
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -66,7 +68,8 @@ compose = [
     "androidx-compose-ui",
     "androidx-compose-ui-graphics",
     "androidx-compose-ui-tooling-preview",
-    "androidx-compose-material3"
+    "androidx-compose-material3",
+    "coil-compose"
 ]
 koin = [
     "koin-android",
