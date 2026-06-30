@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -94,18 +95,18 @@ fun MovieAppSearchBar(
         }
 
         Box(
-            modifier = Modifier.weight(0.12f)
-                .aspectRatio(1f).clip(CircleShape)
-                .background(
-                    if (isFilterActive) DarkColorScheme.primaryYellow else DarkColorScheme.darkestGrey
-                )
+            modifier = Modifier
+                .size(MovieAppSizing.size36)
+                .clip(CircleShape)
                 .clickable(enabled = enabled) { onFilterClick() },
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.unselected_filter),
+                painter = painterResource(
+                    id = if (isFilterActive) R.drawable.selected_filter else R.drawable.unselected_filter
+                ),
                 contentDescription = "Filter",
-                modifier = Modifier.size(MovieAppSizing.size18)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
