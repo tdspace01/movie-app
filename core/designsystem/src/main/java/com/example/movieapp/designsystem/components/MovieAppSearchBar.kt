@@ -1,31 +1,31 @@
 package com.example.movieapp.designsystem.components
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.Image
-import com.example.movieapp.designsystem.R
-import androidx.compose.runtime.Composable
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.painterResource
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.BasicTextField
-import com.example.movieapp.designsystem.theme.Montserrat
+import com.example.movieapp.designsystem.R
+import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppShapes
-import com.example.movieapp.designsystem.theme.DarkColorScheme
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
-import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.theme.DarkColorScheme
+import com.example.movieapp.designsystem.theme.Montserrat
 
 @Composable
 fun MovieAppSearchBar(
@@ -70,7 +70,7 @@ fun MovieAppSearchBar(
                         Image(
                             painter = painterResource(id = R.drawable.search_loop),
                             contentDescription = null,
-                            modifier = Modifier.size(MovieAppSizing.size18)
+                            modifier = Modifier.size(MovieAppSizing.size14)
                         )
                         Box(
                             modifier = Modifier.fillMaxWidth(),
@@ -94,18 +94,18 @@ fun MovieAppSearchBar(
         }
 
         Box(
-            modifier = Modifier.weight(0.12f)
-                .aspectRatio(1f).clip(CircleShape)
-                .background(
-                    if (isFilterActive) DarkColorScheme.primaryYellow else DarkColorScheme.darkestGrey
-                )
+            modifier = Modifier
+                .size(MovieAppSizing.size36)
+                .clip(CircleShape)
                 .clickable(enabled = enabled) { onFilterClick() },
             contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.unselected_filter),
+                painter = painterResource(
+                    id = if (isFilterActive) R.drawable.selected_filter else R.drawable.unselected_filter
+                ),
                 contentDescription = "Filter",
-                modifier = Modifier.size(MovieAppSizing.size18)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

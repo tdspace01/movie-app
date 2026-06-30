@@ -9,8 +9,11 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun FavouriteScreen(
-    onNavigateToDetails:(Int)-> Unit
-){
+    viewModel: FavoriteViewModel,
+    onNavigateToDetails: (Int, String) -> Unit,
+    onNavigateToHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){

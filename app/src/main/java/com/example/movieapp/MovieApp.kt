@@ -2,6 +2,8 @@ package com.example.movieapp
 
 import android.app.Application
 import com.example.movieapp.data.di.coreDataModule
+import com.example.movieapp.favourite.favouritescreen.di.favoriteViewModelModule
+import com.example.movieapp.home.home.di.homeViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -11,7 +13,9 @@ class MovieApp : Application(){
         startKoin {
             androidContext(this@MovieApp)
             modules(
-                coreDataModule
+                coreDataModule,
+                homeViewModelModule,
+                favoriteViewModelModule
             )
         }
     }
