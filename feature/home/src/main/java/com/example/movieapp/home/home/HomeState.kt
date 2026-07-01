@@ -1,8 +1,8 @@
 package com.example.movieapp.home.home
 
+import com.example.movieapp.domain.model.search.Genre
 import com.example.movieapp.common.resource.NetworkError
 import com.example.movieapp.domain.model.movie.PopularMovie
-import com.example.movieapp.domain.model.search.Genre
 
 data class HomeState(
     val searchQuery: String = "",

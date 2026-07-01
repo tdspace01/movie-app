@@ -10,10 +10,10 @@ import com.example.movieapp.domain.usecase.search.SearchMoviesUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
-    factory { GetPopularMoviesUseCase(repository = get()) }
+    factory { GetPopularMoviesUseCase(repository = get(), favouriteMovieRepository = get()) }
     factory { GetGenresUseCase(repository = get()) }
-    factory { GetMoviesByGenreUseCase(repository = get()) }
-    factory { SearchMoviesUseCase(repository = get()) }
+    factory { GetMoviesByGenreUseCase(repository = get(), favouriteMovieRepository = get()) }
+    factory { SearchMoviesUseCase(repository = get(), favouriteMovieRepository = get()) }
     factory { GetMovieDetailsUseCase(repository = get()) }
     factory { ToggleFavouriteUseCase(repository = get()) }
     factory { GetFavouriteMoviesUseCase(repository = get()) }

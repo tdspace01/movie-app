@@ -11,4 +11,5 @@ interface FavouriteMovieRepository {
     fun getAllFavourites(): Flow<List<PopularMovie>>
 
     fun isMovieFavourite(movieId:Int):Flow<Boolean>
+    fun getFavouriteIds(): Flow<Set<Int>>
 }

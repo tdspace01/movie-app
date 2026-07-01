@@ -25,4 +25,9 @@ class FavouriteMovieRepositoryImpl(
     override fun isMovieFavourite(movieId: Int): Flow<Boolean> {
         return localDataSource.isMovieFavourite(movieId)
     }
+    override fun getFavouriteIds(): Flow<Set<Int>> {
+        return localDataSource.getAllFavourites().map { entities ->
+            entities.map { it.id }.toSet()
+        }
+    }
 }

@@ -1,12 +1,12 @@
 package com.example.movieapp.home.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.navigation.NavGraphBuilder
+import androidx.activity.compose.BackHandler
 import androidx.navigation.compose.composable
+import org.koin.androidx.compose.koinViewModel
 import com.example.movieapp.home.home.HomeScreen
 import com.example.movieapp.home.home.HomeViewModel
 import com.example.movieapp.navigation.home.HomeRoute
-import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.homeGraph(
     onNavigateToDetail: (Int, String) -> Unit,

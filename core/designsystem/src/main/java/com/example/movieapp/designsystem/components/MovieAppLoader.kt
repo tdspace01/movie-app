@@ -19,6 +19,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MovieAppLoader(
