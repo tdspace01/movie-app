@@ -10,7 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import com.example.movieapp.designsystem.design.MovieAppSizing
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -19,9 +19,9 @@ fun SplashScreen(
     viewModel: SplashViewModel
 ){
     LaunchedEffect(Unit) {
-        viewModel.state.collectLatest { state->
-            if(state.isReadyToNavigate){
-                onNavigateToHome()
+        viewModel.sideEffect.collectLatest { effect->
+            when(effect){
+                is SplashSideEffect.NavigateToHome -> onNavigateToHome()
             }
         }
     }
@@ -32,7 +32,7 @@ fun SplashScreen(
         Image(
             painter = painterResource(com.example.movieapp.splash.R.drawable.splash_logo),
             contentDescription = null,
-            modifier = Modifier.width(80.dp).height(40.dp)
+            modifier = Modifier.width(MovieAppSizing.size80).height(MovieAppSizing.size40)
         )
     }
 }

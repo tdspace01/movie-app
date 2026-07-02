@@ -1,27 +1,25 @@
 package com.example.movieapp.splash.splashscreen
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
+import com.example.movieapp.ui.base.BaseViewModel
 import kotlin.time.Duration.Companion.milliseconds
 
-class SplashViewModel: ViewModel(){
-    private val _state = MutableStateFlow(SplashState())
-    val state: StateFlow<SplashState> = _state.asStateFlow()
+class SplashViewModel: BaseViewModel<SplashState, SplashEvent, SplashSideEffect>(SplashState()){
 
     init {
-        startSplash()
+        onEvent(SplashEvent.StartTimer)
     }
 
-    private fun startSplash(){
-        viewModelScope.launch {
-            delay(3000.milliseconds)
-            _state.update { it.copy(isReadyToNavigate = true) }
+    override fun onEvent(event: SplashEvent) {
+        when(event){
+            is SplashEvent.StartTimer->{
+                viewModelScope.launch {
+                    delay(2000.milliseconds)
+                    emitSideEffect(SplashSideEffect.NavigateToHome)
+                }
+            }
         }
     }
 }
