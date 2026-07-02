@@ -60,7 +60,7 @@ fun MovieAppNavHost(){
 
         movieDetailGraph(
             onNavigateBack = {
-                navController.navigate(HomeRoute.Home)
+                navController.popBackStack()
             }
         )
     }

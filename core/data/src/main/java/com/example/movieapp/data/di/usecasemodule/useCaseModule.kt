@@ -14,7 +14,7 @@ val useCaseModule = module {
     factory { GetGenresUseCase(repository = get()) }
     factory { GetMoviesByGenreUseCase(repository = get(), favouriteMovieRepository = get()) }
     factory { SearchMoviesUseCase(repository = get(), favouriteMovieRepository = get()) }
-    factory { GetMovieDetailsUseCase(repository = get()) }
+    factory { GetMovieDetailsUseCase(repository = get(),favouriteMovieRepository = get()) }
     factory { ToggleFavouriteUseCase(repository = get()) }
     factory { GetFavouriteMoviesUseCase(repository = get()) }
 }

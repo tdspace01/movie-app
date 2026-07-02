@@ -2,6 +2,7 @@ package com.example.movieapp.domain.usecase.common
 
 import com.example.movieapp.common.resource.Resource
 import com.example.movieapp.common.resource.map
+import com.example.movieapp.domain.model.movie.MovieDetail
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.domain.repository.movie.FavouriteMovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +14,16 @@ fun Flow<Resource<List<PopularMovie>>>.withFavouriteState(
     return combine(this, favouriteMovieRepository.getFavouriteIds()) { resource, favouriteIds ->
         resource.map { movies ->
             movies.map { movie -> movie.copy(isFavorite = movie.id in favouriteIds) }
+        }
+    }
+}
+
+fun Flow<Resource<MovieDetail>>.withFavouriteStateForDetail(
+    favouriteMovieRepository: FavouriteMovieRepository
+): Flow<Resource<MovieDetail>> {
+    return combine(this, favouriteMovieRepository.getFavouriteIds()) { resource, favouriteIds ->
+        resource.map { movie ->
+            movie.copy(isFavorite = movie.id in favouriteIds)
         }
     }
 }

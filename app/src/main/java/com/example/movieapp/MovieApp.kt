@@ -1,11 +1,12 @@
 package com.example.movieapp
 
 import android.app.Application
-import com.example.movieapp.data.di.coreDataModule
-import com.example.movieapp.favourite.favouritescreen.di.favoriteViewModelModule
-import com.example.movieapp.home.home.di.homeViewModelModule
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.android.ext.koin.androidContext
+import com.example.movieapp.data.di.coreDataModule
+import com.example.movieapp.home.home.di.homeViewModelModule
+import com.example.movieapp.favourite.favouritescreen.di.favoriteViewModelModule
+import com.example.movieapp.moviedetail.moviedetailscreen.di.movieDetailViewModelModule
 
 class MovieApp : Application(){
     override fun onCreate() {
@@ -15,7 +16,8 @@ class MovieApp : Application(){
             modules(
                 coreDataModule,
                 homeViewModelModule,
-                favoriteViewModelModule
+                favoriteViewModelModule,
+                movieDetailViewModelModule
             )
         }
     }

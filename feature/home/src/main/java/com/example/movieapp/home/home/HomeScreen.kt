@@ -1,46 +1,46 @@
 package com.example.movieapp.home.home
 
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import com.example.movieapp.domain.model.search.Genre
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.statusBarsPadding
-import com.example.movieapp.domain.model.movie.PopularMovie
-import com.example.movieapp.designsystem.components.ChipItem
-import com.example.movieapp.designsystem.components.MovieTab
-import com.example.movieapp.designsystem.components.MovieCard
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.movieapp.designsystem.theme.DarkColorScheme
-import androidx.compose.foundation.layout.navigationBarsPadding
-import com.example.movieapp.designsystem.components.MovieAppText
-import com.example.movieapp.designsystem.design.MovieAppFontSize
-import com.example.movieapp.designsystem.components.MovieAppLoader
-import com.example.movieapp.designsystem.components.MovieAppSearchBar
+import com.example.movieapp.designsystem.components.ChipItem
 import com.example.movieapp.designsystem.components.MovieAppCategoryChip
+import com.example.movieapp.designsystem.components.MovieAppLoader
 import com.example.movieapp.designsystem.components.MovieAppNavigationButton
 import com.example.movieapp.designsystem.components.MovieAppNetworkConnectionScreen
+import com.example.movieapp.designsystem.components.MovieAppSearchBar
+import com.example.movieapp.designsystem.components.MovieAppText
+import com.example.movieapp.designsystem.components.MovieCard
+import com.example.movieapp.designsystem.components.MovieTab
+import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.theme.DarkColorScheme
+import com.example.movieapp.domain.model.movie.PopularMovie
+import com.example.movieapp.domain.model.search.Genre
 
 @Composable
 fun HomeScreen(
@@ -122,7 +122,8 @@ private fun HomeScreenContent(
 
                     state.errorType != null -> {
                         MovieAppNetworkConnectionScreen(
-                            onRefresh = { onEvent(HomeEvent.OnRefresh) }
+                            onRefresh = { onEvent(HomeEvent.OnRefresh) },
+                            modifier = modifier
                         )
                     }
 
@@ -132,7 +133,6 @@ private fun HomeScreenContent(
                                 text = "Movies",
                                 fontSize = MovieAppFontSize.font18,
                                 color = DarkColorScheme.primaryYellow,
-                                fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
                             )
                             LazyVerticalGrid(
