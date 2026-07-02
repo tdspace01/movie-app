@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,11 +33,13 @@ import com.example.movieapp.designsystem.theme.DarkColorScheme
 @Composable
 fun MovieAppNetworkConnectionScreen(
     onRefresh: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(DarkColorScheme.black)
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = MovieAppSpacing.spacing70),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -44,10 +48,10 @@ fun MovieAppNetworkConnectionScreen(
         Image(
             painter = painterResource(R.drawable.alert_icon),
             contentDescription = null,
-            modifier = modifier.size(MovieAppSizing.size53)
+            modifier = Modifier.size(MovieAppSizing.size53)
         )
 
-        Spacer(modifier.height(MovieAppSpacing.spacing16))
+        Spacer(Modifier.height(MovieAppSpacing.spacing16))
 
         MovieAppText(
             text = "Can't be loaded",
@@ -57,7 +61,7 @@ fun MovieAppNetworkConnectionScreen(
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier.height(MovieAppSpacing.spacing08))
+        Spacer(Modifier.height(MovieAppSpacing.spacing08))
 
         MovieAppText(
             text = "Internet connection or some other server error",
@@ -65,14 +69,14 @@ fun MovieAppNetworkConnectionScreen(
             fontWeight = FontWeight.Medium,
             color = DarkColorScheme.lightGrey,
             textAlign = TextAlign.Center,
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             maxLines = 2
         )
 
-        Spacer(modifier.height(MovieAppSpacing.spacing70))
+        Spacer(Modifier.height(MovieAppSpacing.spacing70))
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .wrapContentWidth()
                 .clip(MovieAppShapes.corner16)
                 .background(DarkColorScheme.primaryYellow)
@@ -93,7 +97,7 @@ fun MovieAppNetworkConnectionScreen(
             Image(
                 painter = painterResource(R.drawable.refresh_icon),
                 contentDescription = null,
-                modifier = modifier.size(MovieAppSizing.size16)
+                modifier = Modifier.size(MovieAppSizing.size16)
             )
         }
     }

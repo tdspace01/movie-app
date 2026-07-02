@@ -13,7 +13,8 @@ fun Flow<Resource<List<PopularMovie>>>.withFavouriteState(
 ): Flow<Resource<List<PopularMovie>>> {
     return combine(this, favouriteMovieRepository.getFavouriteIds()) { resource, favouriteIds ->
         resource.map { movies ->
-            movies.map { movie -> movie.copy(isFavorite = movie.id in favouriteIds) }
+            movies.map { movie ->
+                movie.copy(isFavorite = movie.id in favouriteIds) }
         }
     }
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +33,7 @@ fun MovieAppSearchBar(
     placeholder: String,
     isFilterActive: Boolean,
     onFilterClick: () -> Unit,
+    onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
@@ -42,13 +42,15 @@ fun MovieAppSearchBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08)
     ) {
-
         Box(
             modifier = Modifier
                 .weight(1f)
                 .clip(MovieAppShapes.corner25)
                 .background(DarkColorScheme.darkestGrey)
-                .padding(horizontal = MovieAppSpacing.spacing24, vertical = MovieAppSpacing.spacing09),
+                .padding(
+                    horizontal = MovieAppSpacing.spacing24,
+                    vertical = MovieAppSpacing.spacing09
+                ),
             contentAlignment = Alignment.CenterStart
         ) {
             BasicTextField(
@@ -63,28 +65,31 @@ fun MovieAppSearchBar(
                 ),
                 cursorBrush = SolidColor(DarkColorScheme.whisper),
                 decorationBox = { innerTextField ->
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08)
                     ) {
+
                         Image(
                             painter = painterResource(id = R.drawable.search_loop),
                             contentDescription = null,
                             modifier = Modifier.size(MovieAppSizing.size18)
                         )
+
                         Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.CenterStart
                         ) {
+
                             if (query.isEmpty()) {
-                                if (query.isEmpty()) {
-                                    MovieAppText(
-                                        text = placeholder,
-                                        fontSize = MovieAppFontSize.font14,
-                                        color = DarkColorScheme.lightGrey
-                                    )
-                                }
+                                MovieAppText(
+                                    text = placeholder,
+                                    fontSize = MovieAppFontSize.font14,
+                                    color = DarkColorScheme.lightGrey
+                                )
                             }
+
                             innerTextField()
                         }
                     }
@@ -93,20 +98,40 @@ fun MovieAppSearchBar(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .size(MovieAppSizing.size36)
-                .clip(CircleShape)
-                .clickable(enabled = enabled) { onFilterClick() },
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(
-                    id = if (isFilterActive) R.drawable.selected_filter else R.drawable.unselected_filter
-                ),
-                contentDescription = "Filter",
-                modifier = Modifier.fillMaxSize()
-            )
+        if (query.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .size(MovieAppSizing.size36)
+                    .clip(CircleShape)
+                    .clickable(enabled = enabled) { onClearClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                MovieAppText(
+                    text = "Clear",
+                    fontSize = MovieAppFontSize.font12,
+                    color = DarkColorScheme.whisper
+                )
+            }
+
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(MovieAppSizing.size36)
+                    .clip(CircleShape)
+                    .clickable(enabled = enabled) { onFilterClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = if (isFilterActive)
+                            R.drawable.selected_filter
+                        else
+                            R.drawable.unselected_filter
+                    ),
+                    contentDescription = "Filter",
+                    modifier = Modifier.size(MovieAppSizing.size36)
+                )
+            }
         }
     }
 }

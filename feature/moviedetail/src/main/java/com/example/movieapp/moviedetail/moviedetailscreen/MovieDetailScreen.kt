@@ -77,11 +77,9 @@ private fun MovieDetailContent(
     onEvent: (MovieDetailEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkColorScheme.black)
     ) {
         when {
             state.isLoading -> {
@@ -91,7 +89,7 @@ private fun MovieDetailContent(
             state.errorType != null -> {
                 MovieAppNetworkConnectionScreen(
                     onRefresh = { onEvent(MovieDetailEvent.OnRefresh) },
-                    modifier = modifier
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
@@ -103,35 +101,11 @@ private fun MovieDetailContent(
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
-
-                    Box(
+                    Spacer(
                         modifier = Modifier
-                            .fillMaxWidth()
                             .statusBarsPadding()
-                            .padding(
-                                horizontal = MovieAppSpacing.spacing16,
-                                vertical = MovieAppSpacing.spacing12
-                            )
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.arrow_back),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(MovieAppSizing.size10)
-                                .height(MovieAppSizing.size18)
-                                .align(Alignment.CenterStart)
-                                .clickable { onEvent(MovieDetailEvent.OnBackClick) }
-                        )
-                        MovieAppText(
-                            text = "Details",
-                            fontSize = MovieAppFontSize.font16,
-                            fontWeight = FontWeight.SemiBold,
-                            color = DarkColorScheme.whisper,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 18.sp,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
+                            .height(56.dp)
+                    )
 
                     Box(
                         modifier = Modifier
@@ -169,12 +143,9 @@ private fun MovieDetailContent(
                                 .clip(MovieAppShapes.corner16)
                                 .background(DarkColorScheme.primaryYellow)
                                 .clickable {
-                                    //open trailer
+                                    //movie trl
                                 }
-                                .padding(
-                                    horizontal = 24.dp,
-                                    vertical = 12.dp
-                                )
+                                .padding(horizontal = 24.dp, vertical = 12.dp)
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -200,7 +171,6 @@ private fun MovieDetailContent(
                             .fillMaxWidth()
                             .padding(MovieAppSpacing.spacing16)
                     ) {
-
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
@@ -221,9 +191,7 @@ private fun MovieDetailContent(
                                 contentDescription = "Favorite",
                                 modifier = Modifier
                                     .size(MovieAppSizing.size24)
-                                    .clickable {
-                                        onEvent(MovieDetailEvent.OnToggleFavorite)
-                                    }
+                                    .clickable { onEvent(MovieDetailEvent.OnToggleFavorite) }
                             )
                         }
 
@@ -237,14 +205,11 @@ private fun MovieDetailContent(
                                 text = movie.rating.takeIf { it > 0 }?.let { "%.1f".format(it) },
                                 iconRes = R.drawable.start_icon
                             )
-
                             InfoChip(text = category.takeIf { it != "N/A" })
-
                             InfoChip(
                                 text = movie.durationFormatted.takeIf { it.isNotBlank() },
                                 iconRes = R.drawable.clock_icon
                             )
-
                             InfoChip(text = movie.releaseYear.takeIf { it.isNotBlank() })
                         }
 
@@ -270,6 +235,35 @@ private fun MovieDetailContent(
                     }
                 }
             }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(
+                    horizontal = MovieAppSpacing.spacing16,
+                    vertical = MovieAppSpacing.spacing12
+                )
+        ) {
+            Image(
+                painter = painterResource(R.drawable.arrow_back),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(MovieAppSizing.size10)
+                    .height(MovieAppSizing.size18)
+                    .align(Alignment.CenterStart)
+                    .clickable { onEvent(MovieDetailEvent.OnBackClick) }
+            )
+            MovieAppText(
+                text = "Details",
+                fontSize = MovieAppFontSize.font16,
+                fontWeight = FontWeight.SemiBold,
+                color = DarkColorScheme.whisper,
+                textAlign = TextAlign.Center,
+                lineHeight = 18.sp,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }

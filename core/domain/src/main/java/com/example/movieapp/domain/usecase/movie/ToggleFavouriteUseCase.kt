@@ -12,7 +12,7 @@ class ToggleFavouriteUseCase(
         toggle(movie)
     }
 
-    suspend operator fun invoke(movie: MovieDetail) {
+    suspend operator fun invoke(movie: MovieDetail,category: String) {
         toggle(
             PopularMovie(
                 id = movie.id,
@@ -20,7 +20,7 @@ class ToggleFavouriteUseCase(
                 posterUrl = movie.posterUrl,
                 year = movie.releaseYear,
                 isFavorite = movie.isFavorite,
-                category = ""
+                category = category
             )
         )
     }

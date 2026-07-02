@@ -8,7 +8,6 @@ import com.example.movieapp.moviedetail.moviedetailscreen.MovieDetailScreen
 import com.example.movieapp.moviedetail.moviedetailscreen.MovieDetailViewModel
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.movieDetailGraph(
     onNavigateBack: () -> Unit
@@ -16,7 +15,7 @@ fun NavGraphBuilder.movieDetailGraph(
     composable<MovieDetailRoute.MovieDetail> { backStackEntry ->
         BackHandler(enabled = true) {}
         val detailRoute = backStackEntry.toRoute<MovieDetailRoute.MovieDetail>()
-        val viewModel: MovieDetailViewModel = koinViewModel { parametersOf(detailRoute.movieId) }
+        val viewModel: MovieDetailViewModel = koinViewModel()
         MovieDetailScreen(
             viewModel = viewModel,
             onNavigateBack = onNavigateBack,
