@@ -16,7 +16,7 @@ class MovieDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val toggleFavoriteUseCase: ToggleFavouriteUseCase
-): BaseViewModel<MovieDetailState, MovieDetailEvent, MovieDetailSideEffect>(MovieDetailState()) {
+) : BaseViewModel<MovieDetailState, MovieDetailEvent, MovieDetailSideEffect>(MovieDetailState()) {
 
     private val route = savedStateHandle.toRoute<MovieDetailRoute.MovieDetail>()
     private val movieId = route.movieId
@@ -27,38 +27,39 @@ class MovieDetailViewModel(
     }
 
     override fun onEvent(event: MovieDetailEvent) {
-        when(event){
+        when (event) {
             is MovieDetailEvent.LoadMovieDetails -> loadMovieDetails()
-            is MovieDetailEvent.OnBackClick -> emitSideEffect(MovieDetailSideEffect.NavigateBack)
-
-            is MovieDetailEvent.OnToggleFavorite -> {
-                val current = currentState.movieDetail ?: return
-                updateState {
-                    copy(movieDetail = current.copy(isFavorite = !current.isFavorite))
-                }
-
-                viewModelScope.launch {
-                    toggleFavoriteUseCase(current,category)
-                }
-            }
-
-            is MovieDetailEvent.OnRefresh -> {
-                updateState { copy(errorType = null, isLoading = true) }
-                viewModelScope.launch {
-                    delay(2000.milliseconds)
-                    loadMovieDetails()
-                }
-            }
+            is MovieDetailEvent.OnBackClick -> handleBackClick()
+            is MovieDetailEvent.OnToggleFavorite -> handleToggleFavorite()
+            is MovieDetailEvent.OnRefresh -> handleRefresh()
         }
     }
-
-    private fun loadMovieDetails(){
+    private fun loadMovieDetails() {
         viewModelScope.launch {
             getMovieDetailsUseCase(movieId).collectAsResource(
                 onLoading = { loading -> updateState { copy(isLoading = loading) } },
-                onError = { error -> updateState { copy(errorType = error) } },
-                onSuccess = { data -> updateState { copy(movieDetail = data, errorType = null) } }
+                onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
+                onSuccess = { data -> updateState { copy(isLoading = false, movieDetail = data, errorType = null) } }
             )
+        }
+    }
+
+    private fun handleBackClick() {
+        emitSideEffect(MovieDetailSideEffect.NavigateBack)
+    }
+
+    private fun handleToggleFavorite() {
+        val current = currentState.movieDetail ?: return
+        viewModelScope.launch {
+            toggleFavoriteUseCase(current, category)
+        }
+    }
+
+    private fun handleRefresh() {
+        updateState { copy(errorType = null, isLoading = true) }
+        viewModelScope.launch {
+            delay(2000.milliseconds)
+            loadMovieDetails()
         }
     }
 }
