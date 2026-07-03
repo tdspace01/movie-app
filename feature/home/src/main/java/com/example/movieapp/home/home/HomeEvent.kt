@@ -5,7 +5,6 @@ import com.example.movieapp.domain.model.movie.PopularMovie
 
 sealed interface HomeEvent {
     object OnRefresh : HomeEvent
-    object LoadMovies : HomeEvent
     object LoadGenres : HomeEvent
     object OnClearSearch : HomeEvent
     object OnGenreCleared : HomeEvent
