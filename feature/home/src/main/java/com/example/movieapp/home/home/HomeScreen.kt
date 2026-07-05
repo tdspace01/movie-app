@@ -1,10 +1,14 @@
 package com.example.movieapp.home.home
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +26,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,6 +42,7 @@ import com.example.movieapp.designsystem.components.MovieAppNetworkConnectionScr
 import com.example.movieapp.designsystem.components.MovieAppSearchBar
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.components.MovieCard
+import com.example.movieapp.designsystem.components.MovieCardShimmer
 import com.example.movieapp.designsystem.components.MovieTab
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.theme.DarkColorScheme
@@ -69,76 +76,115 @@ fun HomeScreen(
     )
 }
 
+@SuppressLint("FrequentlyChangingValue")
 @Composable
 private fun HomeScreenContent(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    val lazyListState = rememberLazyListState()
+    val isNetworkError = state.errorType != null
+    var isSearchBarVisible by remember { mutableStateOf(true) }
+    var isRefreshingFromError by remember { mutableStateOf(false) }
+    if (!state.isLoading && isRefreshingFromError) {
+        isRefreshingFromError = false
+    }
+    val isGenreVisible = state.isGenresVisible
+    val dynamicTopPadding by animateDpAsState(
+        targetValue = if (isGenreVisible) 100.dp else 70.dp,
+        label = "ListPaddingAnimation"
+    )
+
+    val isInitialLoading = state.isLoading && isRefreshingFromError
+    val isCategoryLoading = state.isLoading && !isInitialLoading
+
+    LaunchedEffect(
+        lazyListState.firstVisibleItemIndex,
+        lazyListState.firstVisibleItemScrollOffset,
+        isNetworkError,
+        state.isLoading
+    ) {
+        if (isNetworkError || state.isLoading) {
+            isSearchBarVisible = true
+        } else {
+            val isAtAbsoluteTop = lazyListState.firstVisibleItemIndex == 0
+                    && lazyListState.firstVisibleItemScrollOffset == 0
+            isSearchBarVisible = isAtAbsoluteTop
+        }
+    }
+
+    Box(
         modifier = modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .statusBarsPadding()
     ) {
         Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             when {
-                state.isLoading -> {
-                    MovieAppLoader()
-                }
-
-                state.errorType != null -> {
+                isNetworkError && !state.isLoading -> {
                     MovieAppNetworkConnectionScreen(
-                        onRefresh = { onEvent(HomeEvent.OnRefresh) },
+                        onRefresh = {
+                            isRefreshingFromError = true
+                            onEvent(HomeEvent.OnRefresh)
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                else -> {
-                    LazyColumn(
-                        state = rememberLazyListState(),
+                isInitialLoading -> {
+                    Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 16.dp)
+                        contentAlignment = Alignment.Center
+                    ) {
+                        MovieAppLoader()
+                    }
+                }
+
+                isCategoryLoading -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(top = dynamicTopPadding, bottom = 80.dp),
+                        userScrollEnabled = false
                     ) {
                         item {
-                            Column {
-                                SearchBar(
-                                    query = state.searchQuery,
-                                    isFilterActive = state.isGenresVisible,
-                                    onQueryChanged = { onEvent(HomeEvent.OnSearchQueryChanged(it)) },
-                                    onFilterClick = { onEvent(HomeEvent.OnToggleGenresVisibility) },
-                                    onClearClick = { onEvent(HomeEvent.OnClearSearch) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp, vertical = 15.dp)
-                                )
-
-                                AnimatedVisibility(
-                                    visible = state.isGenresVisible,
-                                    enter = expandVertically() + fadeIn(),
-                                    exit = shrinkVertically() + fadeOut()
-                                ) {
-                                    GenreRow(
-                                        genres = state.genres,
-                                        selectedGenreId = state.selectedGenreId,
-                                        isLoading = state.isGenresLoading,
-                                        onGenreSelected = { onEvent(HomeEvent.OnGenreSelected(it)) },
-                                        onGenreCleared = { onEvent(HomeEvent.OnGenreCleared) }
-                                    )
-                                }
-
-                                MovieAppText(
-                                    text = "Movies",
-                                    fontSize = MovieAppFontSize.font18,
-                                    color = DarkColorScheme.primaryYellow,
-                                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
-                                )
+                            MovieAppText(
+                                text = "Movies",
+                                fontSize = MovieAppFontSize.font18,
+                                color = DarkColorScheme.primaryYellow,
+                                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
+                            )
+                        }
+                        items(3) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Box(modifier = Modifier.weight(1f)) { MovieCardShimmer() }
+                                Box(modifier = Modifier.weight(1f)) { MovieCardShimmer() }
                             }
+                        }
+                    }
+                }
+
+                else -> {
+                    LazyColumn(
+                        state = lazyListState,
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(top = dynamicTopPadding, bottom = 80.dp)
+                    ) {
+                        item {
+                            MovieAppText(
+                                text = "Movies",
+                                fontSize = MovieAppFontSize.font18,
+                                color = DarkColorScheme.primaryYellow,
+                                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
+                            )
                         }
 
                         if (state.searchQuery.isNotBlank() && state.popularMovies.isEmpty()) {
@@ -150,7 +196,7 @@ private fun HomeScreenContent(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     MovieAppText(
-                                        text = "No results found for",
+                                        text = "No results found",
                                         fontSize = MovieAppFontSize.font16,
                                         color = DarkColorScheme.lightGrey,
                                         modifier = Modifier.padding(horizontal = 24.dp)
@@ -169,19 +215,68 @@ private fun HomeScreenContent(
                                         Box(modifier = Modifier.weight(1f)) {
                                             MovieItem(
                                                 popularMovie = movie,
-                                                onMovieClick = { onEvent(HomeEvent.OnMovieClick(movieId = movie.id, category = movie.category)) },
-                                                onFavoriteClick = { onEvent(HomeEvent.OnToggleFavorite(movie)) }
+                                                onMovieClick = {
+                                                    onEvent(
+                                                        HomeEvent.OnMovieClick(
+                                                            movieId = movie.id,
+                                                            category = movie.category
+                                                        )
+                                                    )
+                                                },
+                                                onFavoriteClick = {
+                                                    onEvent(HomeEvent.OnToggleFavorite(movie))
+                                                }
                                             )
                                         }
                                     }
-
-                                    if (row.size == 1) {
-                                        Spacer(modifier = Modifier.weight(1f))
-                                    }
+                                    if (row.size == 1) { Spacer(modifier = Modifier.weight(1f)) }
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = isSearchBarVisible,
+            enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                SearchBar(
+                    query = state.searchQuery,
+                    isFilterActive = state.isGenresVisible,
+                    enabled = !isNetworkError && !state.isLoading,
+                    onQueryChanged = { onEvent(HomeEvent.OnSearchQueryChanged(it)) },
+                    onFilterClick = {
+                        if (!state.isLoading && !isNetworkError) {
+                            onEvent(HomeEvent.OnToggleGenresVisibility)
+                        }
+                    },
+                    onClearClick = { onEvent(HomeEvent.OnClearSearch) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 15.dp)
+                )
+
+                AnimatedVisibility(
+                    visible = isGenreVisible && !isNetworkError && !isInitialLoading,
+                    enter = expandVertically() + fadeIn(),
+                    exit = shrinkVertically() + fadeOut()
+                ) {
+                    GenreRow(
+                        genres = state.genres,
+                        selectedGenreId = state.selectedGenreId,
+                        isLoading = state.isGenresLoading,
+                        onGenreSelected = { onEvent(HomeEvent.OnGenreSelected(it)) },
+                        onGenreCleared = { onEvent(HomeEvent.OnGenreCleared) }
+                    )
                 }
             }
         }
@@ -192,7 +287,8 @@ private fun HomeScreenContent(
                 if (selectedTab == MovieTab.FAVORITES) {
                     onEvent(HomeEvent.OnFavoriteClick)
                 }
-            }
+            },
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
@@ -204,7 +300,8 @@ private fun SearchBar(
     isFilterActive: Boolean,
     onFilterClick: () -> Unit,
     onClearClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     MovieAppSearchBar(
         query = query,
@@ -214,6 +311,7 @@ private fun SearchBar(
         onFilterClick = onFilterClick,
         onClearClick = onClearClick,
         modifier = modifier,
+        enabled = enabled
     )
 }
 

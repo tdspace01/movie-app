@@ -1,6 +1,12 @@
 package com.example.movieapp.moviedetail.moviedetailscreen
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +28,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,8 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.example.movieapp.designsystem.R
+import com.example.movieapp.designsystem.components.MovieAppAsyncImage
 import com.example.movieapp.designsystem.components.MovieAppLoader
 import com.example.movieapp.designsystem.components.MovieAppNetworkConnectionScreen
 import com.example.movieapp.designsystem.components.MovieAppText
@@ -70,6 +79,7 @@ fun MovieDetailScreen(
     )
 }
 
+@SuppressLint("FrequentlyChangingValue")
 @Composable
 private fun MovieDetailContent(
     state: MovieDetailState,
@@ -77,9 +87,15 @@ private fun MovieDetailContent(
     onEvent: (MovieDetailEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+    var isHeaderVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(scrollState.value) {
+        isHeaderVisible = scrollState.value == 0
+    }
+
     Box(
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         when {
             state.isLoading -> {
@@ -87,10 +103,12 @@ private fun MovieDetailContent(
             }
 
             state.errorType != null -> {
-                MovieAppNetworkConnectionScreen(
-                    onRefresh = { onEvent(MovieDetailEvent.OnRefresh) },
-                    modifier = Modifier.fillMaxSize()
-                )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    MovieAppNetworkConnectionScreen(
+                        onRefresh = { onEvent(MovieDetailEvent.OnRefresh) },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
             state.movieDetail != null -> {
@@ -99,7 +117,7 @@ private fun MovieDetailContent(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(scrollState)
                 ) {
                     Spacer(
                         modifier = Modifier
@@ -112,8 +130,8 @@ private fun MovieDetailContent(
                             .fillMaxWidth()
                             .aspectRatio(375f / 490f)
                     ) {
-                        AsyncImage(
-                            model = movie.posterUrl ?: movie.backdropUrl,
+                        MovieAppAsyncImage(
+                            imageUrl = movie.posterUrl ?: movie.backdropUrl,
                             contentDescription = movie.title,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
@@ -143,7 +161,7 @@ private fun MovieDetailContent(
                                 .clip(MovieAppShapes.corner16)
                                 .background(DarkColorScheme.primaryYellow)
                                 .clickable {
-                                    //movie trl
+                                    // movie trl
                                 }
                                 .padding(horizontal = 24.dp, vertical = 12.dp)
                         ) {
@@ -186,7 +204,8 @@ private fun MovieDetailContent(
                             )
                             Image(
                                 painter = painterResource(
-                                    if (movie.isFavorite) R.drawable.big_marked_heart else R.drawable.big_unmarked_heart
+                                    if (movie.isFavorite) R.drawable.big_marked_heart
+                                    else R.drawable.big_unmarked_heart
                                 ),
                                 contentDescription = "Favorite",
                                 modifier = Modifier
@@ -202,7 +221,9 @@ private fun MovieDetailContent(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             InfoChip(
-                                text = movie.rating.takeIf { it > 0 }?.let { "%.1f".format(it) },
+                                text = movie.rating.takeIf { it > 0 }?.let {
+                                    "%.1f".format(it)
+                                },
                                 iconRes = R.drawable.start_icon
                             )
                             InfoChip(text = category.takeIf { it != "N/A" })
@@ -232,38 +253,51 @@ private fun MovieDetailContent(
                             color = DarkColorScheme.lighterGrey,
                             lineHeight = 18.sp
                         )
+
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
             }
         }
 
-        Box(
+        val shouldShowHeader = isHeaderVisible || state.isLoading || state.errorType != null
+
+        AnimatedVisibility(
+            visible = shouldShowHeader,
+            enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(
-                    horizontal = MovieAppSpacing.spacing16,
-                    vertical = MovieAppSpacing.spacing12
-                )
+                .align(Alignment.TopCenter)
         ) {
-            Image(
-                painter = painterResource(R.drawable.arrow_back),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
-                    .width(MovieAppSizing.size10)
-                    .height(MovieAppSizing.size18)
-                    .align(Alignment.CenterStart)
-                    .clickable { onEvent(MovieDetailEvent.OnBackClick) }
-            )
-            MovieAppText(
-                text = "Details",
-                fontSize = MovieAppFontSize.font16,
-                fontWeight = FontWeight.SemiBold,
-                color = DarkColorScheme.whisper,
-                textAlign = TextAlign.Center,
-                lineHeight = 18.sp,
-                modifier = Modifier.align(Alignment.Center)
-            )
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(
+                        horizontal = MovieAppSpacing.spacing16,
+                        vertical = MovieAppSpacing.spacing12
+                    )
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(MovieAppSizing.size10)
+                        .height(MovieAppSizing.size18)
+                        .align(Alignment.CenterStart)
+                        .clickable { onEvent(MovieDetailEvent.OnBackClick) }
+                )
+                MovieAppText(
+                    text = "Details",
+                    fontSize = MovieAppFontSize.font16,
+                    fontWeight = FontWeight.SemiBold,
+                    color = DarkColorScheme.whisper,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 18.sp,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }

@@ -1,38 +1,44 @@
 package com.example.movieapp.home.home
 
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import androidx.lifecycle.viewModelScope
-import com.example.movieapp.ui.base.BaseViewModel
-import kotlin.time.Duration.Companion.milliseconds
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.collectLatest
+import com.example.movieapp.common.networkstatus.NetworkStatus
+import com.example.movieapp.common.resource.NetworkError
 import com.example.movieapp.common.resource.collectAsResource
 import com.example.movieapp.domain.model.movie.PopularMovie
-import com.example.movieapp.domain.usecase.search.GetGenresUseCase
-import com.example.movieapp.domain.usecase.search.SearchMoviesUseCase
-import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
 import com.example.movieapp.domain.usecase.movie.GetPopularMoviesUseCase
+import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
+import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
+import com.example.movieapp.domain.usecase.search.GetGenresUseCase
 import com.example.movieapp.domain.usecase.search.GetMoviesByGenreUseCase
+import com.example.movieapp.domain.usecase.search.SearchMoviesUseCase
+import com.example.movieapp.ui.base.BaseViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class HomeViewModel(
     private val popularMoviesUseCase: GetPopularMoviesUseCase,
     private val searchMoviesUseCase: SearchMoviesUseCase,
     private val getGenresUseCase: GetGenresUseCase,
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
-    private val toggleFavoriteUseCase: ToggleFavouriteUseCase
+    private val toggleFavoriteUseCase: ToggleFavouriteUseCase,
+    private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase
 ) : BaseViewModel<HomeState, HomeEvent, HomeSideEffect>(HomeState()) {
 
     private var moviesJob: Job? = null
+    private var networkJob: Job? = null
 
     init {
         onEvent(HomeEvent.LoadGenres)
         observeSearchQueryAndFetch()
+        observeNetworkStatus()
     }
 
     override fun onEvent(event: HomeEvent) {
@@ -58,6 +64,8 @@ class HomeViewModel(
                 .drop(1)
                 .debounce(700L.milliseconds)
                 .collectLatest { query ->
+                    if (currentState.errorType == NetworkError.NO_INTERNET) return@collectLatest
+
                     if (query.isNotBlank()) {
                         searchMovies(query)
                     } else {
@@ -75,8 +83,11 @@ class HomeViewModel(
     private fun loadPopularMovies() {
         moviesJob?.cancel()
         moviesJob = viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+            delay(1000.milliseconds)
+
             popularMoviesUseCase().collectAsResource(
-                onLoading = { loading -> updateState { copy(isLoading = loading) } },
+                onLoading = { loading -> if (!loading) updateState { copy(isLoading = false) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
                 onSuccess = { data -> updateState { copy(isLoading = false, popularMovies = data, errorType = null) } }
             )
@@ -86,8 +97,11 @@ class HomeViewModel(
     private fun searchMovies(query: String) {
         moviesJob?.cancel()
         moviesJob = viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+            delay(1000.milliseconds)
+
             searchMoviesUseCase(query).collectAsResource(
-                onLoading = { loading -> updateState { copy(isLoading = loading) } },
+                onLoading = { loading -> if (!loading) updateState { copy(isLoading = false) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
                 onSuccess = { data -> updateState { copy(isLoading = false, popularMovies = data, errorType = null) } }
             )
@@ -99,8 +113,11 @@ class HomeViewModel(
 
         moviesJob?.cancel()
         moviesJob = viewModelScope.launch {
+            updateState { copy(isLoading = true) }
+            delay(1000.milliseconds)
+
             getMoviesByGenreUseCase(genreName).collectAsResource(
-                onLoading = { loading -> updateState { copy(isLoading = loading) } },
+                onLoading = { loading -> if (!loading) updateState { copy(isLoading = false) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
                 onSuccess = { data -> updateState { copy(isLoading = false, popularMovies = data, errorType = null) } }
             )
@@ -112,8 +129,35 @@ class HomeViewModel(
             getGenresUseCase(Unit).collectAsResource(
                 onLoading = { loading -> updateState { copy(isGenresLoading = loading) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
-                onSuccess = { data -> updateState { copy(genres = data) }; loadPopularMovies() }
+                onSuccess = { data ->
+                    updateState { copy(genres = data) }
+                    if (currentState.errorType != NetworkError.NO_INTERNET) {
+                        loadPopularMovies()
+                    }
+                }
             )
+        }
+    }
+
+    private fun observeNetworkStatus() {
+        networkJob?.cancel()
+        networkJob = viewModelScope.launch {
+            observeNetworkStatusUseCase()
+                .distinctUntilChanged()
+                .collectLatest { status ->
+                    when (status) {
+                        is NetworkStatus.Available -> {}
+                        is NetworkStatus.Unavailable -> {
+                            moviesJob?.cancel()
+                            updateState {
+                                copy(
+                                    isLoading = false,
+                                    errorType = NetworkError.NO_INTERNET
+                                )
+                            }
+                        }
+                    }
+                }
         }
     }
 
@@ -135,7 +179,9 @@ class HomeViewModel(
 
     private fun handleGenreCleared() {
         updateState { copy(selectedGenreId = null) }
-        loadPopularMovies()
+        if (currentState.errorType != NetworkError.NO_INTERNET) {
+            loadPopularMovies()
+        }
     }
 
     private fun handleMovieClick(movieId: Int, category: String) {
@@ -171,6 +217,8 @@ class HomeViewModel(
         val newGenreId = if (currentState.selectedGenreId == genreId) null else genreId
 
         updateState { copy(selectedGenreId = newGenreId) }
+
+        if (currentState.errorType == NetworkError.NO_INTERNET) return
 
         if (newGenreId != null) {
             loadMoviesByGenre(newGenreId)

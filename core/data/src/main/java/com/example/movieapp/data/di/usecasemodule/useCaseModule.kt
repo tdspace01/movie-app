@@ -4,6 +4,7 @@ import com.example.movieapp.domain.usecase.movie.GetFavouriteMoviesUseCase
 import com.example.movieapp.domain.usecase.movie.GetMovieDetailsUseCase
 import com.example.movieapp.domain.usecase.movie.GetPopularMoviesUseCase
 import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
+import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
 import com.example.movieapp.domain.usecase.search.GetFavouriteIdsUseCase
 import com.example.movieapp.domain.usecase.search.GetGenresUseCase
 import com.example.movieapp.domain.usecase.search.GetMoviesByGenreUseCase
@@ -19,4 +20,5 @@ val useCaseModule = module {
     factory { ToggleFavouriteUseCase(repository = get()) }
     factory { GetFavouriteMoviesUseCase(repository = get()) }
     factory { GetFavouriteIdsUseCase(repository = get()) }
+    factory { ObserveNetworkStatusUseCase(networkObserver = get()) }
 }
