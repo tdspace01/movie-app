@@ -13,6 +13,5 @@ object MovieAppSpacing {
     val spacing16 = 16.dp
     val spacing24 = 24.dp
     val spacing30 = 30.dp
-    val spacing48 = 48.dp
     val spacing70 = 70.dp
 }

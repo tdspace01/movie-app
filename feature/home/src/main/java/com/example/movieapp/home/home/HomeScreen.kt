@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -46,9 +47,11 @@ import com.example.movieapp.designsystem.components.MovieCard
 import com.example.movieapp.designsystem.components.MovieCardShimmer
 import com.example.movieapp.designsystem.components.MovieTab
 import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.domain.model.search.Genre
+import com.example.movieapp.home.R
 
 @Composable
 fun HomeScreen(
@@ -136,19 +139,19 @@ private fun HomeScreenContent(
                         columns = GridCells.Fixed(2),
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(
-                            start = 16.dp, end = 16.dp,
-                            top = dynamicTopPadding, bottom = 80.dp
+                            start = MovieAppSizing.size16, end = MovieAppSizing.size16,
+                            top = dynamicTopPadding, bottom = MovieAppSizing.size80
                         ),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size16),
+                        verticalArrangement = Arrangement.spacedBy(MovieAppSizing.size16),
                         userScrollEnabled = false
                     ) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             MovieAppText(
-                                text = "Movies",
+                                text = stringResource(R.string.movies_home),
                                 fontSize = MovieAppFontSize.font18,
                                 color = DarkColorScheme.primaryYellow,
-                                modifier = Modifier.padding(vertical = 8.dp)
+                                modifier = Modifier.padding(vertical = MovieAppSizing.size8)
                             )
                         }
                         items(6) {
@@ -163,18 +166,18 @@ private fun HomeScreenContent(
                         state = lazyGridState,
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(
-                            start = 16.dp, end = 16.dp,
-                            top = dynamicTopPadding, bottom = 80.dp
+                            start = MovieAppSizing.size16, end = MovieAppSizing.size16,
+                            top = dynamicTopPadding, bottom = MovieAppSizing.size80
                         ),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size16),
+                        verticalArrangement = Arrangement.spacedBy(MovieAppSizing.size16)
                     ) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             MovieAppText(
-                                text = "Movies",
+                                text = stringResource(R.string.movies_home),
                                 fontSize = MovieAppFontSize.font18,
                                 color = DarkColorScheme.primaryYellow,
-                                modifier = Modifier.padding(vertical = 8.dp)
+                                modifier = Modifier.padding(vertical = MovieAppSizing.size8)
                             )
                         }
 
@@ -184,14 +187,16 @@ private fun HomeScreenContent(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 100.dp),
+                                        .padding(top = MovieAppSizing.size100),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     MovieAppText(
-                                        text = "No results found",
+                                        text = stringResource(R.string.no_result),
                                         fontSize = MovieAppFontSize.font16,
                                         color = DarkColorScheme.lightGrey,
-                                        modifier = Modifier.padding(horizontal = 24.dp)
+                                        modifier = Modifier.padding(
+                                            horizontal = MovieAppSizing.size24
+                                        )
                                     )
                                 }
                             }
@@ -237,7 +242,10 @@ private fun HomeScreenContent(
                     onClearClick = { onEvent(HomeEvent.OnClearSearch) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 15.dp)
+                        .padding(
+                            horizontal = MovieAppSizing.size16,
+                            vertical = MovieAppSizing.size15
+                        )
                 )
 
                 AnimatedVisibility(
@@ -279,7 +287,7 @@ private fun SearchBar(
     MovieAppSearchBar(
         query = query,
         onQueryChanged = onQueryChanged,
-        placeholder = "Search",
+        placeholder = stringResource(R.string.search),
         isFilterActive = isFilterActive,
         onFilterClick = onFilterClick,
         onClearClick = onClearClick,
@@ -325,9 +333,9 @@ private fun MovieItem(
         badgeText = popularMovie.category,
         favoriteIcon = painterResource(
             if (popularMovie.isFavorite)
-                com.example.movieapp.designsystem.R.drawable.big_marked_heart
+                com.example.movieapp.designsystem.R.drawable.small_marked_heart
             else
-                com.example.movieapp.designsystem.R.drawable.big_unmarked_heart
+                com.example.movieapp.designsystem.R.drawable.small_unmarked_heart
         ),
         onCardClick = { onMovieClick(popularMovie.id) },
         onFavoriteClick = onFavoriteClick,

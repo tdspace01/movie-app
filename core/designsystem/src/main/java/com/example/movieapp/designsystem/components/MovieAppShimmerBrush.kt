@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
+import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 
 @Composable
@@ -21,7 +23,10 @@ fun Modifier.shimmerBrush(): Modifier {
         DarkColorScheme.black,
     )
 
-    val transition = rememberInfiniteTransition(label = "ShimmerTransition")
+    val transition = rememberInfiniteTransition(
+        label = stringResource(R.string.shimmer_transition)
+    )
+
     val translateAnim = transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
@@ -29,7 +34,7 @@ fun Modifier.shimmerBrush(): Modifier {
             animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
-        label = "ShimmerAnimation"
+        label = stringResource(R.string.shimmer_transition)
     )
 
     val brush = Brush.linearGradient(

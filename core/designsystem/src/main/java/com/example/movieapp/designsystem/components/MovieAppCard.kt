@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.design.MovieAppLineHeight
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
@@ -82,7 +83,7 @@ fun MovieCard(
             MovieAppText(
                 text = title,
                 fontSize = MovieAppFontSize.font14,
-                lineHeight = 18.sp,
+                lineHeight = MovieAppLineHeight.line18,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -91,7 +92,7 @@ fun MovieCard(
 
             Image(
                 painter = favoriteIcon,
-                contentDescription = "Favorite",
+                contentDescription = null,
                 modifier = Modifier
                     .padding(MovieAppSpacing.spacing02)
                     .size(MovieAppSizing.size18)
@@ -102,7 +103,7 @@ fun MovieCard(
         MovieAppText(
             text = subtitle,
             fontSize = MovieAppFontSize.font12,
-            lineHeight = 16.sp,
+            lineHeight = MovieAppLineHeight.line16,
             fontWeight = FontWeight.Normal,
             color = DarkColorScheme.lightGrey,
             modifier = Modifier.padding(top = MovieAppSpacing.spacing04)

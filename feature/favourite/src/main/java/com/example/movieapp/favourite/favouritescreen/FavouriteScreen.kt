@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,9 +44,11 @@ import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.components.MovieCard
 import com.example.movieapp.designsystem.components.MovieTab
 import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 import com.example.movieapp.domain.model.movie.PopularMovie
+import com.example.movieapp.favourite.R
 
 @Composable
 fun FavouriteScreen(
@@ -113,27 +116,27 @@ private fun FavouriteScreenContent(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(modifier = Modifier.fillMaxWidth()) {
-                            Spacer(modifier = Modifier.width(24.dp))
+                            Spacer(modifier = Modifier.width(MovieAppSizing.size24))
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Image(
                                     painter = painterResource(
-                                        com.example.movieapp.designsystem.R.drawable.no_result_icon
+                                        R.drawable.no_result_icon
                                     ),
                                     contentDescription = null,
-                                    modifier = Modifier.size(106.dp)
+                                    modifier = Modifier.size(MovieAppSizing.size106)
                                 )
                                 Spacer(modifier = Modifier.height(MovieAppSpacing.spacing12))
                                 MovieAppText(
-                                    text = "No favorites added yet",
+                                    text = stringResource(R.string.no_favorite),
                                     fontSize = MovieAppFontSize.font16,
                                     color = DarkColorScheme.lightGrey,
                                     fontWeight = FontWeight.Normal
                                 )
                             }
-                            Spacer(modifier = Modifier.width(24.dp))
+                            Spacer(modifier = Modifier.width(MovieAppSizing.size24))
                         }
                     }
                 }
@@ -141,14 +144,17 @@ private fun FavouriteScreenContent(
                     LazyColumn(
                         state = lazyListState,
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(top = dynamicTopPadding, bottom = 80.dp)
+                        contentPadding = PaddingValues(
+                            top = dynamicTopPadding,
+                            bottom = MovieAppSizing.size80
+                        )
                     ) {
                         items(state.favoriteMovies.chunked(2)) { row ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size16)
                             ) {
                                 row.forEach { movie ->
                                     Box(modifier = Modifier.weight(1f)) {
@@ -187,14 +193,14 @@ private fun FavouriteScreenContent(
                 .align(Alignment.TopCenter)
         ) {
             MovieAppText(
-                text = "Favorite movies",
+                text = stringResource(R.string.favorite_movie),
                 fontSize = MovieAppFontSize.font16,
                 color = DarkColorScheme.whisper,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = MovieAppSizing.size16)
             )
         }
 
@@ -223,7 +229,7 @@ private fun FavoriteMovieItem(
         subtitle = movie.year,
         badgeText = movie.category.ifEmpty { null },
         favoriteIcon = painterResource(
-            com.example.movieapp.designsystem.R.drawable.big_marked_heart
+            com.example.movieapp.designsystem.R.drawable.small_marked_heart
         ),
         onCardClick = { onMovieClick(movie.id) },
         onFavoriteClick = onRemoveFavorite,

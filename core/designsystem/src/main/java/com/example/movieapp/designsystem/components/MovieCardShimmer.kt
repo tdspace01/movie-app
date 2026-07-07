@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.movieapp.designsystem.design.MovieAppShapes
+import com.example.movieapp.designsystem.design.MovieAppSizing
 
 @Composable
 fun MovieCardShimmer(
@@ -30,7 +31,7 @@ fun MovieCardShimmer(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 16.dp)
+                .padding(all = MovieAppSizing.size12)
         ) {
             Box(
                 modifier = Modifier
@@ -45,7 +46,7 @@ fun MovieCardShimmer(
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
-                    .height(12.dp)
+                    .height(MovieAppSizing.size12)
                     .clip(MovieAppShapes.corner50)
                     .shimmerBrush()
             )

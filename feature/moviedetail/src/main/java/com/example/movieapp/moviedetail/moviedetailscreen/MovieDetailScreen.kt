@@ -38,21 +38,23 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.components.MovieAppAsyncImage
 import com.example.movieapp.designsystem.components.MovieAppLoader
 import com.example.movieapp.designsystem.components.MovieAppNetworkConnectionScreen
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.design.MovieAppLineHeight
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
+import com.example.movieapp.moviedetail.R
 
 @Composable
 fun MovieDetailScreen(
@@ -122,7 +124,7 @@ private fun MovieDetailContent(
                     Spacer(
                         modifier = Modifier
                             .statusBarsPadding()
-                            .height(56.dp)
+                            .height(MovieAppSizing.size53)
                     )
 
                     Box(
@@ -163,14 +165,17 @@ private fun MovieDetailContent(
                                 .clickable {
                                     // movie trl
                                 }
-                                .padding(horizontal = 24.dp, vertical = 12.dp)
+                                .padding(
+                                    horizontal = MovieAppSizing.size24,
+                                    vertical = MovieAppSizing.size12
+                                )
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size10)
                             ) {
                                 MovieAppText(
-                                    text = "Trailer",
+                                    text = stringResource(R.string.trailer),
                                     fontSize = MovieAppFontSize.font13,
                                     fontWeight = FontWeight.Medium,
                                     color = DarkColorScheme.black
@@ -178,7 +183,7 @@ private fun MovieDetailContent(
                                 Image(
                                     painter = painterResource(R.drawable.trailer_icon),
                                     contentDescription = null,
-                                    modifier = Modifier.size(10.dp)
+                                    modifier = Modifier.size(MovieAppSizing.size10)
                                 )
                             }
                         }
@@ -199,7 +204,7 @@ private fun MovieDetailContent(
                                 fontSize = MovieAppFontSize.font20,
                                 fontWeight = FontWeight.Bold,
                                 color = DarkColorScheme.whisper,
-                                lineHeight = 26.sp,
+                                lineHeight = MovieAppLineHeight.line26,
                                 modifier = Modifier.weight(1f)
                             )
                             Image(
@@ -207,7 +212,7 @@ private fun MovieDetailContent(
                                     if (movie.isFavorite) R.drawable.big_marked_heart
                                     else R.drawable.big_unmarked_heart
                                 ),
-                                contentDescription = "Favorite",
+                                contentDescription = null,
                                 modifier = Modifier
                                     .size(MovieAppSizing.size24)
                                     .clickable { onEvent(MovieDetailEvent.OnToggleFavorite) }
@@ -226,7 +231,9 @@ private fun MovieDetailContent(
                                 },
                                 iconRes = R.drawable.start_icon
                             )
-                            InfoChip(text = category.takeIf { it != "N/A" })
+                            InfoChip(text = category.takeIf {
+                                it != stringResource(R.string.na)
+                            })
                             InfoChip(
                                 text = movie.durationFormatted.takeIf { it.isNotBlank() },
                                 iconRes = R.drawable.clock_icon
@@ -237,11 +244,11 @@ private fun MovieDetailContent(
                         Spacer(Modifier.height(MovieAppSpacing.spacing16))
 
                         MovieAppText(
-                            text = "About movie",
+                            text = stringResource(R.string.about_movie),
                             fontSize = MovieAppFontSize.font16,
                             fontWeight = FontWeight.SemiBold,
                             color = DarkColorScheme.whisper,
-                            lineHeight = 21.sp
+                            lineHeight = MovieAppLineHeight.line21
                         )
 
                         Spacer(Modifier.height(MovieAppSpacing.spacing08))
@@ -251,10 +258,10 @@ private fun MovieDetailContent(
                             fontSize = MovieAppFontSize.font14,
                             fontWeight = FontWeight.Medium,
                             color = DarkColorScheme.lighterGrey,
-                            lineHeight = 18.sp
+                            lineHeight = MovieAppLineHeight.line18
                         )
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(MovieAppSizing.size20))
                     }
                 }
             }
@@ -289,12 +296,12 @@ private fun MovieDetailContent(
                         .clickable { onEvent(MovieDetailEvent.OnBackClick) }
                 )
                 MovieAppText(
-                    text = "Details",
+                    text = stringResource(R.string.details),
                     fontSize = MovieAppFontSize.font16,
                     fontWeight = FontWeight.SemiBold,
                     color = DarkColorScheme.whisper,
                     textAlign = TextAlign.Center,
-                    lineHeight = 18.sp,
+                    lineHeight = MovieAppLineHeight.line18,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
@@ -332,7 +339,7 @@ private fun InfoChip(
                     fontSize = MovieAppFontSize.font14,
                     fontWeight = FontWeight.Medium,
                     color = DarkColorScheme.lightGrey,
-                    lineHeight = 18.sp,
+                    lineHeight = MovieAppLineHeight.line18,
                     textAlign = TextAlign.Center
                 )
             }
@@ -342,7 +349,7 @@ private fun InfoChip(
                 fontSize = MovieAppFontSize.font14,
                 fontWeight = FontWeight.Medium,
                 color = DarkColorScheme.lightGrey,
-                lineHeight = 18.sp,
+                lineHeight = MovieAppLineHeight.line18,
                 textAlign = TextAlign.Center
             )
         }

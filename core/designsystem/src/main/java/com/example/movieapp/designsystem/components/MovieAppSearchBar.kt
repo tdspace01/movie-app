@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppShapes
@@ -89,7 +90,6 @@ fun MovieAppSearchBar(
                                     color = DarkColorScheme.lightGrey
                                 )
                             }
-
                             innerTextField()
                         }
                     }
@@ -107,7 +107,7 @@ fun MovieAppSearchBar(
                 contentAlignment = Alignment.Center
             ) {
                 MovieAppText(
-                    text = "Cancel",
+                    text = stringResource(R.string.cancel),
                     fontSize = MovieAppFontSize.font10,
                     color = DarkColorScheme.whisper
                 )
@@ -128,7 +128,7 @@ fun MovieAppSearchBar(
                         else
                             R.drawable.unselected_filter
                     ),
-                    contentDescription = "Filter",
+                    contentDescription = null,
                     modifier = Modifier.size(MovieAppSizing.size36)
                 )
             }

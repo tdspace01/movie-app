@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all">All</string>
+    <string name="home">Home</string>
+    <string name="cancel">Cancel</string>
+    <string name="refresh">Refresh</string>
+    <string name="favourite">Favourite</string>
+    <string name="rotate_angle">rotatingAngle</string>
+    <string name="can_not_be_loaded">Can\'t be loaded</string>
+    <string name="shimmer_transition">ShimmerTransition</string>
+    <string name="internet_connection_error">Internet connection or some other server error</string>
+</resources>

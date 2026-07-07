@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.res.stringResource
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 import com.example.movieapp.designsystem.design.MovieAppFontSize
+import com.example.movieapp.designsystem.design.MovieAppSizing
 
 enum class MovieTab { HOME, FAVORITES }
 
@@ -34,14 +36,14 @@ fun MovieAppNavigationButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(62.dp)
+            .height(MovieAppSizing.size62)
             .background(DarkColorScheme.black)
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size8),
         verticalAlignment = Alignment.CenterVertically
     ) {
         NavTab(
-            label = "Home",
+            label = stringResource(R.string.home),
             selectedIconRes = R.drawable.home_marked_icon,
             unselectedIconRes = R.drawable.home_unmarked_icon,
             isSelected = currentTab == MovieTab.HOME,
@@ -50,7 +52,7 @@ fun MovieAppNavigationButton(
         )
 
         NavTab(
-            label = "Favorites",
+            label = stringResource(R.string.favourite),
             selectedIconRes = R.drawable.favourite_marked_heart_icon,
             unselectedIconRes = R.drawable.favourite_unmarked_heart_icon,
             isSelected = currentTab == MovieTab.FAVORITES,
@@ -71,7 +73,7 @@ private fun NavTab(
 ) {
     Row(
         modifier = modifier
-            .height(38.dp)
+            .height(MovieAppSizing.size38)
             .clip(MovieAppShapes.corner8)
             .background(
                 if (isSelected) DarkColorScheme.primaryYellow
@@ -85,10 +87,10 @@ private fun NavTab(
         Image(
             painter = painterResource(id = if (isSelected) selectedIconRes else unselectedIconRes),
             contentDescription = label,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(MovieAppSizing.size18)
         )
 
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(MovieAppSizing.size10))
 
         MovieAppText(
             text = label,
