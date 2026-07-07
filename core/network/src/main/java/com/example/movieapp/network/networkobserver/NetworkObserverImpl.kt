@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 class NetworkObserverImpl(
-    private val context: Context
+    context: Context
 ) : NetworkObserver {
 
     private val connectivityManager =

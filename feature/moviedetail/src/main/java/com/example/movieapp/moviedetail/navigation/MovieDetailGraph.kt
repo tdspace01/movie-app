@@ -1,6 +1,5 @@
 package com.example.movieapp.moviedetail.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -13,7 +12,6 @@ fun NavGraphBuilder.movieDetailGraph(
     onNavigateBack: () -> Unit
 ) {
     composable<MovieDetailRoute.MovieDetail> { backStackEntry ->
-        //BackHandler(enabled = true) {}
         val detailRoute = backStackEntry.toRoute<MovieDetailRoute.MovieDetail>()
         val viewModel: MovieDetailViewModel = koinViewModel()
         MovieDetailScreen(

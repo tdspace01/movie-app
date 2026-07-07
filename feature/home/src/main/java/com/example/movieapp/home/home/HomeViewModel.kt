@@ -36,7 +36,7 @@ class HomeViewModel(
     private val searchMoviesPagedUseCase: SearchMoviesPagedUseCase,
     private val getMoviesByGenrePagedUseCase: GetMoviesByGenrePagedUseCase,
     private val getGenresUseCase: GetGenresUseCase,
-    private val getFavouriteIdsUseCase: GetFavouriteIdsUseCase,
+    getFavouriteIdsUseCase: GetFavouriteIdsUseCase,
     private val toggleFavoriteUseCase: ToggleFavouriteUseCase,
     private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase,
 ) : BaseViewModel<HomeState, HomeEvent, HomeSideEffect>(HomeState()) {

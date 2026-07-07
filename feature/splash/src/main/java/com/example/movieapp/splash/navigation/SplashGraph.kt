@@ -1,6 +1,5 @@
 package com.example.movieapp.splash.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -12,7 +11,6 @@ fun NavGraphBuilder.splashGraph(
     onNavigateToHome: () -> Unit
 ){
     composable<SplashRoute> {
-        //BackHandler(enabled = true) {}
         val viewModel: SplashViewModel = viewModel()
         SplashScreen(
             onNavigateToHome = onNavigateToHome,
