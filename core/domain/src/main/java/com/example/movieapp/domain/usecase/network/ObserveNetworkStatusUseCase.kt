@@ -8,4 +8,5 @@ class ObserveNetworkStatusUseCase(
     private val networkObserver: NetworkObserver
 ) {
     operator fun invoke(): Flow<NetworkStatus> = networkObserver.observe()
+    suspend fun isConnected(): Boolean = networkObserver.isConnected()
 }

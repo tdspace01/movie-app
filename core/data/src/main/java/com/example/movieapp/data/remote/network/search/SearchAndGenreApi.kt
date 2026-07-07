@@ -14,6 +14,12 @@ interface SearchAndGenreApi {
         @Query("page") page: Int = 1,
     ): Response<SearchMovieResponseDto>
 
+    @GET("discover/movie")
+    suspend fun discoverMoviesByGenre(
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int
+    ): Response<PopularMovieResponseDto>
+
     @GET("genre/movie/list")
     suspend fun getGenres(): Response<GenreListResponseDto>
 }

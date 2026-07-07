@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlin.time.Duration.Companion.milliseconds
 
-class SplashViewModel: BaseViewModel<SplashState, SplashEvent, SplashSideEffect>(SplashState()){
+class SplashViewModel:
+    BaseViewModel<SplashState, SplashEvent, SplashSideEffect>(SplashState()){
 
     init {
         onEvent(SplashEvent.StartTimer)

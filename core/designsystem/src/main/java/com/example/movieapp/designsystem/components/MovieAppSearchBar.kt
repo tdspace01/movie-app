@@ -107,8 +107,8 @@ fun MovieAppSearchBar(
                 contentAlignment = Alignment.Center
             ) {
                 MovieAppText(
-                    text = "Clear",
-                    fontSize = MovieAppFontSize.font12,
+                    text = "Cancel",
+                    fontSize = MovieAppFontSize.font10,
                     color = DarkColorScheme.whisper
                 )
             }

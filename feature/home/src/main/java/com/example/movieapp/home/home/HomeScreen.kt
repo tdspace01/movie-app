@@ -13,16 +13,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,9 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieapp.designsystem.components.ChipItem
 import com.example.movieapp.designsystem.components.MovieAppCategoryChip
-import com.example.movieapp.designsystem.components.MovieAppLoader
 import com.example.movieapp.designsystem.components.MovieAppNavigationButton
 import com.example.movieapp.designsystem.components.MovieAppNetworkConnectionScreen
 import com.example.movieapp.designsystem.components.MovieAppSearchBar
@@ -57,20 +58,22 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val lazyPagingItems = viewModel.pagedMovies.collectAsLazyPagingItems()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is HomeSideEffect.NavigateToDetail -> {
+                is HomeSideEffect.NavigateToDetail ->
                     onNavigateToDetail(effect.movieId, effect.category)
-                }
-                is HomeSideEffect.NavigateToFavorite -> onNavigateToFavorite()
+                is HomeSideEffect.NavigateToFavorite ->
+                    onNavigateToFavorite()
             }
         }
     }
 
     HomeScreenContent(
         state = state,
+        lazyPagingItems = lazyPagingItems,
         onEvent = viewModel::onEvent,
         modifier = modifier
     )
@@ -80,37 +83,33 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     state: HomeState,
+    lazyPagingItems: LazyPagingItems<PopularMovie>,
     onEvent: (HomeEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val lazyListState = rememberLazyListState()
-    val isNetworkError = state.errorType != null
+    val lazyGridState = rememberLazyGridState()
+    val isError = state.errorType != null
+    val isLoading = lazyPagingItems.loadState.refresh is LoadState.Loading
+
     var isSearchBarVisible by remember { mutableStateOf(true) }
-    var isRefreshingFromError by remember { mutableStateOf(false) }
-    if (!state.isLoading && isRefreshingFromError) {
-        isRefreshingFromError = false
-    }
+
     val isGenreVisible = state.isGenresVisible
     val dynamicTopPadding by animateDpAsState(
         targetValue = if (isGenreVisible) 100.dp else 70.dp,
         label = "ListPaddingAnimation"
     )
 
-    val isInitialLoading = state.isLoading && isRefreshingFromError
-    val isCategoryLoading = state.isLoading && !isInitialLoading
-
     LaunchedEffect(
-        lazyListState.firstVisibleItemIndex,
-        lazyListState.firstVisibleItemScrollOffset,
-        isNetworkError,
-        state.isLoading
+        lazyGridState.firstVisibleItemIndex,
+        lazyGridState.firstVisibleItemScrollOffset,
+        isError,
+        isLoading
     ) {
-        if (isNetworkError || state.isLoading) {
-            isSearchBarVisible = true
+        isSearchBarVisible = if (isError || isLoading) {
+            true
         } else {
-            val isAtAbsoluteTop = lazyListState.firstVisibleItemIndex == 0
-                    && lazyListState.firstVisibleItemScrollOffset == 0
-            isSearchBarVisible = isAtAbsoluteTop
+            lazyGridState.firstVisibleItemIndex == 0
+                    && lazyGridState.firstVisibleItemScrollOffset == 0
         }
     }
 
@@ -125,74 +124,67 @@ private fun HomeScreenContent(
             contentAlignment = Alignment.Center
         ) {
             when {
-                isNetworkError && !state.isLoading -> {
+                isError -> {
                     MovieAppNetworkConnectionScreen(
-                        onRefresh = {
-                            isRefreshingFromError = true
-                            onEvent(HomeEvent.OnRefresh)
-                        },
+                        onRefresh = { onEvent(HomeEvent.OnRefresh) },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
 
-                isInitialLoading -> {
-                    Box(
+                isLoading -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        MovieAppLoader()
-                    }
-                }
-
-                isCategoryLoading -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(top = dynamicTopPadding, bottom = 80.dp),
+                        contentPadding = PaddingValues(
+                            start = 16.dp, end = 16.dp,
+                            top = dynamicTopPadding, bottom = 80.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         userScrollEnabled = false
                     ) {
-                        item {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
                             MovieAppText(
                                 text = "Movies",
                                 fontSize = MovieAppFontSize.font18,
                                 color = DarkColorScheme.primaryYellow,
-                                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
+                                modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
-                        items(3) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Box(modifier = Modifier.weight(1f)) { MovieCardShimmer() }
-                                Box(modifier = Modifier.weight(1f)) { MovieCardShimmer() }
-                            }
+                        items(6) {
+                            MovieCardShimmer()
                         }
                     }
                 }
 
                 else -> {
-                    LazyColumn(
-                        state = lazyListState,
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        state = lazyGridState,
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(top = dynamicTopPadding, bottom = 80.dp)
+                        contentPadding = PaddingValues(
+                            start = 16.dp, end = 16.dp,
+                            top = dynamicTopPadding, bottom = 80.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        item {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
                             MovieAppText(
                                 text = "Movies",
                                 fontSize = MovieAppFontSize.font18,
                                 color = DarkColorScheme.primaryYellow,
-                                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
+                                modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
 
-                        if (state.searchQuery.isNotBlank() && state.popularMovies.isEmpty()) {
-                            item {
+                        val itemCount = lazyPagingItems.itemCount
+                        if (state.searchQuery.isNotBlank() && itemCount == 0) {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
                                 Box(
                                     modifier = Modifier
-                                        .fillParentMaxHeight(0.7f)
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .padding(top = 100.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     MovieAppText(
@@ -204,32 +196,21 @@ private fun HomeScreenContent(
                                 }
                             }
                         } else {
-                            items(state.popularMovies.chunked(2)) { row ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                                ) {
-                                    row.forEach { movie ->
-                                        Box(modifier = Modifier.weight(1f)) {
-                                            MovieItem(
-                                                popularMovie = movie,
-                                                onMovieClick = {
-                                                    onEvent(
-                                                        HomeEvent.OnMovieClick(
-                                                            movieId = movie.id,
-                                                            category = movie.category
-                                                        )
-                                                    )
-                                                },
-                                                onFavoriteClick = {
-                                                    onEvent(HomeEvent.OnToggleFavorite(movie))
-                                                }
+                            items(count = itemCount) { index ->
+                                val movie = lazyPagingItems[index]
+                                if (movie != null) {
+                                    MovieItem(
+                                        popularMovie = movie,
+                                        onMovieClick = {
+                                            onEvent(HomeEvent.OnMovieClick(
+                                                movie.id,
+                                                movie.category)
                                             )
+                                        },
+                                        onFavoriteClick = {
+                                            onEvent(HomeEvent.OnToggleFavorite(movie))
                                         }
-                                    }
-                                    if (row.size == 1) { Spacer(modifier = Modifier.weight(1f)) }
+                                    )
                                 }
                             }
                         }
@@ -246,19 +227,13 @@ private fun HomeScreenContent(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 SearchBar(
                     query = state.searchQuery,
                     isFilterActive = state.isGenresVisible,
-                    enabled = !isNetworkError && !state.isLoading,
+                    enabled = !isError,
                     onQueryChanged = { onEvent(HomeEvent.OnSearchQueryChanged(it)) },
-                    onFilterClick = {
-                        if (!state.isLoading && !isNetworkError) {
-                            onEvent(HomeEvent.OnToggleGenresVisibility)
-                        }
-                    },
+                    onFilterClick = { if (!isError) onEvent(HomeEvent.OnToggleGenresVisibility) },
                     onClearClick = { onEvent(HomeEvent.OnClearSearch) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -266,7 +241,7 @@ private fun HomeScreenContent(
                 )
 
                 AnimatedVisibility(
-                    visible = isGenreVisible && !isNetworkError && !isInitialLoading,
+                    visible = isGenreVisible && !isError,
                     enter = expandVertically() + fadeIn(),
                     exit = shrinkVertically() + fadeOut()
                 ) {
@@ -284,9 +259,7 @@ private fun HomeScreenContent(
         MovieAppNavigationButton(
             currentTab = MovieTab.HOME,
             onTabSelected = { selectedTab ->
-                if (selectedTab == MovieTab.FAVORITES) {
-                    onEvent(HomeEvent.OnFavoriteClick)
-                }
+                if (selectedTab == MovieTab.FAVORITES) onEvent(HomeEvent.OnFavoriteClick)
             },
             modifier = Modifier.align(Alignment.BottomCenter)
         )
