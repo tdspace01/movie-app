@@ -46,7 +46,8 @@ fun MovieCard(
         ) {
             MovieAppAsyncImage(
                 imageUrl = imageUrl,
-                contentDescription = title
+                contentDescription = title,
+                modifier = Modifier.matchParentSize()
             )
 
             if (!badgeText.isNullOrEmpty()) {

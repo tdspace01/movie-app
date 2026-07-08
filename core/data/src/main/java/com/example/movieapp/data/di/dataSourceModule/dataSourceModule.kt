@@ -3,11 +3,15 @@ package com.example.movieapp.data.di.dataSourceModule
 import com.example.movieapp.data.remote.datasource.repository.movie.MovieDetailRemoteDataSource
 import com.example.movieapp.data.remote.datasource.repository.movie.MoviePagingDataSource
 import com.example.movieapp.data.remote.datasource.repository.movie.PopularMovieLocalDataSource
+import com.example.movieapp.data.remote.datasource.repository.movie.PopularMovieRemoteDataSource
 import com.example.movieapp.data.remote.datasource.repository.search.GenreRemoteDataSource
+import com.example.movieapp.data.remote.datasource.repository.search.SearchRemoteDataSource
 import com.example.movieapp.data.remote.datasource.repository_implementation.movie.MovieDetailRemoteDataSourceImpl
 import com.example.movieapp.data.remote.datasource.repository_implementation.movie.MoviePagingDataSourceImpl
 import com.example.movieapp.data.remote.datasource.repository_implementation.movie.PopularMovieLocalDataSourceImpl
+import com.example.movieapp.data.remote.datasource.repository_implementation.movie.PopularMovieRemoteDataSourceImpl
 import com.example.movieapp.data.remote.datasource.repository_implementation.search.GenreRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.repository_implementation.search.SearchRemoteDataSourceImpl
 import org.koin.dsl.module
 
 val dataSourceModule = module {
@@ -20,7 +24,16 @@ val dataSourceModule = module {
     single<GenreRemoteDataSource> {
         GenreRemoteDataSourceImpl(searchAndGenreApi = get())
     }
+    single<PopularMovieRemoteDataSource> {
+        PopularMovieRemoteDataSourceImpl(popularMovieApi = get())
+    }
+    single<SearchRemoteDataSource> {
+        SearchRemoteDataSourceImpl(searchAndGenreApi = get())
+    }
     single<MoviePagingDataSource> {
-        MoviePagingDataSourceImpl(popularMovieApi = get(), searchAndGenreApi = get())
+        MoviePagingDataSourceImpl(
+            popularMovieRemoteDataSource = get(),
+            searchRemoteDataSource = get(),
+        )
     }
 }

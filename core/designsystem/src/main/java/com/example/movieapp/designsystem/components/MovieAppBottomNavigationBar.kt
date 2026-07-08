@@ -1,5 +1,7 @@
 package com.example.movieapp.designsystem.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +40,10 @@ fun MovieAppNavigationButton(
             .fillMaxWidth()
             .height(MovieAppSizing.size62)
             .background(DarkColorScheme.black)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { /* consume clicks so they don't pass through to content behind */ }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size8),
         verticalAlignment = Alignment.CenterVertically
@@ -77,10 +83,10 @@ private fun NavTab(
             .clip(MovieAppShapes.corner8)
             .background(
                 if (isSelected) DarkColorScheme.primaryYellow
-                            else DarkColorScheme.darkestGrey
+                else DarkColorScheme.darkestGrey
             )
             .clickable { onClick() }
-            .padding(horizontal = 42.dp, vertical = 10.dp),
+            .padding(horizontal = MovieAppSizing.size42, vertical = MovieAppSizing.size10),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

@@ -7,6 +7,7 @@ import com.example.movieapp.data.di.coreDataModule
 import com.example.movieapp.home.home.di.homeViewModelModule
 import com.example.movieapp.favourite.favouritescreen.di.favoriteViewModelModule
 import com.example.movieapp.moviedetail.moviedetailscreen.di.movieDetailViewModelModule
+import com.example.movieapp.splash.splashscreen.di.splashViewModelModule
 
 class MovieApp : Application(){
     override fun onCreate() {
@@ -17,7 +18,8 @@ class MovieApp : Application(){
                 coreDataModule,
                 homeViewModelModule,
                 favoriteViewModelModule,
-                movieDetailViewModelModule
+                movieDetailViewModelModule,
+                splashViewModelModule
             )
         }
     }

@@ -2,20 +2,20 @@ package com.example.movieapp.data.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.movieapp.data.remote.datasource.repository.movie.PopularMovieRemoteDataSource
 import com.example.movieapp.data.remote.mapper.toDomain
-import com.example.movieapp.data.remote.network.movie.PopularMovieApi
 import com.example.movieapp.domain.model.movie.PopularMovie
 
 class PopularMoviePagingSource(
-    private val api: PopularMovieApi
+    private val remoteDataSource: PopularMovieRemoteDataSource
 ) : PagingSource<Int, PopularMovie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PopularMovie> {
         val page = params.key ?: 1
         return try {
-            val response = api.getPopularMovies(page = page)
+            val response = remoteDataSource.getPopularMovies(page = page)
             val body = response.body() ?:
-                return LoadResult.Error(Exception("Empty response"))
+            return LoadResult.Error(Exception("Empty response"))
             LoadResult.Page(
                 data = body.results.map { it.toDomain() },
                 prevKey = if (page == 1) null else page - 1,

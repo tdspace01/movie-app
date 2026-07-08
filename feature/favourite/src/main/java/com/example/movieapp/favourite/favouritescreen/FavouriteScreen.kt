@@ -2,7 +2,10 @@ package com.example.movieapp.favourite.favouritescreen
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -33,11 +36,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.movieapp.designsystem.components.MovieAppNavigationButton
 import com.example.movieapp.designsystem.components.MovieAppText
@@ -49,6 +55,8 @@ import com.example.movieapp.designsystem.design.MovieAppSpacing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.favourite.R
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun FavouriteScreen(
@@ -211,7 +219,8 @@ private fun FavouriteScreenContent(
                     onEvent(FavoriteEvent.OnHomeClick)
                 }
             },
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier
+                .align(Alignment.BottomCenter).zIndex(1f)
         )
     }
 }
@@ -223,16 +232,49 @@ private fun FavoriteMovieItem(
     onRemoveFavorite: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    MovieCard(
-        title = movie.title,
-        imageUrl = movie.posterUrl,
-        subtitle = movie.year,
-        badgeText = movie.category.ifEmpty { null },
-        favoriteIcon = painterResource(
-            com.example.movieapp.designsystem.R.drawable.small_marked_heart
+    var isClicked by remember(movie.id) { mutableStateOf(false) }
+
+    val alpha by animateFloatAsState(
+        targetValue = if (isClicked) 0f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessMediumLow
         ),
-        onCardClick = { onMovieClick(movie.id) },
-        onFavoriteClick = onRemoveFavorite,
-        modifier = modifier
+        label = stringResource(R.string.smooth)
     )
+
+    val scale by animateFloatAsState(
+        targetValue = if (isClicked) 0.85f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessMediumLow
+        ),
+        label = stringResource(R.string.smooth)
+    )
+
+    LaunchedEffect(isClicked) {
+        if (isClicked) {
+            delay(220.milliseconds)
+            onRemoveFavorite()
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .scale(scale)
+            .alpha(alpha)
+    ) {
+        MovieCard(
+            title = movie.title,
+            imageUrl = movie.posterUrl,
+            subtitle = movie.year,
+            badgeText = movie.category.ifEmpty { null },
+            favoriteIcon = painterResource(
+                com.example.movieapp.designsystem.R.drawable.small_marked_heart
+            ),
+            onCardClick = { if (!isClicked) onMovieClick(movie.id) },
+            onFavoriteClick = { isClicked = true },
+            modifier = Modifier
+        )
+    }
 }

@@ -11,72 +11,74 @@ import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
 import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import com.example.movieapp.ui.base.BaseViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class MovieDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val toggleFavoriteUseCase: ToggleFavouriteUseCase,
-    private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase
+    private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase,
 ) : BaseViewModel
 <MovieDetailState, MovieDetailEvent, MovieDetailSideEffect>(MovieDetailState()) {
 
-    private val route = savedStateHandle.toRoute<MovieDetailRoute.MovieDetail>()
-    private val movieId = route.movieId
-    private val category = route.category
-    private var detailsJob: Job? = null
-    private var networkJob: Job? = null
+    private val args = savedStateHandle.toRoute<MovieDetailRoute.MovieDetail>()
+    private val reloadTrigger = MutableStateFlow(0)
 
     init {
-        onEvent(MovieDetailEvent.LoadMovieDetails)
-        observeNetworkStatus()
+        observeDetails()
+        observeNetwork()
     }
 
     override fun onEvent(event: MovieDetailEvent) {
         when (event) {
-            is MovieDetailEvent.LoadMovieDetails -> loadMovieDetails()
-            is MovieDetailEvent.OnBackClick -> handleBackClick()
-            is MovieDetailEvent.OnToggleFavorite -> handleToggleFavorite()
-            is MovieDetailEvent.OnRefresh -> handleRefresh()
+            MovieDetailEvent.OnBackClick ->
+                emitSideEffect(MovieDetailSideEffect.NavigateBack)
+
+            MovieDetailEvent.OnToggleFavorite -> {
+                if (currentState.errorType == NetworkError.NO_INTERNET) return
+                val movie = currentState.movieDetail ?: return
+                viewModelScope.launch { toggleFavoriteUseCase(movie, args.category) }
+            }
+
+            MovieDetailEvent.OnRefresh -> reload()
         }
     }
 
-    private fun loadMovieDetails() {
-        detailsJob?.cancel()
-        detailsJob = viewModelScope.launch {
-            getMovieDetailsUseCase(movieId).collectAsResource(
-                onLoading = { loading -> updateState { copy(isLoading = loading) } },
-                onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
-                onSuccess = { data -> updateState {
-                    copy(isLoading = false, movieDetail = data, errorType = null) }
-                }
-            )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeDetails() {
+        viewModelScope.launch {
+            reloadTrigger
+                .flatMapLatest { getMovieDetailsUseCase(args.movieId) }
+                .collectAsResource(
+                    onLoading = { loading -> updateState { copy(isLoading = loading) } },
+                    onError = { error -> updateState {
+                        copy(isLoading = false, errorType = error)
+                    } },
+                    onSuccess = { data ->
+                        updateState {
+                            copy(isLoading = false, movieDetail = data, errorType = null)
+                        }
+                    }
+                )
         }
     }
 
-    private fun observeNetworkStatus() {
-        networkJob?.cancel()
-        networkJob = viewModelScope.launch {
+    private fun observeNetwork() {
+        viewModelScope.launch {
             observeNetworkStatusUseCase()
                 .distinctUntilChanged()
-                .collectLatest { status ->
+                .collect { status ->
                     when (status) {
-                        is NetworkStatus.Available -> {
-                            if (currentState.errorType == NetworkError.NO_INTERNET) {
-                                updateState { copy(errorType = null, isLoading = true) }
-                                loadMovieDetails()
-                            }
+                        NetworkStatus.Available -> {
+                            if (currentState.errorType == NetworkError.NO_INTERNET) reload()
                         }
-                        is NetworkStatus.Unavailable -> {
-                            detailsJob?.cancel()
+                        NetworkStatus.Unavailable -> {
                             updateState {
-                                copy(
-                                    isLoading = false,
-                                    errorType = NetworkError.NO_INTERNET
-                                )
+                                copy(isLoading = false, errorType = NetworkError.NO_INTERNET)
                             }
                         }
                     }
@@ -84,23 +86,11 @@ class MovieDetailViewModel(
         }
     }
 
-    private fun handleBackClick() {
-        emitSideEffect(MovieDetailSideEffect.NavigateBack)
-    }
-
-    private fun handleToggleFavorite() {
-        if (currentState.errorType == NetworkError.NO_INTERNET) return
-        val current = currentState.movieDetail ?: return
-        viewModelScope.launch {
-            toggleFavoriteUseCase(current, category)
-        }
-    }
-
-    private fun handleRefresh() {
+    private fun reload() {
         viewModelScope.launch {
             if (!observeNetworkStatusUseCase.isConnected()) return@launch
             updateState { copy(errorType = null, isLoading = true) }
-            loadMovieDetails()
+            reloadTrigger.value++
         }
     }
 }

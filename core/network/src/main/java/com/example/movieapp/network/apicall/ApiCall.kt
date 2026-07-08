@@ -45,5 +45,5 @@ fun <T> apiCall(
     )
 
     emit(result)
-    emit(NetworkResource.Loading(isLoading = false))
+   // emit(NetworkResource.Loading(isLoading = false))
 }

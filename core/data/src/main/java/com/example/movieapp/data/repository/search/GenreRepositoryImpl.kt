@@ -3,7 +3,7 @@ package com.example.movieapp.data.repository.search
 import com.example.movieapp.common.resource.NetworkResource
 import com.example.movieapp.common.resource.asResource
 import com.example.movieapp.data.remote.datasource.repository.search.GenreRemoteDataSource
-import com.example.movieapp.data.remote.mapper.globalGenreMap
+import com.example.movieapp.data.remote.mapper.MovieMapperConfig
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.domain.model.search.Genre
 import com.example.movieapp.domain.repository.search.GenreRepository
@@ -19,7 +19,7 @@ class GenreRepositoryImpl(
                 apiResponse.genres
                     .map { dto -> dto.toDomain() }
                     .also { domainGenres ->
-                        globalGenreMap = domainGenres.associate { it.id to it.name }
+                        MovieMapperConfig.genreMap = domainGenres.associate { it.id to it.name }
                     }
             }
     }
