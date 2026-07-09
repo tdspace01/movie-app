@@ -12,10 +12,12 @@ import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class MovieDetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -54,13 +56,22 @@ class MovieDetailViewModel(
             reloadTrigger
                 .flatMapLatest { getMovieDetailsUseCase(args.movieId) }
                 .collectAsResource(
-                    onLoading = { loading -> updateState { copy(isLoading = loading) } },
-                    onError = { error -> updateState {
-                        copy(isLoading = false, errorType = error)
-                    } },
+                    onLoading = { loading ->
+                        if (!currentState.isRefreshing) {
+                            updateState { copy(isLoading = loading) }
+                        }
+                    },
+                    onError = { error ->
+                        updateState {
+                            copy(isLoading = false, isRefreshing = false, errorType = error,)
+                        }
+                    },
                     onSuccess = { data ->
                         updateState {
-                            copy(isLoading = false, movieDetail = data, errorType = null)
+                            copy(
+                                isLoading = false,isRefreshing = false,
+                                movieDetail = data,errorType = null,
+                            )
                         }
                     }
                 )
@@ -73,12 +84,16 @@ class MovieDetailViewModel(
                 .distinctUntilChanged()
                 .collect { status ->
                     when (status) {
-                        NetworkStatus.Available -> {
-                            if (currentState.errorType == NetworkError.NO_INTERNET) reload()
-                        }
+                        NetworkStatus.Available -> Unit
                         NetworkStatus.Unavailable -> {
-                            updateState {
-                                copy(isLoading = false, errorType = NetworkError.NO_INTERNET)
+                            if (currentState.movieDetail == null) {
+                                updateState {
+                                    copy(
+                                        isLoading = false,
+                                        isRefreshing = false,
+                                        errorType = NetworkError.NO_INTERNET,
+                                    )
+                                }
                             }
                         }
                     }
@@ -87,9 +102,19 @@ class MovieDetailViewModel(
     }
 
     private fun reload() {
+        if (currentState.isRefreshing) return
         viewModelScope.launch {
-            if (!observeNetworkStatusUseCase.isConnected()) return@launch
-            updateState { copy(errorType = null, isLoading = true) }
+            updateState {copy(isRefreshing = true,isLoading = false,errorType = null,) }
+            delay(2.seconds)
+            if (!observeNetworkStatusUseCase.isConnected()) {
+                updateState {
+                    copy(
+                        isRefreshing = false,
+                        errorType = NetworkError.NO_INTERNET,
+                    )
+                }
+                return@launch
+            }
             reloadTrigger.value++
         }
     }

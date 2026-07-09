@@ -12,12 +12,17 @@ data class HomeState(
     val genres: List<Genre> = emptyList(),
     val refreshKey: Int = 0,
     val errorType: NetworkError? = null,
+    val isOffline: Boolean = false,
+    val isRefreshing: Boolean = false,
+    val requiresManualRefresh: Boolean = false,
 ) {
     val listMode: MovieListMode?
-        get() = when {
-            errorType == NetworkError.NO_INTERNET || genres.isEmpty() -> null
-            activeSearchQuery.isNotBlank() -> MovieListMode.Search(activeSearchQuery)
-            selectedGenreId != null -> MovieListMode.ByGenre(selectedGenreId)
-            else -> MovieListMode.Popular
+        get() {
+            if (genres.isEmpty()) return null
+            return when {
+                activeSearchQuery.isNotBlank() -> MovieListMode.Search(activeSearchQuery)
+                selectedGenreId != null -> MovieListMode.ByGenre(selectedGenreId)
+                else -> MovieListMode.Popular
+            }
         }
 }

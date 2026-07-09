@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,18 +35,27 @@ data class ChipItem(
 fun MovieAppCategoryChip(
     items: List<ChipItem>,
     selectedId: Int?,
-    isLoading: Boolean,
     onItemSelected: (Int) -> Unit,
     onClearSelected: () -> Unit,
     modifier: Modifier = Modifier,
     allLabel: String = stringResource(R.string.all)
 ) {
-    if (isLoading) {
-        MovieAppLoader()
-        return
+    val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(selectedId, items) {
+        val targetIndex = when (selectedId) {
+            null -> 0
+            else -> {
+                val itemIndex = items.indexOfFirst { it.id == selectedId }
+                if (itemIndex == -1) return@LaunchedEffect
+                itemIndex + 1
+            }
+        }
+        lazyListState.animateScrollToItem(targetIndex)
     }
 
     LazyRow(
+        state = lazyListState,
         contentPadding = PaddingValues(horizontal = MovieAppSpacing.spacing16),
         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08),
         modifier = modifier.fillMaxWidth().padding(bottom = MovieAppSpacing.spacing08)

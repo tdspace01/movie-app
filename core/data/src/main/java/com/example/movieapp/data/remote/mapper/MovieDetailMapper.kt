@@ -9,7 +9,7 @@ fun MovieDetailResponseDto.toDomain(): MovieDetail {
         val hours = minutes / 60
         val remainingMinutes = minutes % 60
         if (hours > 0) "${hours}h ${remainingMinutes}m" else "${remainingMinutes}m"
-    } ?: "N/A"
+    } ?: "n/a"
 
     val roundedRating = (this.voteAverage * 10).roundToInt() / 10.0
 

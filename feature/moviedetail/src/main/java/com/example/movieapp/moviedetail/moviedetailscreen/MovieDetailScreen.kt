@@ -99,7 +99,7 @@ private fun MovieDetailContent(
         modifier = modifier.fillMaxSize()
     ) {
         when {
-            state.isLoading -> {
+            state.isRefreshing || state.isLoading -> {
                 MovieAppLoader()
             }
 
@@ -266,7 +266,8 @@ private fun MovieDetailContent(
             }
         }
 
-        val shouldShowHeader = isHeaderVisible || state.isLoading || state.errorType != null
+        val shouldShowHeader =
+            isHeaderVisible || state.isLoading || state.isRefreshing || state.errorType != null
 
         AnimatedVisibility(
             visible = shouldShowHeader,

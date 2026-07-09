@@ -17,6 +17,7 @@ import com.example.movieapp.home.home.move_mode.MovieListMode
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class HomeViewModel(
     private val getPopularMoviesPagedUseCase: GetPopularMoviesPagedUseCase,
@@ -40,10 +42,10 @@ class HomeViewModel(
     val pagedMovies: Flow<PagingData<PopularMovie>> = state
         .map { it.listMode to it.refreshKey }
         .distinctUntilChanged()
-        .mapNotNull { (mode, _) -> mode }
+        .mapNotNull { (mode,_) -> mode }
         .flatMapLatest { mode ->
             when (mode) {
-                MovieListMode.Popular -> getPopularMoviesPagedUseCase(viewModelScope)
+                is MovieListMode.Popular -> getPopularMoviesPagedUseCase(viewModelScope)
                 is MovieListMode.Search -> searchMoviesPagedUseCase(mode.query, viewModelScope)
                 is MovieListMode.ByGenre -> {
                     getMoviesByGenrePagedUseCase(mode.genreId, viewModelScope)
@@ -78,16 +80,16 @@ class HomeViewModel(
                 updateState { copy(isGenresExpanded = !isGenresExpanded) }
 
             is HomeEvent.OnGenreSelected ->
-                if (currentState.errorType != NetworkError.NO_INTERNET) {
-                updateState {
-                    copy(
-                        selectedGenreId = if (selectedGenreId == event.genreId) null
+                if (!currentState.isOffline) {
+                    updateState {
+                        copy(
+                            selectedGenreId = if (selectedGenreId == event.genreId) null
                             else event.genreId
-                    )
+                        )
+                    }
                 }
-            }
 
-            HomeEvent.OnGenreCleared -> if (currentState.errorType != NetworkError.NO_INTERNET) {
+            HomeEvent.OnGenreCleared -> if (!currentState.isOffline) {
                 updateState { copy(selectedGenreId = null) }
             }
 
@@ -112,7 +114,7 @@ class HomeViewModel(
                 .drop(1)
                 .debounce(700.milliseconds)
                 .collect { query ->
-                    if (currentState.errorType == NetworkError.NO_INTERNET) return@collect
+                    if (currentState.isOffline) return@collect
                     updateState { copy(activeSearchQuery = query) }
                 }
         }
@@ -125,10 +127,15 @@ class HomeViewModel(
                 .collect { status ->
                     when (status) {
                         NetworkStatus.Available -> {
-                            if (currentState.errorType == NetworkError.NO_INTERNET) refresh()
+                            updateState { copy(isOffline = false) }
                         }
                         NetworkStatus.Unavailable -> {
-                            updateState { copy(errorType = NetworkError.NO_INTERNET) }
+                            updateState {
+                                copy(
+                                    isOffline = true,
+                                    requiresManualRefresh = true,
+                                )
+                            }
                         }
                     }
                 }
@@ -138,16 +145,45 @@ class HomeViewModel(
     private fun loadGenres() {
         viewModelScope.launch {
             getGenresUseCase(Unit).collectAsResource(
-                onError = { error -> updateState { copy(errorType = error) } },
+                onError = { error ->
+                    if (error != NetworkError.NO_INTERNET) {
+                        updateState {
+                            copy(
+                                errorType = error,
+                                requiresManualRefresh = true,
+                            )
+                        }
+                    }
+                },
                 onSuccess = { genres -> updateState { copy(genres = genres) } },
             )
         }
     }
 
     private fun refresh() {
+        if (currentState.isRefreshing) return
         viewModelScope.launch {
-            if (!observeNetworkStatusUseCase.isConnected()) return@launch
-            updateState { copy(errorType = null, refreshKey = refreshKey + 1) }
+            updateState { copy(isRefreshing = true, errorType = null) }
+            delay(2.seconds)
+            if (!observeNetworkStatusUseCase.isConnected()) {
+                updateState {
+                    copy(
+                        isRefreshing = false,
+                        isOffline = true,
+                        requiresManualRefresh = true,
+                    )
+                }
+                return@launch
+            }
+            updateState {
+                copy(
+                    isRefreshing = false,
+                    isOffline = false,
+                    errorType = null,
+                    requiresManualRefresh = false,
+                    refreshKey = refreshKey + 1,
+                )
+            }
             if (currentState.genres.isEmpty()) loadGenres()
         }
     }

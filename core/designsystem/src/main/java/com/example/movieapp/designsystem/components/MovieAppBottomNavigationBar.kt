@@ -43,7 +43,7 @@ fun MovieAppNavigationButton(
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
-            ) { /* consume clicks so they don't pass through to content behind */ }
+            ) { /* click doesn't go through */ }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size8),
         verticalAlignment = Alignment.CenterVertically

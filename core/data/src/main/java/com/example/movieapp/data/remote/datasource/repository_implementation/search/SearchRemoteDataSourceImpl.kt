@@ -14,7 +14,7 @@ class SearchRemoteDataSourceImpl(
     }
 
     override suspend fun discoverMoviesByGenre(genreId: Int, page: Int)
-    : Response<PopularMovieResponseDto> {
+            : Response<PopularMovieResponseDto> {
         return searchAndGenreApi.discoverMoviesByGenre(genreId = genreId, page = page)
     }
 }
