@@ -13,16 +13,16 @@ import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
 import com.example.movieapp.domain.usecase.search.GetGenresUseCase
 import com.example.movieapp.domain.usecase.search.GetMoviesByGenrePagedUseCase
 import com.example.movieapp.domain.usecase.search.SearchMoviesPagedUseCase
-import com.example.movieapp.home.home.move_mode.MovieListMode
+import com.example.movieapp.home.home.movie_mode.MovieListMode
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
@@ -63,45 +63,30 @@ class HomeViewModel(
         when (event) {
             is HomeEvent.OnSearchQueryChanged -> updateState {
                 if (event.query.isNotBlank()) {
-                    copy(
-                        searchQuery = event.query,
-                        isGenresExpanded = false,
+                    copy(searchQuery = event.query, isGenresExpanded = false,
                         selectedGenreId = null,
                     )
-                } else {
-                    copy(searchQuery = event.query)
-                }
+                } else { copy(searchQuery = event.query) }
             }
-
-            HomeEvent.OnClearSearch ->
-                updateState { copy(searchQuery = "", activeSearchQuery = "") }
-
+            HomeEvent.OnClearSearch ->updateState { copy(searchQuery = "", activeSearchQuery = "") }
             HomeEvent.OnToggleGenresVisibility ->
                 updateState { copy(isGenresExpanded = !isGenresExpanded) }
-
             is HomeEvent.OnGenreSelected ->
                 if (!currentState.isOffline) {
                     updateState {
-                        copy(
-                            selectedGenreId = if (selectedGenreId == event.genreId) null
+                        copy(selectedGenreId = if (selectedGenreId == event.genreId) null
                             else event.genreId
                         )
                     }
                 }
-
             HomeEvent.OnGenreCleared -> if (!currentState.isOffline) {
                 updateState { copy(selectedGenreId = null) }
             }
-
             is HomeEvent.OnToggleFavorite ->
                 viewModelScope.launch { toggleFavoriteUseCase(event.movie) }
-
             is HomeEvent.OnMovieClick ->
                 emitSideEffect(HomeSideEffect.NavigateToDetail(event.movieId, event.category))
-
-            HomeEvent.OnFavoriteClick ->
-                emitSideEffect(HomeSideEffect.NavigateToFavorite)
-
+            HomeEvent.OnFavoriteClick -> emitSideEffect(HomeSideEffect.NavigateToFavorite)
             HomeEvent.OnRefresh -> refresh()
         }
     }
@@ -126,16 +111,9 @@ class HomeViewModel(
                 .distinctUntilChanged()
                 .collect { status ->
                     when (status) {
-                        NetworkStatus.Available -> {
-                            updateState { copy(isOffline = false) }
-                        }
+                        NetworkStatus.Available -> {updateState { copy(isOffline = false) } }
                         NetworkStatus.Unavailable -> {
-                            updateState {
-                                copy(
-                                    isOffline = true,
-                                    requiresManualRefresh = true,
-                                )
-                            }
+                            updateState { copy(isOffline = true, requiresManualRefresh = true) }
                         }
                     }
                 }
@@ -147,12 +125,7 @@ class HomeViewModel(
             getGenresUseCase(Unit).collectAsResource(
                 onError = { error ->
                     if (error != NetworkError.NO_INTERNET) {
-                        updateState {
-                            copy(
-                                errorType = error,
-                                requiresManualRefresh = true,
-                            )
-                        }
+                        updateState { copy(errorType = error, requiresManualRefresh = true) }
                     }
                 },
                 onSuccess = { genres -> updateState { copy(genres = genres) } },
@@ -167,21 +140,14 @@ class HomeViewModel(
             delay(2.seconds)
             if (!observeNetworkStatusUseCase.isConnected()) {
                 updateState {
-                    copy(
-                        isRefreshing = false,
-                        isOffline = true,
-                        requiresManualRefresh = true,
-                    )
+                    copy(isRefreshing = false, isOffline = true,requiresManualRefresh = true)
                 }
                 return@launch
             }
             updateState {
                 copy(
-                    isRefreshing = false,
-                    isOffline = false,
-                    errorType = null,
-                    requiresManualRefresh = false,
-                    refreshKey = refreshKey + 1,
+                    isRefreshing = false,isOffline = false,
+                    errorType = null,requiresManualRefresh = false,refreshKey = refreshKey + 1,
                 )
             }
             if (currentState.genres.isEmpty()) loadGenres()

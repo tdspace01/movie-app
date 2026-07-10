@@ -10,13 +10,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 
-private val LocalRaveShopColors = staticCompositionLocalOf { DarkColorScheme }
+private val LocalMovieAppColor = staticCompositionLocalOf { DarkColorScheme }
 
 object MovieAppTheme {
     val colors: MovieAppColorScheme
         @Composable
         @ReadOnlyComposable
-        get() = LocalRaveShopColors.current
+        get() = LocalMovieAppColor.current
 }
 
 @Composable
@@ -28,7 +28,7 @@ fun MovieAppTheme(
 
     SystemThem(lightIcons = !darkTheme)
 
-    CompositionLocalProvider(LocalRaveShopColors provides colorScheme) {
+    CompositionLocalProvider(LocalMovieAppColor provides colorScheme) {
         Box(
             modifier = Modifier.fillMaxSize()
                 .background(colorScheme.black)

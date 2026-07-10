@@ -1,4 +1,4 @@
-package com.example.movieapp.home.home.move_mode
+package com.example.movieapp.home.home.movie_mode
 
 sealed interface MovieListMode {
     object Popular : MovieListMode

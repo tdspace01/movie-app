@@ -20,8 +20,11 @@ class FavoriteViewModel(
         when (event) {
             is FavoriteEvent.ObserveFavorites -> observeFavorites()
             is FavoriteEvent.OnRemoveFavorite -> handleRemoveFavorite(event.movie)
-            is FavoriteEvent.OnMovieClick -> handleMovieClick(event.movieId, event.category)
-            is FavoriteEvent.OnHomeClick -> handleHomeClick()
+            is FavoriteEvent.OnMovieClick -> {
+                emitSideEffect(FavoriteSideEffect.NavigateToDetail(event.movieId, event.category))
+            }
+            is FavoriteEvent.OnHomeClick -> emitSideEffect(FavoriteSideEffect.NavigateToHome)
+
         }
     }
 
@@ -37,13 +40,5 @@ class FavoriteViewModel(
         viewModelScope.launch {
             toggleFavoriteUseCase(movie)
         }
-    }
-
-    private fun handleMovieClick(movieId: Int, category: String) {
-        emitSideEffect(FavoriteSideEffect.NavigateToDetail(movieId, category))
-    }
-
-    private fun handleHomeClick() {
-        emitSideEffect(FavoriteSideEffect.NavigateToHome)
     }
 }

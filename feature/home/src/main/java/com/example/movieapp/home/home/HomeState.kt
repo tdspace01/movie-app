@@ -2,7 +2,7 @@ package com.example.movieapp.home.home
 
 import com.example.movieapp.common.resource.NetworkError
 import com.example.movieapp.domain.model.search.Genre
-import com.example.movieapp.home.home.move_mode.MovieListMode
+import com.example.movieapp.home.home.movie_mode.MovieListMode
 
 data class HomeState(
     val searchQuery: String = "",

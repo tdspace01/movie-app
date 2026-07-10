@@ -63,7 +63,7 @@ class MovieDetailViewModel(
                     },
                     onError = { error ->
                         updateState {
-                            copy(isLoading = false, isRefreshing = false, errorType = error,)
+                            copy(isLoading = false, isRefreshing = false, errorType = error)
                         }
                     },
                     onSuccess = { data ->
@@ -104,7 +104,7 @@ class MovieDetailViewModel(
     private fun reload() {
         if (currentState.isRefreshing) return
         viewModelScope.launch {
-            updateState {copy(isRefreshing = true,isLoading = false,errorType = null,) }
+            updateState {copy(isRefreshing = true,isLoading = false,errorType = null) }
             delay(2.seconds)
             if (!observeNetworkStatusUseCase.isConnected()) {
                 updateState {
