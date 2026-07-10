@@ -14,31 +14,11 @@ import org.koin.dsl.module
 val useCaseModule = module {
     factory { GetGenresUseCase(repository = get()) }
     factory { GetFavouriteIdsUseCase(repository = get()) }
-    factory {
-        GetMovieDetailsUseCase(
-            repository = get(),
-            getFavouriteIdsUseCase = get(),
-        )
-    }
+    factory { GetMovieDetailsUseCase(repository = get(),getFavouriteIdsUseCase = get()) }
     factory { ToggleFavouriteUseCase(repository = get()) }
     factory { GetFavouriteMoviesUseCase(repository = get()) }
     factory { ObserveNetworkStatusUseCase(networkObserver = get()) }
-    factory {
-        GetPopularMoviesPagedUseCase(
-            repository = get(),
-            getFavouriteIdsUseCase = get(),
-        )
-    }
-    factory {
-        SearchMoviesPagedUseCase(
-            repository = get(),
-            getFavouriteIdsUseCase = get(),
-        )
-    }
-    factory {
-        GetMoviesByGenrePagedUseCase(
-            repository = get(),
-            getFavouriteIdsUseCase = get(),
-        )
-    }
+    factory { GetPopularMoviesPagedUseCase(repository = get()) }
+    factory { SearchMoviesPagedUseCase(repository = get()) }
+    factory { GetMoviesByGenrePagedUseCase(repository = get()) }
 }

@@ -7,9 +7,11 @@ import com.example.movieapp.common.networkstatus.NetworkStatus
 import com.example.movieapp.common.resource.NetworkError
 import com.example.movieapp.common.resource.collectAsResource
 import com.example.movieapp.domain.model.movie.PopularMovie
+import com.example.movieapp.domain.usecase.common.withFavouriteState
 import com.example.movieapp.domain.usecase.movie.GetPopularMoviesPagedUseCase
 import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
 import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
+import com.example.movieapp.domain.usecase.search.GetFavouriteIdsUseCase
 import com.example.movieapp.domain.usecase.search.GetGenresUseCase
 import com.example.movieapp.domain.usecase.search.GetMoviesByGenrePagedUseCase
 import com.example.movieapp.domain.usecase.search.SearchMoviesPagedUseCase
@@ -36,6 +38,7 @@ class HomeViewModel(
     private val getGenresUseCase: GetGenresUseCase,
     private val toggleFavoriteUseCase: ToggleFavouriteUseCase,
     private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase,
+    getFavouriteIdsUseCase: GetFavouriteIdsUseCase,
 ) : BaseViewModel<HomeState, HomeEvent, HomeSideEffect>(HomeState()) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,13 +48,13 @@ class HomeViewModel(
         .mapNotNull { (mode,_) -> mode }
         .flatMapLatest { mode ->
             when (mode) {
-                is MovieListMode.Popular -> getPopularMoviesPagedUseCase(viewModelScope)
-                is MovieListMode.Search -> searchMoviesPagedUseCase(mode.query, viewModelScope)
+                is MovieListMode.Popular -> getPopularMoviesPagedUseCase()
+                is MovieListMode.Search -> searchMoviesPagedUseCase(mode.query)
                 is MovieListMode.ByGenre -> {
-                    getMoviesByGenrePagedUseCase(mode.genreId, viewModelScope)
+                    getMoviesByGenrePagedUseCase(mode.genreId)
                 }
             }
-        }.cachedIn(viewModelScope)
+        }.cachedIn(viewModelScope).withFavouriteState(getFavouriteIdsUseCase())
 
     init {
         loadGenres()
@@ -141,8 +144,7 @@ class HomeViewModel(
             if (!observeNetworkStatusUseCase.isConnected()) {
                 updateState {
                     copy(isRefreshing = false, isOffline = true,requiresManualRefresh = true)
-                }
-                return@launch
+                };return@launch
             }
             updateState {
                 copy(
