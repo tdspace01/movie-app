@@ -1,36 +1,30 @@
 package com.example.movieapp.data.di.dataSourceModule
 
-import com.example.movieapp.data.remote.datasource.repository.movie.MovieDetailRemoteDataSource
-import com.example.movieapp.data.remote.datasource.repository.movie.MoviePagingDataSource
-import com.example.movieapp.data.remote.datasource.repository.movie.PopularMovieLocalDataSource
-import com.example.movieapp.data.remote.datasource.repository.movie.PopularMovieRemoteDataSource
-import com.example.movieapp.data.remote.datasource.repository.search.GenreRemoteDataSource
-import com.example.movieapp.data.remote.datasource.repository.search.SearchRemoteDataSource
-import com.example.movieapp.data.remote.datasource.repository_implementation.movie.MovieDetailRemoteDataSourceImpl
-import com.example.movieapp.data.remote.datasource.repository_implementation.movie.MoviePagingDataSourceImpl
-import com.example.movieapp.data.remote.datasource.repository_implementation.movie.PopularMovieLocalDataSourceImpl
-import com.example.movieapp.data.remote.datasource.repository_implementation.movie.PopularMovieRemoteDataSourceImpl
-import com.example.movieapp.data.remote.datasource.repository_implementation.search.GenreRemoteDataSourceImpl
-import com.example.movieapp.data.remote.datasource.repository_implementation.search.SearchRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.remote.MovieDetailRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.remote.MoviePagingDataSourceImpl
+import com.example.movieapp.data.remote.datasource.local.PopularMovieLocalDataSourceImpl
+import com.example.movieapp.data.remote.datasource.remote.PopularMovieRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.remote.GenreRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.remote.SearchRemoteDataSourceImpl
 import org.koin.dsl.module
 
 val dataSourceModule = module {
-    single<MovieDetailRemoteDataSource> {
+    single {
         MovieDetailRemoteDataSourceImpl(movieDetailApi = get())
     }
-    single<PopularMovieLocalDataSource> {
+    single {
         PopularMovieLocalDataSourceImpl(favouriteMovieDao = get())
     }
-    single<GenreRemoteDataSource> {
+    single {
         GenreRemoteDataSourceImpl(searchAndGenreApi = get())
     }
-    single<PopularMovieRemoteDataSource> {
+    single {
         PopularMovieRemoteDataSourceImpl(popularMovieApi = get())
     }
-    single<SearchRemoteDataSource> {
+    single {
         SearchRemoteDataSourceImpl(searchAndGenreApi = get())
     }
-    single<MoviePagingDataSource> {
+    single {
         MoviePagingDataSourceImpl(
             popularMovieRemoteDataSource = get(),
             searchRemoteDataSource = get(),

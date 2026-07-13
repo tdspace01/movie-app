@@ -2,7 +2,7 @@ package com.example.movieapp.data.repository.search
 
 import com.example.movieapp.common.resource.NetworkResource
 import com.example.movieapp.common.resource.asResource
-import com.example.movieapp.data.remote.datasource.repository.search.GenreRemoteDataSource
+import com.example.movieapp.data.remote.datasource.remote.GenreRemoteDataSourceImpl
 import com.example.movieapp.data.remote.mapper.MovieMapperConfig
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.domain.model.search.Genre
@@ -11,7 +11,7 @@ import com.example.movieapp.network.apicall.apiCall
 import kotlinx.coroutines.flow.Flow
 
 class GenreRepositoryImpl(
-    private val remoteDataSource: GenreRemoteDataSource
+    private val remoteDataSource: GenreRemoteDataSourceImpl
 ) : GenreRepository {
     override fun getGenres(): Flow<NetworkResource<List<Genre>>> {
         return apiCall { remoteDataSource.getGenres() }

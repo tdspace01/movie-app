@@ -2,8 +2,8 @@ package com.example.movieapp.home.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.example.movieapp.home.home.HomeScreen
-import com.example.movieapp.home.home.HomeViewModel
+import com.example.movieapp.home.presentation.HomeScreen
+import com.example.movieapp.home.presentation.HomeViewModel
 import com.example.movieapp.navigation.home.HomeRoute
 import org.koin.androidx.compose.koinViewModel
 

@@ -3,13 +3,13 @@ package com.example.movieapp.data.repository.movie
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.movieapp.data.remote.datasource.repository.movie.MoviePagingDataSource
+import com.example.movieapp.data.remote.datasource.remote.MoviePagingDataSourceImpl
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.domain.repository.movie.MoviePagingRepository
 import kotlinx.coroutines.flow.Flow
 
 class MoviePagingRepositoryImpl(
-    private val dataSource: MoviePagingDataSource
+    private val dataSource: MoviePagingDataSourceImpl
 ) : MoviePagingRepository {
 
     override fun getPopularMoviesPaged(): Flow<PagingData<PopularMovie>> =

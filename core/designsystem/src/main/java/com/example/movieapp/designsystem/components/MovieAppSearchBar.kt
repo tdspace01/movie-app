@@ -36,7 +36,9 @@ fun MovieAppSearchBar(
     onFilterClick: () -> Unit,
     onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    showDeleteIcon: Boolean = false,
+    onDeleteLastCharacter: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -68,6 +70,7 @@ fun MovieAppSearchBar(
                 decorationBox = { innerTextField ->
 
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08)
                     ) {
@@ -79,7 +82,7 @@ fun MovieAppSearchBar(
                         )
 
                         Box(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.weight(1f),
                             contentAlignment = Alignment.CenterStart
                         ) {
 
@@ -91,6 +94,16 @@ fun MovieAppSearchBar(
                                 )
                             }
                             innerTextField()
+                        }
+
+                        if (showDeleteIcon && query.isNotEmpty()) {
+                            Image(
+                                painter = painterResource(id = R.drawable.search_clear_icon),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(MovieAppSizing.size10)
+                                    .clickable(enabled = enabled) { onDeleteLastCharacter() }
+                            )
                         }
                     }
                 },
