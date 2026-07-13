@@ -69,8 +69,8 @@ class MovieDetailViewModel(
                     onSuccess = { data ->
                         updateState {
                             copy(
-                                isLoading = false,isRefreshing = false,
-                                movieDetail = data,errorType = null,
+                                isLoading = false, isRefreshing = false,
+                                movieDetail = data, errorType = null,
                             )
                         }
                     }
@@ -104,14 +104,11 @@ class MovieDetailViewModel(
     private fun reload() {
         if (currentState.isRefreshing) return
         viewModelScope.launch {
-            updateState {copy(isRefreshing = true,isLoading = false,errorType = null) }
+            updateState { copy(isRefreshing = true, isLoading = false, errorType = null) }
             delay(2.seconds)
             if (!observeNetworkStatusUseCase.isConnected()) {
                 updateState {
-                    copy(
-                        isRefreshing = false,
-                        errorType = NetworkError.NO_INTERNET,
-                    )
+                    copy( isRefreshing = false, errorType = NetworkError.NO_INTERNET)
                 }
                 return@launch
             }

@@ -9,7 +9,7 @@ import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.splashGraph(
     onNavigateToHome: () -> Unit
-){
+) {
     composable<SplashRoute> {
         val viewModel: SplashViewModel = koinViewModel()
         SplashScreen(

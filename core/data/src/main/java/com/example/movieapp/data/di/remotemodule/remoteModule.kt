@@ -7,7 +7,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 
 val remoteModule = module {
-    single <PopularMovieApi>{ get<Retrofit>().create(PopularMovieApi::class.java) }
-    single <MovieDetailApi>{ get<Retrofit>().create(MovieDetailApi::class.java) }
-    single <SearchAndGenreApi>{ get<Retrofit>().create(SearchAndGenreApi::class.java) }
+    single<PopularMovieApi> { get<Retrofit>().create(PopularMovieApi::class.java) }
+    single<MovieDetailApi> { get<Retrofit>().create(MovieDetailApi::class.java) }
+    single<SearchAndGenreApi> { get<Retrofit>().create(SearchAndGenreApi::class.java) }
 }

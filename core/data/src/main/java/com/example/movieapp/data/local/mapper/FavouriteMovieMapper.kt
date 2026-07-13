@@ -13,7 +13,7 @@ fun FavouriteMovieEntity.toDomain(): PopularMovie {
     )
 }
 
-fun PopularMovie.toEntity(): FavouriteMovieEntity{
+fun PopularMovie.toEntity(): FavouriteMovieEntity {
     return FavouriteMovieEntity(
         id = this.id,
         title = this.title,

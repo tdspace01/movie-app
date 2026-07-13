@@ -23,6 +23,7 @@ class FavouriteViewModel(
             is FavouriteEvent.OnMovieClick -> {
                 emitSideEffect(FavouriteSideEffect.NavigateToDetail(event.movieId, event.category))
             }
+
             is FavouriteEvent.OnHomeClick -> emitSideEffect(FavouriteSideEffect.NavigateToHome)
 
         }

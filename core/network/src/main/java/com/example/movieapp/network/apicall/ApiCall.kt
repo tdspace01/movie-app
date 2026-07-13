@@ -15,27 +15,27 @@ fun <T> apiCall(
     emit(NetworkResource.Loading(isLoading = true))
 
     val result = runCatching { apiCall() }.fold(
-        onSuccess = { response->
-          if(response.isSuccessful){
-              val body = response.body()
-              if(body != null){
-                  NetworkResource.Success(body)
-              }else{
-                  NetworkResource.Error(NetworkError.EMPTY_RESPONSE)
-              }
-          }else{
+        onSuccess = { response ->
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    NetworkResource.Success(body)
+                } else {
+                    NetworkResource.Error(NetworkError.EMPTY_RESPONSE)
+                }
+            } else {
                 val errorBody = response.errorBody()?.string()
-                val errorType = when(response.code()) {
+                val errorType = when (response.code()) {
                     401 -> NetworkError.UNAUTHORIZED
                     404 -> NetworkError.NOT_FOUND
                     else -> NetworkError.UNKNOWN
                 }
-              NetworkResource.Error(errorType, message = errorBody)
-          }
+                NetworkResource.Error(errorType, message = errorBody)
+            }
         },
 
-        onFailure = { e->
-            val errorType = when(e){
+        onFailure = { e ->
+            val errorType = when (e) {
                 is IOException -> NetworkError.NO_INTERNET
                 is HttpException -> NetworkError.SERVER_UNREACHABLE
                 else -> NetworkError.UNKNOWN
@@ -45,5 +45,5 @@ fun <T> apiCall(
     )
 
     emit(result)
-   // emit(NetworkResource.Loading(isLoading = false))
+    // emit(NetworkResource.Loading(isLoading = false))
 }

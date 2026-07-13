@@ -4,6 +4,6 @@ import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModelOf
 import com.example.movieapp.moviedetail.presentation.MovieDetailViewModel
 
-val movieDetailViewModelModule = module{
+val movieDetailViewModelModule = module {
     viewModelOf(::MovieDetailViewModel)
 }

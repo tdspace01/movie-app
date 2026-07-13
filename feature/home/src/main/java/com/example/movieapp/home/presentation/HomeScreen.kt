@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -80,6 +79,7 @@ fun HomeScreen(
             when (effect) {
                 is HomeSideEffect.NavigateToDetail ->
                     onNavigateToDetail(effect.movieId, effect.category)
+
                 is HomeSideEffect.NavigateToFavorite ->
                     onNavigateToFavorite()
             }
@@ -96,7 +96,6 @@ fun HomeScreen(
     )
 }
 
-@SuppressLint("FrequentlyChangingValue")
 @Composable
 private fun HomeScreenContent(
     state: HomeState,
@@ -117,12 +116,12 @@ private fun HomeScreenContent(
 
     val isGenresExpanded = state.isGenresExpanded
     val dynamicTopPadding by animateDpAsState(
-        targetValue = if (isGenresExpanded) 100.dp else 70.dp,
-        label = "ListPaddingAnimation"
+        targetValue = if (isGenresExpanded) MovieAppSizing.size100 else MovieAppSizing.size70,
+        label = stringResource(R.string.list_padding_animation)
     )
     val gridBottomPadding by animateDpAsState(
         targetValue = if (showOfflineBanner) MovieAppSizing.size106 else MovieAppSizing.size80,
-        label = "GridBottomPadding"
+        label = stringResource(R.string.grid_bottom_padding)
     )
 
     LaunchedEffect(showFullError, state.isRefreshing, isInitialLoading, isGridAtTop) {
@@ -365,8 +364,9 @@ private fun HomeMoviesGrid(
                             onMovieClick = {
                                 onEvent(
                                     HomeEvent.OnMovieClick(
-                                    movie.id,
-                                    movie.category)
+                                        movie.id,
+                                        movie.category
+                                    )
                                 )
                             },
                             onFavoriteClick = {

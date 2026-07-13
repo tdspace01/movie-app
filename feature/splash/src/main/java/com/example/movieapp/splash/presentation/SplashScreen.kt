@@ -15,24 +15,27 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SplashScreen(
-    onNavigateToHome:()-> Unit,
+    onNavigateToHome: () -> Unit,
     viewModel: SplashViewModel
-){
+) {
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.collectLatest { effect->
-            when(effect){
+        viewModel.sideEffect.collectLatest { effect ->
+            when (effect) {
                 is SplashSideEffect.NavigateToHome -> onNavigateToHome()
             }
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Image(
             painter = painterResource(com.example.movieapp.splash.R.drawable.splash_logo),
             contentDescription = null,
-            modifier = Modifier.width(MovieAppSizing.size80).height(MovieAppSizing.size40)
+            modifier = Modifier
+                .width(MovieAppSizing.size80)
+                .height(MovieAppSizing.size40)
         )
     }
 }

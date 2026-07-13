@@ -1,6 +1,6 @@
 package com.example.movieapp.data.remote.datasource.remote
 
-import com.example.movieapp.data.remote.model.response_dto.search.GenreListResponseDto
+import com.example.movieapp.data.remote.model.search.GenreListResponseDto
 import com.example.movieapp.data.remote.network.search.SearchAndGenreApi
 import retrofit2.Response
 

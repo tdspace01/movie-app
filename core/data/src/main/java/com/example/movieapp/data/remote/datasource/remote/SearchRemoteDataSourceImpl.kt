@@ -1,7 +1,7 @@
 package com.example.movieapp.data.remote.datasource.remote
 
-import com.example.movieapp.data.remote.model.response_dto.movie.PopularMovieResponseDto
-import com.example.movieapp.data.remote.model.response_dto.search.SearchMovieResponseDto
+import com.example.movieapp.data.remote.model.movie.PopularMovieResponseDto
+import com.example.movieapp.data.remote.model.search.SearchMovieResponseDto
 import com.example.movieapp.data.remote.network.search.SearchAndGenreApi
 import retrofit2.Response
 

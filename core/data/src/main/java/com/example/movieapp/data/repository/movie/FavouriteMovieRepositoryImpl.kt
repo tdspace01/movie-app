@@ -14,17 +14,21 @@ class FavouriteMovieRepositoryImpl(
     override suspend fun insertFavourite(movie: PopularMovie) {
         localDataSource.insertFavourite(movie.toEntity())
     }
+
     override suspend fun deleteFavourite(movie: PopularMovie) {
         localDataSource.deleteFavourite(movie.toEntity())
     }
+
     override fun getAllFavourites(): Flow<List<PopularMovie>> {
         return localDataSource.getAllFavourites().map { entities ->
             entities.map { it.toDomain() }
         }
     }
+
     override fun isMovieFavourite(movieId: Int): Flow<Boolean> {
         return localDataSource.isMovieFavourite(movieId)
     }
+
     override fun getFavouriteIds(): Flow<Set<Int>> {
         return localDataSource.getAllFavourites().map { entities ->
             entities.map { it.id }.toSet()

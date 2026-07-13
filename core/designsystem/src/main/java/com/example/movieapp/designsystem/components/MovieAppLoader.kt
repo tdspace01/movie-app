@@ -39,14 +39,17 @@ fun MovieAppLoader(
     )
 
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(DarkColorScheme.black),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(R.drawable.loader_icon),
             contentDescription = null,
-            modifier = Modifier.size(MovieAppSizing.size96).rotate(angle)
+            modifier = Modifier
+                .size(MovieAppSizing.size96)
+                .rotate(angle)
         )
     }
 }

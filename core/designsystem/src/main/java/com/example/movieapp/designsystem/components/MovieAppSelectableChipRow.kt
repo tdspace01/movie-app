@@ -58,7 +58,9 @@ fun MovieAppCategoryChip(
         state = lazyListState,
         contentPadding = PaddingValues(horizontal = MovieAppSpacing.spacing16),
         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08),
-        modifier = modifier.fillMaxWidth().padding(bottom = MovieAppSpacing.spacing08)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = MovieAppSpacing.spacing08)
     ) {
         item {
             CategoryChip(
@@ -90,7 +92,8 @@ private fun CategoryChip(
             .background(
                 if (selected) DarkColorScheme.primaryYellow
                 else DarkColorScheme.darkestGrey
-            ).then(
+            )
+            .then(
                 if (!selected) Modifier.border(
                     width = 0.5.dp,
                     color = DarkColorScheme.darkGrey,

@@ -42,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.movieapp.designsystem.components.MovieAppNavigationButton
@@ -73,6 +72,7 @@ fun FavouriteScreen(
                 is FavouriteSideEffect.NavigateToDetail -> {
                     onNavigateToDetails(effect.movieId, effect.category)
                 }
+
                 is FavouriteSideEffect.NavigateToHome -> onNavigateToHome()
             }
         }
@@ -96,12 +96,14 @@ private fun FavouriteScreenContent(
     var isHeaderVisible by remember { mutableStateOf(true) }
 
     val dynamicTopPadding by animateDpAsState(
-        targetValue = if (isHeaderVisible) 50.dp else 0.dp,
-        label = "ListPaddingAnimation"
+        targetValue = if (isHeaderVisible) MovieAppSizing.size50 else MovieAppSizing.size0,
+        label = stringResource(R.string.list_padding_animation)
     )
 
-    LaunchedEffect(lazyListState.firstVisibleItemIndex,
-        lazyListState.firstVisibleItemScrollOffset) {
+    LaunchedEffect(
+        lazyListState.firstVisibleItemIndex,
+        lazyListState.firstVisibleItemScrollOffset
+    ) {
         val isAtAbsoluteTop = lazyListState.firstVisibleItemIndex == 0
                 && lazyListState.firstVisibleItemScrollOffset == 0
         isHeaderVisible = isAtAbsoluteTop
@@ -148,6 +150,7 @@ private fun FavouriteScreenContent(
                         }
                     }
                 }
+
                 else -> {
                     LazyColumn(
                         state = lazyListState,
@@ -161,7 +164,10 @@ private fun FavouriteScreenContent(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                    .padding(
+                                        horizontal = MovieAppSizing.size16,
+                                        vertical = MovieAppSizing.size8
+                                    ),
                                 horizontalArrangement = Arrangement.spacedBy(MovieAppSizing.size16)
                             ) {
                                 row.forEach { movie ->
@@ -220,7 +226,8 @@ private fun FavouriteScreenContent(
                 }
             },
             modifier = Modifier
-                .align(Alignment.BottomCenter).zIndex(1f)
+                .align(Alignment.BottomCenter)
+                .zIndex(1f)
         )
     }
 }

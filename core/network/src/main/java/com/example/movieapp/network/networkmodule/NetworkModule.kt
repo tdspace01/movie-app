@@ -46,8 +46,10 @@ val networkModule = module {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(get<OkHttpClient>())
-            .addConverterFactory(get<Json>()
-                .asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(
+                get<Json>()
+                    .asConverterFactory("application/json".toMediaType())
+            )
             .build()
     }
 }

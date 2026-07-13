@@ -1,4 +1,4 @@
-package com.example.movieapp.data.remote.model.response_dto.movie
+package com.example.movieapp.data.remote.model.movie
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -16,6 +16,5 @@ data class MovieDetailResponseDto(
     val voteAverage: Double,
     @SerialName("release_date")
     val releaseDate: String? = null,
-    @SerialName("runtime")
     val runtime: Int? = null
 )

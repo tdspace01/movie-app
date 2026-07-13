@@ -1,9 +1,9 @@
 package com.example.movieapp.data.remote.mapper
 
-import com.example.movieapp.data.remote.model.request_dto.movie.PopularMovieDto
+import com.example.movieapp.data.remote.model.movie.PopularMovieResponseDto
 import com.example.movieapp.domain.model.movie.PopularMovie
 
-fun PopularMovieDto.toDomain(genreMap: Map<Int, String> = emptyMap()): PopularMovie {
+fun PopularMovieResponseDto.PopularMovieDto.toDomain(genreMap: Map<Int, String> = emptyMap()): PopularMovie {
     val activeMap = genreMap.ifEmpty { MovieMapperConfig.genreMap }
     val genreNames = genreIds.mapNotNull { activeMap[it] }
 

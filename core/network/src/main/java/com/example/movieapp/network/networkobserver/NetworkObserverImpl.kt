@@ -21,6 +21,7 @@ class NetworkObserverImpl(
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     override fun observe(): Flow<NetworkStatus> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
@@ -36,7 +37,8 @@ class NetworkObserverImpl(
         val isCurrentlyConnected = isConnected()
         trySend(
             if (isCurrentlyConnected) NetworkStatus.Available
-            else NetworkStatus.Unavailable)
+            else NetworkStatus.Unavailable
+        )
 
         val request = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)

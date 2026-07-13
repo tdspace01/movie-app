@@ -1,6 +1,6 @@
 package com.example.movieapp.data.remote.mapper
 
-import com.example.movieapp.data.remote.model.response_dto.movie.MovieDetailResponseDto
+import com.example.movieapp.data.remote.model.movie.MovieDetailResponseDto
 import com.example.movieapp.domain.model.movie.MovieDetail
 import kotlin.math.roundToInt
 
