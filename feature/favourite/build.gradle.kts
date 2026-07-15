@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.example.movieapp.favourite"
 }
+
+dependencies{
+    implementation(project(":core:navigation"))
+}
