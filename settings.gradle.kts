@@ -27,25 +27,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "movieapp"
 include(":app")
-<<<<<<< HEAD
 include(":core:ui")
 include(":core:data")
-include(":core:domain")
-include(":core:common")
-=======
-include(":core:data")
 include(":core:common")
 include(":core:domain")
->>>>>>> fc8400e (Networking Branch: Api calls added)
 include(":feature:home:")
 include(":core:network:")
 include(":feature:splash:")
 include(":core:navigation:")
-<<<<<<< HEAD
-include(":feature:favourite:")
-include(":core:designsystem:")
-=======
 include(":core:designsystem:")
 include(":feature:favourite:")
->>>>>>> fc8400e (Networking Branch: Api calls added)
 include(":feature:moviedetail:")
