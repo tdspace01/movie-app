@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.dependencies
+
 plugins {
     id("convention.android.library")
     id("convention.compose")

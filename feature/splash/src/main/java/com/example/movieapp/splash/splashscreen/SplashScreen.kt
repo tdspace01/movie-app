@@ -1,5 +1,3 @@
-<<<<<<< HEAD:feature/splash/src/main/java/com/example/movieapp/splash/splash_screen/SplashScreen.kt
-=======
 package com.example.movieapp.splash.splashscreen
 
 import androidx.compose.foundation.Image
@@ -28,17 +26,13 @@ fun SplashScreen(
         }
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize(),
+    Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Image(
             painter = painterResource(com.example.movieapp.splash.R.drawable.splash_logo),
             contentDescription = null,
-            modifier = Modifier
-                .width(80.dp)
-                .height(40.dp)
+            modifier = Modifier.width(80.dp).height(40.dp)
         )
     }
 }
->>>>>>> fc8400e (Networking Branch: Api calls added):feature/splash/src/main/java/com/example/movieapp/splash/splashscreen/SplashScreen.kt
