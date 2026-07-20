@@ -3,7 +3,6 @@
     <string name="movies_home">Movies</string>
     <string name="search">Search</string>
     <string name="no_result">No results found</string>
-    <string name="no_internet_connection">Oee no internet connection</string>
     <string name="list_padding_animation">ListPaddingAnimation</string>
     <string name="grid_bottom_padding">GridBottomPadding</string>
 </resources>

@@ -6,7 +6,7 @@ data class MovieDetail(
     val overview: String,
     val posterUrl: String?,
     val backdropUrl: String?,
-    val rating: Double,
+    val rating: String?,
     val releaseYear: String,
     val durationFormatted: String,
     val isFavorite: Boolean = false

@@ -2,12 +2,12 @@ package com.example.movieapp.data.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.movieapp.data.remote.datasource.remote.PopularMovieRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.contract.PopularMovieRemoteDataSource
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.domain.model.movie.PopularMovie
 
 class PopularMoviePagingSource(
-    private val remoteDataSource: PopularMovieRemoteDataSourceImpl
+    private val remoteDataSource: PopularMovieRemoteDataSource
 ) : PagingSource<Int, PopularMovie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PopularMovie> {

@@ -1,8 +1,8 @@
 package com.example.movieapp.home.di
 
-import org.koin.dsl.module
+import com.example.movieapp.home.presentation.vm.HomeViewModel
 import org.koin.core.module.dsl.viewModelOf
-import com.example.movieapp.home.presentation.HomeViewModel
+import org.koin.dsl.module
 
 val homeViewModelModule = module {
     viewModelOf(::HomeViewModel)

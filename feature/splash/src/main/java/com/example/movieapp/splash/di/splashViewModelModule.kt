@@ -1,6 +1,6 @@
 package com.example.movieapp.splash.di
 
-import com.example.movieapp.splash.presentation.SplashViewModel
+import com.example.movieapp.splash.presentation.vm.SplashViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

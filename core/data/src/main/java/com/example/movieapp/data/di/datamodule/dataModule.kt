@@ -24,6 +24,9 @@ val dataModule = module {
     }
 
     single<MoviePagingRepository> {
-        MoviePagingRepositoryImpl(dataSource = get())
+        MoviePagingRepositoryImpl(
+            popularMovieRemoteDataSource = get(),
+            searchAndGenreRemoteDataSource = get(),
+        )
     }
 }

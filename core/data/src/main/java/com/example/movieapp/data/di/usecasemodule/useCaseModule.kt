@@ -1,11 +1,12 @@
 package com.example.movieapp.data.di.usecasemodule
 
+import com.example.movieapp.domain.usecase.movie.GetFavouriteIdsUseCase
 import com.example.movieapp.domain.usecase.movie.GetFavouriteMoviesUseCase
 import com.example.movieapp.domain.usecase.movie.GetMovieDetailsUseCase
 import com.example.movieapp.domain.usecase.movie.GetPopularMoviesPagedUseCase
+import com.example.movieapp.domain.usecase.movie.ObserveHomeMoviesUseCase
 import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
 import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
-import com.example.movieapp.domain.usecase.search.GetFavouriteIdsUseCase
 import com.example.movieapp.domain.usecase.search.GetGenresUseCase
 import com.example.movieapp.domain.usecase.search.GetMoviesByGenrePagedUseCase
 import com.example.movieapp.domain.usecase.search.SearchMoviesPagedUseCase
@@ -21,4 +22,11 @@ val useCaseModule = module {
     factory { GetPopularMoviesPagedUseCase(repository = get()) }
     factory { SearchMoviesPagedUseCase(repository = get()) }
     factory { GetMoviesByGenrePagedUseCase(repository = get()) }
+    factory {
+        ObserveHomeMoviesUseCase(
+            getPopularMoviesPagedUseCase = get(),
+            searchMoviesPagedUseCase = get(),
+            getMoviesByGenrePagedUseCase = get(),
+        )
+    }
 }

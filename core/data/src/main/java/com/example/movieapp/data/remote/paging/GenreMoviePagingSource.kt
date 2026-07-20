@@ -2,12 +2,12 @@ package com.example.movieapp.data.remote.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.movieapp.data.remote.datasource.remote.SearchRemoteDataSourceImpl
+import com.example.movieapp.data.remote.datasource.contract.SearchAndGenreRemoteDataSource
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.domain.model.movie.PopularMovie
 
 class GenreMoviePagingSource(
-    private val remoteDataSource: SearchRemoteDataSourceImpl,
+    private val remoteDataSource: SearchAndGenreRemoteDataSource,
     private val genreId: Int
 ) : PagingSource<Int, PopularMovie>() {
 

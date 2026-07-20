@@ -11,7 +11,9 @@ fun MovieDetailResponseDto.toDomain(): MovieDetail {
         if (hours > 0) "${hours}h ${remainingMinutes}m" else "${remainingMinutes}m"
     } ?: "n/a"
 
-    val roundedRating = (this.voteAverage * 10).roundToInt() / 10.0
+    val rating = voteAverage
+        .takeIf { it > 0 }
+        ?.let { avg -> "%.1f".format((avg * 10).roundToInt() / 10.0) }
 
     return MovieDetail(
         id = this.id,
@@ -19,8 +21,8 @@ fun MovieDetailResponseDto.toDomain(): MovieDetail {
         overview = this.overview,
         posterUrl = this.posterPath?.let { "${MovieMapperConfig.POSTER_BASE_URL}$it" },
         backdropUrl = this.backdropPath?.let { "${MovieMapperConfig.BACKDROP_BASE_URL}$it" },
-        rating = roundedRating,
-        releaseYear = if (!this.releaseDate.isNullOrBlank()) this.releaseDate.take(4) else "n/a",
-        durationFormatted = formattedDuration
+        rating = rating,
+        durationFormatted = formattedDuration,
+        releaseYear = if (!this.releaseDate.isNullOrBlank()) this.releaseDate.take(4) else "n/a"
     )
 }
