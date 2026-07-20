@@ -1,8 +1,4 @@
-<<<<<<< HEAD:feature/favourite/src/main/java/com/example/movieapp/favourite/favourite_screen/FavouriteScreen.kt
-package com.example.movieapp.favourite
-=======
 package com.example.movieapp.favourite.favouritescreen
->>>>>>> fc8400e (Networking Branch: Api calls added):feature/favourite/src/main/java/com/example/movieapp/favourite/favouritescreen/FavouriteScreen.kt
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

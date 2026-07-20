@@ -1,8 +1,4 @@
-<<<<<<< HEAD:feature/home/src/main/java/com/example/movieapp/home/home_screen/HomeScreen.kt
-package com.example.movieapp.home
-=======
 package com.example.movieapp.home.home
->>>>>>> fc8400e (Networking Branch: Api calls added):feature/home/src/main/java/com/example/movieapp/home/home/HomeScreen.kt
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

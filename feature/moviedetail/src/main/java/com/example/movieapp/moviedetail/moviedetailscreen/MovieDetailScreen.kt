@@ -1,8 +1,4 @@
-<<<<<<< HEAD:feature/moviedetail/src/main/java/com/example/movieapp/moviedetail/movie_detail_screen/MovieDetailScreen.kt
-package com.example.movieapp.moviedetail
-=======
 package com.example.movieapp.moviedetail.moviedetailscreen
->>>>>>> fc8400e (Networking Branch: Api calls added):feature/moviedetail/src/main/java/com/example/movieapp/moviedetail/moviedetailscreen/MovieDetailScreen.kt
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
