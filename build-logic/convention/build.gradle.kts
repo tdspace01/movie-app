@@ -23,11 +23,12 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    compileOnly(libs.plugins.android.application.toDep())
-    compileOnly(libs.plugins.android.library.toDep())
-    compileOnly(libs.plugins.kotlin.android.toDep())
-    compileOnly(libs.plugins.kotlin.compose.toDep())
-    compileOnly(libs.plugins.google.ksp.toDep())
+    implementation(libs.plugins.android.application.toDep())
+    implementation(libs.plugins.android.library.toDep())
+    implementation(libs.plugins.kotlin.android.toDep())
+    implementation(libs.plugins.kotlin.compose.toDep())
+    implementation(libs.plugins.google.ksp.toDep())
+    implementation(libs.plugins.kotlin.serialization.toDep())
 }
 
 fun Provider<PluginDependency>.toDep() = map {
@@ -51,6 +52,10 @@ gradlePlugin {
         register("kotlinLibrary"){
             id = "convention.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"
+        }
+        register("androidNetwork"){
+            id = "convention.android.network"
+            implementationClass = "AndroidNetworkConventionPlugin"
         }
     }
 }
