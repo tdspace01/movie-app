@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppLineHeight
@@ -22,6 +23,7 @@ import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
+import com.example.movieapp.moviedetail.R
 
 @Composable
 internal fun MovieDetailInfoChip(
@@ -68,4 +70,14 @@ internal fun MovieDetailInfoChip(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieDetailInfoChipP(){
+    MovieDetailInfoChip(
+        text = "6.9",
+        modifier = Modifier,
+        iconRes = R.drawable.start_icon
+    )
 }

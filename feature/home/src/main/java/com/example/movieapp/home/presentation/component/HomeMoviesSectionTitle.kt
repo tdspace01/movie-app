@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppSizing
@@ -38,4 +39,16 @@ internal fun HomeEmptySearchResult(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(horizontal = MovieAppSizing.size24),
         )
     }
+}
+
+@Preview
+@Composable
+private fun HomeMoviesSectionTitlePreview() {
+    HomeMoviesSectionTitle()
+}
+
+@Preview
+@Composable
+private fun HomeEmptySearchResultPreview() {
+    HomeEmptySearchResult()
 }

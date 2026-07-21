@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.SubcomposeAsyncImage
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppShapes
@@ -70,4 +71,48 @@ private fun PlaceholderBox(
             modifier = Modifier.size(MovieAppSizing.size36)
         )
     }
+}
+
+@Preview
+@Composable
+private fun MovieAppAsyncImageValidUrlP() {
+    MovieAppAsyncImage(
+        imageUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+        contentDescription = "Sample movie poster",
+        modifier = Modifier
+            .size(MovieAppSizing.size100)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppAsyncImageNullUrlP() {
+    MovieAppAsyncImage(
+        imageUrl = null,
+        contentDescription = null,
+        modifier = Modifier
+        .size(MovieAppSizing.size100)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppAsyncImageEmptyUrlP() {
+    MovieAppAsyncImage(
+        imageUrl = "",
+        contentDescription = null,
+        modifier = Modifier
+            .size(MovieAppSizing.size100)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppAsyncImageInvalidUrlP() {
+    MovieAppAsyncImage(
+        imageUrl = "https://this-domain-does-not-exist-12345.invalid/broken.jpg",
+        contentDescription = null,
+        modifier = Modifier
+        .size(MovieAppSizing.size100)
+    )
 }

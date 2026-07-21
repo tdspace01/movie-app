@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppAsyncImage
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
@@ -195,3 +196,52 @@ private fun MovieDetailPoster(
         }
     }
 }
+
+@Preview
+@Composable
+private fun MovieDetailBodyP() {
+    MovieDetailBody(
+        movie = previewMovieDetail,
+        category = "Sci-Fi",
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun MovieDetailBodyNoBackdropP() {
+    MovieDetailBody(
+        movie = previewMovieDetail.copy(
+            backdropUrl = null,
+            isFavorite = false,
+        ),
+        category = "Sci-Fi",
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun MovieDetailBodyMissingMetadataP() {
+    MovieDetailBody(
+        movie = previewMovieDetail.copy(
+            durationFormatted = "",
+            releaseYear = "",
+        ),
+        category = "N/A",
+        onEvent = {},
+    )
+}
+
+private val previewMovieDetail = MovieDetail(
+    id = 1,
+    title = "Interstellar",
+    posterUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+    backdropUrl = "https://image.tmdb.org/t/p/w780/sample_backdrop.jpg",
+    overview = "A team of explorers travel through a wormhole in space in an attempt to ensure " +
+            "humanity's survival by finding a new habitable planet beyond our solar system.",
+    rating = "8.6",
+    durationFormatted = "2h 49m",
+    releaseYear = "2014",
+    isFavorite = true,
+)

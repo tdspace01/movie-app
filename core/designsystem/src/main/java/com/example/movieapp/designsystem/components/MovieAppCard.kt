@@ -13,13 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppLineHeight
 import com.example.movieapp.designsystem.design.MovieAppShapes
@@ -126,4 +129,72 @@ fun MovieCard(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieCardWithBadgeP() {
+    MovieCard(
+        title = "Interstellar",
+        imageUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+        subtitle = "2014",
+        badgeText = "Sci-Fi",
+        favoriteIcon = painterResource(
+            com.example.movieapp.designsystem.R.drawable.small_marked_heart,
+        ),
+        onCardClick = {},
+        onFavoriteClick = {},
+        modifier = Modifier.width(MovieAppSizing.size200)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieCardNoBadgeP() {
+    MovieCard(
+        title = "The Godfather",
+        imageUrl = "https://image.tmdb.org/t/p/w500/sample_poster2.jpg",
+        subtitle = "1972",
+        badgeText = null,
+        favoriteIcon = painterResource(
+            com.example.movieapp.designsystem.R.drawable.small_unmarked_heart,
+        ),
+        onCardClick = {},
+        onFavoriteClick = {},
+        modifier = Modifier.width(MovieAppSizing.size200)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieCardLongTitleP() {
+    MovieCard(
+        title = "The Lord of the Rings: The Fellowship of the Ring - Extended Edition",
+        imageUrl = "https://image.tmdb.org/t/p/w500/sample_poster3.jpg",
+        subtitle = "2001",
+        badgeText = "Fantasy Adventure Epic",
+        favoriteIcon = painterResource(
+            com.example.movieapp.designsystem.R.drawable.small_marked_heart,
+        ),
+        onCardClick = {},
+        onFavoriteClick = {},
+        modifier = Modifier.width(MovieAppSizing.size200)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieCardNullImageP() {
+    MovieCard(
+        title = "Unknown Film",
+        imageUrl = null,
+        subtitle = "N/A",
+        badgeText = null,
+        favoriteIcon = painterResource(
+            com.example.movieapp.designsystem.R.drawable.small_unmarked_heart,
+        ),
+        onCardClick = {},
+        onFavoriteClick = {},
+        modifier = Modifier.width(MovieAppSizing.size200)
+    )
 }

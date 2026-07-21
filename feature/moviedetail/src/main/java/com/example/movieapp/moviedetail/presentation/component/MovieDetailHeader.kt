@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppLineHeight
@@ -57,4 +58,13 @@ internal fun MovieDetailHeader(
             modifier = Modifier.align(Alignment.Center),
         )
     }
+}
+
+@Preview
+@Composable
+private fun MovieDetailHeaderP(){
+    MovieDetailHeader(
+        onEvent = {},
+        modifier = Modifier
+    )
 }

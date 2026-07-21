@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppFontSize
@@ -116,3 +117,45 @@ private fun CategoryChip(
         )
     }
 }
+
+@Preview
+@Composable
+private fun MovieAppCategoryChipAllSelectedP() {
+    MovieAppCategoryChip(
+        items = previewChips,
+        selectedId = null,
+        onItemSelected = {},
+        onClearSelected = {},
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppCategoryChipItemSelectedP() {
+    MovieAppCategoryChip(
+        items = previewChips,
+        selectedId = 3,
+        onItemSelected = {},
+        onClearSelected = {},
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppCategoryChipEmptyP() {
+    MovieAppCategoryChip(
+        items = emptyList(),
+        selectedId = null,
+        onItemSelected = {},
+        onClearSelected = {},
+    )
+}
+
+private val previewChips = listOf(
+    ChipItem(id = 1, label = "Action"),
+    ChipItem(id = 2, label = "Comedy"),
+    ChipItem(id = 3, label = "Drama"),
+    ChipItem(id = 4, label = "Sci-Fi"),
+    ChipItem(id = 5, label = "Horror"),
+    ChipItem(id = 6, label = "Romance"),
+)

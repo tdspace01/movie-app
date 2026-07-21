@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppSizing
@@ -54,4 +55,10 @@ fun MovieAppOfflineBanner(modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieAppOfflineBannerP(){
+    MovieAppOfflineBanner()
 }

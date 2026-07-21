@@ -23,4 +23,5 @@ object MovieAppSizing {
     val size96 = 96.dp
     val size100 = 100.dp
     val size106 = 106.dp
+    val size200 = 200.dp
 }

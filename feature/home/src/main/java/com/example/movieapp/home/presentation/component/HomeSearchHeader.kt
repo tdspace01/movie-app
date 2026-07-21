@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.ChipItem
 import com.example.movieapp.designsystem.components.MovieAppCategoryChip
 import com.example.movieapp.designsystem.components.MovieAppSearchBar
 import com.example.movieapp.designsystem.design.MovieAppSizing
+import com.example.movieapp.domain.model.search.Genre
 import com.example.movieapp.home.R
 import com.example.movieapp.home.presentation.contract.HomeEvent
 import com.example.movieapp.home.presentation.contract.HomeState
@@ -56,4 +58,49 @@ internal fun HomeSearchHeader(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun HomeSearchHeaderP() {
+    HomeSearchHeader(
+        uiState = HomeState(
+            searchQuery = "",
+            isGenresExpanded = false,
+            genres = emptyList(),
+            selectedGenreId = null,
+        ),
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun HomeSearchHeaderP2() {
+    HomeSearchHeader(
+        uiState = HomeState(
+            searchQuery = "",
+            isGenresExpanded = true,
+            genres = emptyList(),
+            selectedGenreId = null,
+        ),
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun HomeSearchHeaderGenresExpandedP() {
+    HomeSearchHeader(
+        uiState = HomeState(
+            searchQuery = "Gela",
+            isGenresExpanded = true,
+            genres = listOf(
+                Genre(id = 1, name = "Action"),
+                Genre(id = 2, name = "Comedy")
+            ),
+            selectedGenreId = 1,
+        ),
+        onEvent = {},
+    )
 }

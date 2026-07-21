@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.favourite.presentation.contract.FavouriteEvent
@@ -57,4 +58,39 @@ internal fun FavouriteMoviesList(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun FavouriteMoviesListP(){
+    FavouriteMoviesList(
+        movies = listOf(
+            PopularMovie(
+                id = 1,
+                title = "Gela",
+                posterUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+                year = "2024",
+                category = "Action",
+                isFavorite = true
+            ),
+            PopularMovie(
+                id = 2,
+                title = "Gela2",
+                posterUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+                year = "2024",
+                category = "Action",
+                isFavorite = true
+            ),
+            PopularMovie(
+                id = 3,
+                title = "Gela3",
+                posterUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+                year = "2024",
+                category = "Action",
+                isFavorite = false
+            )
+        ),
+        onEvent = {},
+        modifier = Modifier
+    )
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppSizing
@@ -25,4 +26,10 @@ internal fun FavouriteHeader(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(vertical = MovieAppSizing.size16),
     )
+}
+
+@Preview
+@Composable
+private fun FavouriteHeaderP(){
+    FavouriteHeader()
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.splash.R
 import com.example.movieapp.splash.presentation.contract.SplashSideEffect
@@ -41,4 +42,13 @@ fun SplashScreen(
                 .height(MovieAppSizing.size40)
         )
     }
+}
+
+@Preview
+@Composable
+private fun SplashScreenP(){
+    SplashScreen(
+        onNavigateToHome = {},
+        viewModel = SplashViewModel()
+    )
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieAppText
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppSizing
@@ -37,4 +38,10 @@ internal fun FavouriteEmptyState(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Normal,
         )
     }
+}
+
+@Preview
+@Composable
+private fun FavouriteEmptyStateP(){
+    FavouriteEmptyState()
 }

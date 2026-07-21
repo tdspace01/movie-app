@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.components.MovieCard
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.favourite.R
@@ -72,4 +73,22 @@ internal fun FavouriteMovieItem(
             onFavoriteClick = { isRemoving = true },
         )
     }
+}
+
+@Preview
+@Composable
+private fun FavouriteMovieItemPreview() {
+    FavouriteMovieItem(
+        movie = PopularMovie(
+            id = 1,
+            title = "Gela",
+            posterUrl = "https://image.tmdb.org/t/p/w500/sample_poster.jpg",
+            year = "2024",
+            category = "Action",
+            isFavorite = true,
+        ),
+        onMovieClick = {},
+        onRemoveFavorite = {},
+        modifier = Modifier,
+    )
 }

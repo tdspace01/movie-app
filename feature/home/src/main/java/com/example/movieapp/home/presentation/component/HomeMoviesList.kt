@@ -12,14 +12,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieapp.designsystem.components.MovieCardShimmer
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.home.presentation.contract.HomeEvent
 import com.example.movieapp.home.presentation.contract.HomeState
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun HomeMoviesList(
@@ -187,3 +191,68 @@ private fun HomeMovieListItem(
         MovieCardShimmer(modifier = modifier)
     }
 }
+
+@Preview
+@Composable
+private fun HomeMoviesListContentP() {
+    val lazyPagingItems = flowOf(PagingData.from(previewMovies)).collectAsLazyPagingItems()
+
+    HomeMoviesList(
+        uiState = HomeState(activeSearchQuery = ""),
+        lazyPagingItems = lazyPagingItems,
+        bottomPadding = MovieAppSizing.size16,
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun HomeMoviesListEmptySearchP() {
+    val lazyPagingItems = flowOf(PagingData.from(emptyList<PopularMovie>())).collectAsLazyPagingItems()
+
+    HomeMoviesList(
+        uiState = HomeState(activeSearchQuery = "nonexistent movie"),
+        lazyPagingItems = lazyPagingItems,
+        bottomPadding = MovieAppSizing.size16,
+        onEvent = {},
+    )
+}
+
+@Preview
+@Composable
+private fun HomeMoviesListShimmerP() {
+    val lazyPagingItems = flowOf(PagingData.empty<PopularMovie>()).collectAsLazyPagingItems()
+
+    HomeMoviesList(
+        uiState = HomeState(activeSearchQuery = ""),
+        lazyPagingItems = lazyPagingItems,
+        bottomPadding = MovieAppSizing.size16,
+        onEvent = {},
+    )
+}
+private val previewMovies = listOf(
+    PopularMovie(
+        id = 1,
+        title = "Gela",
+        posterUrl = "https://image.tmdb.org/t/p/w500/sample1.jpg",
+        year = "2024",
+        category = "Action",
+        isFavorite = true,
+    ),
+    PopularMovie(
+        id = 2,
+        title = "Interstellar",
+        posterUrl = "https://image.tmdb.org/t/p/w500/sample2.jpg",
+        year = "2014",
+        category = "Sci-Fi",
+        isFavorite = false,
+    ),
+    PopularMovie(
+        id = 3,
+        title = "The Godfather",
+        posterUrl = "https://image.tmdb.org/t/p/w500/sample3.jpg",
+        year = "1972",
+        category = "Crime",
+        isFavorite = false,
+    ),
+)

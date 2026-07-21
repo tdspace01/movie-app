@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppShapes
@@ -147,4 +148,34 @@ fun MovieAppSearchBar(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieAppSearchBarEmptyP() {
+    MovieAppSearchBar(
+        query = "",
+        onQueryChanged = {},
+        placeholder = "Search movies...",
+        isFilterActive = false,
+        onFilterClick = {},
+        onClearClick = {},
+        modifier = Modifier.padding(MovieAppSizing.size16)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppSearchBarActiveP() {
+    MovieAppSearchBar(
+        query = "Interstellar",
+        onQueryChanged = {},
+        placeholder = "Search movies...",
+        isFilterActive = true,
+        onFilterClick = {},
+        onClearClick = {},
+        showDeleteIcon = true,
+        onDeleteLastCharacter = {},
+        modifier = Modifier.padding(MovieAppSizing.size16)
+    )
 }

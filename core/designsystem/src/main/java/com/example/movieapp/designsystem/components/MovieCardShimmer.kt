@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.design.MovieAppSpacing
@@ -54,4 +55,10 @@ fun MovieCardShimmer(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieCardShimmerP(){
+    MovieCardShimmer()
 }
