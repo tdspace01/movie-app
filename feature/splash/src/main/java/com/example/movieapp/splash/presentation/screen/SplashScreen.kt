@@ -1,5 +1,6 @@
 package com.example.movieapp.splash.presentation.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +45,7 @@ fun SplashScreen(
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview
 @Composable
 private fun SplashScreenP(){

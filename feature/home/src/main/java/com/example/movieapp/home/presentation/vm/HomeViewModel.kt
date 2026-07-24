@@ -3,7 +3,6 @@ package com.example.movieapp.home.presentation.vm
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.movieapp.common.networkstatus.NetworkStatus
 import com.example.movieapp.common.resource.NetworkError
 import com.example.movieapp.common.resource.collectAsResource
 import com.example.movieapp.domain.model.movie.HomeMovieFilter
@@ -19,16 +18,14 @@ import com.example.movieapp.home.presentation.contract.HomeSideEffect
 import com.example.movieapp.home.presentation.contract.HomeState
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 class HomeViewModel(
     getFavouriteIdsUseCase: GetFavouriteIdsUseCase,
@@ -46,27 +43,27 @@ class HomeViewModel(
     ).cachedIn(viewModelScope).withPagingFavouriteState(getFavouriteIdsUseCase())
 
     init {
-        loadGenres()
         observeNetwork()
+        loadGenres()
         observeSearchQuery()
     }
 
     override fun onEvent(event: HomeEvent) {
         when (event) {
-            is HomeEvent.OnToggleGenresVisibility -> updateState {
+            is HomeEvent.OnToggleGenresVisibility -> update {
                 copy(isGenresExpanded = !isGenresExpanded)
             }
             is HomeEvent.OnToggleFavorite -> {
                 viewModelScope.launch { toggleFavoriteUseCase(event.movie) }
             }
-            is HomeEvent.OnMovieClick -> {
-                emitSideEffect(HomeSideEffect.NavigateToDetail(event.movieId, event.category))
-            }
+            is HomeEvent.OnMovieClick -> emit(
+                HomeSideEffect.NavigateToDetail(event.movieId, event.category)
+            )
             is HomeEvent.OnFavoriteClick -> {
-                emitSideEffect(HomeSideEffect.NavigateToFavorite)
+                emit(HomeSideEffect.NavigateToFavorite)
             }
-            is HomeEvent.OnMoviesLoaded -> {
-                updateState { copy(hasLoadedContent = true, showErrorScreen = false) }
+            is HomeEvent.OnMoviesLoaded -> update {
+                copy(hasLoadedContent = true, showErrorScreen = false)
             }
             is HomeEvent.OnRefresh -> refresh()
             is HomeEvent.OnGenreCleared -> clearGenre()
@@ -75,8 +72,15 @@ class HomeViewModel(
         }
     }
 
+    private fun observeNetwork(){
+        observeNetwork(
+            networkStatus = observeNetworkStatusUseCase(),
+            onAvailable = { copy(isOffline = false) },
+            onUnavailable = { copy(isOffline = true, showErrorScreen = !hasLoadedContent) },
+        )
+    }
     private fun updateSearchQuery(query: String) {
-        updateState {
+        update {
             if (query.isBlank()) {
                 copy(searchQuery = query, activeSearchQuery = "")
             } else {
@@ -86,15 +90,13 @@ class HomeViewModel(
     }
 
     private fun selectGenre(genreId: Int) {
-        if (currentState.isOffline) return
-        updateState {
-            copy(selectedGenreId = if (selectedGenreId == genreId) null else genreId)
+        requireOnline {
+            update { copy(selectedGenreId = if (selectedGenreId == genreId) null else genreId) }
         }
     }
 
     private fun clearGenre() {
-        if (currentState.isOffline) return
-        updateState { copy(selectedGenreId = null) }
+        requireOnline { update { copy(selectedGenreId = null) } }
     }
 
     @OptIn(FlowPreview::class)
@@ -106,24 +108,9 @@ class HomeViewModel(
                 .debounce(700.milliseconds)
                 .collect { query ->
                     if (!currentState.isOffline) {
-                        updateState { copy(activeSearchQuery = query) }
+                        update { copy(activeSearchQuery = query) }
                     }
                 }
-        }
-    }
-
-    private fun observeNetwork() {
-        viewModelScope.launch {
-            observeNetworkStatusUseCase().collect { status ->
-                updateState {
-                    when (status) {
-                        NetworkStatus.Available -> copy(isOffline = false)
-                        NetworkStatus.Unavailable -> copy(
-                            isOffline = true,showErrorScreen = !hasLoadedContent
-                        )
-                    }
-                }
-            }
         }
     }
 
@@ -132,11 +119,11 @@ class HomeViewModel(
             getGenresUseCase(Unit).collectAsResource(
                 onError = { error ->
                     if (error != NetworkError.NO_INTERNET) {
-                        updateState { copy(showErrorScreen = true) }
+                        update { copy(showErrorScreen = true) }
                     }
                 },
                 onSuccess = { genres ->
-                    updateState { copy(genres = genres) }
+                    update { copy(genres = genres) }
                     refreshTrigger.tryEmit(Unit)
                 },
             )
@@ -144,25 +131,18 @@ class HomeViewModel(
     }
 
     private fun refresh() {
-        if (currentState.isRefreshing) return
-        viewModelScope.launch {
-            updateState { copy(isRefreshing = true, showErrorScreen = false) }
-            delay(2.seconds)
-            val isConnected = observeNetworkStatusUseCase.isConnected()
-            updateState {
-                if (!isConnected) {
-                    copy(isRefreshing = false,isOffline = true,showErrorScreen = !hasLoadedContent)
-                } else {
-                    copy(isRefreshing = false,isOffline = false, showErrorScreen = false)
-                }
-            }
-            if (isConnected) {
-                if (currentState.genres.isEmpty()) {
-                    loadGenres()
-                } else {
-                    refreshTrigger.emit(Unit)
-                }
-            }
-        }
+        refresh(
+            isRefreshing = { currentState.isRefreshing },
+            isConnected = observeNetworkStatusUseCase::isConnected,
+            onStart = { copy(isRefreshing = true, showErrorScreen = false) },
+            onOffline = {
+                copy(isRefreshing = false, isOffline = true, showErrorScreen = !hasLoadedContent)
+            },
+            onOnline = { copy(isRefreshing = false, isOffline = false, showErrorScreen = false) },
+            onConnected = {
+                if (currentState.genres.isEmpty()) { loadGenres() }
+                else { refreshTrigger.emit(Unit) }
+            },
+        )
     }
 }

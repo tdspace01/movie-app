@@ -11,13 +11,9 @@ class SplashViewModel :
     BaseViewModel<Unit, Unit, SplashSideEffect>(Unit) {
 
     init {
-        startTimer()
-    }
-
-    private fun startTimer() {
         viewModelScope.launch {
             delay(1000.milliseconds)
-            emitSideEffect(SplashSideEffect.NavigateToHome)
+            emit(SplashSideEffect.NavigateToHome)
         }
     }
 }

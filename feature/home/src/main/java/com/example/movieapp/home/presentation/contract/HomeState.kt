@@ -1,6 +1,8 @@
 package com.example.movieapp.home.presentation.contract
 
 import com.example.movieapp.domain.model.search.Genre
+import com.example.movieapp.ui.state.ErrorCapable
+import com.example.movieapp.ui.state.OfflineCapable
 
 data class HomeState(
     val searchQuery: String = "",
@@ -8,14 +10,11 @@ data class HomeState(
     val selectedGenreId: Int? = null,
     val isGenresExpanded: Boolean = false,
     val genres: List<Genre> = emptyList(),
-    val isOffline: Boolean = false,
-    val isRefreshing: Boolean = false,
+    override val isOffline: Boolean = false,
+    override val isRefreshing: Boolean = false,
     val hasLoadedContent: Boolean = false,
-    val showErrorScreen: Boolean = false,
-) {
-    val showFullError: Boolean
-        get() = showErrorScreen && !isRefreshing
-
+    override val showErrorScreen: Boolean = false,
+) : OfflineCapable, ErrorCapable {
     val showOfflineBanner: Boolean
         get() = isOffline && hasLoadedContent && !isRefreshing
 
