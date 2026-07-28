@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":feature:splash"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:designsystem"))
     implementation(project(":feature:favourite"))
     implementation(project(":feature:moviedetail"))
 }
