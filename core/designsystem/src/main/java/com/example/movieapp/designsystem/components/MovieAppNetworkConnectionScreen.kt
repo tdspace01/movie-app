@@ -20,7 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
@@ -34,7 +36,7 @@ fun MovieAppNetworkConnectionScreen(
     Column(
         modifier = Modifier.fillMaxSize()
             .background(DarkColorScheme.black)
-            .padding(horizontal = MovieAppSpacing.spacing16),
+            .padding(horizontal = MovieAppSpacing.spacing70),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -60,13 +62,14 @@ fun MovieAppNetworkConnectionScreen(
         MovieAppText(
             text = "Internet connection or some other server error",
             fontSize = MovieAppFontSize.font16,
-            lineHeight = 18.sp,
             fontWeight = FontWeight.Medium,
             color = DarkColorScheme.lightGrey,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 2
         )
 
-        Spacer(Modifier.height(MovieAppSpacing.spacing48))
+        Spacer(Modifier.height(MovieAppSpacing.spacing70))
 
         Row(
             modifier = Modifier

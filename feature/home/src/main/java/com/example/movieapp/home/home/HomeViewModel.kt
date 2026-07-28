@@ -1,21 +1,22 @@
 package com.example.movieapp.home.home
 
-import androidx.lifecycle.viewModelScope
-import com.example.movieapp.common.resource.collectAsResource
-import com.example.movieapp.domain.usecase.movie.GetPopularMoviesUseCase
-import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
-import com.example.movieapp.domain.usecase.search.GetGenresUseCase
-import com.example.movieapp.domain.usecase.search.GetMoviesByGenreUseCase
-import com.example.movieapp.domain.usecase.search.SearchMoviesUseCase
-import com.example.movieapp.ui.base.BaseViewModel
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collectLatest
+import com.example.movieapp.ui.base.BaseViewModel
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.flow.distinctUntilChanged
+import com.example.movieapp.common.resource.collectAsResource
+import com.example.movieapp.domain.usecase.search.GetGenresUseCase
+import com.example.movieapp.domain.usecase.search.SearchMoviesUseCase
+import com.example.movieapp.domain.usecase.movie.ToggleFavouriteUseCase
+import com.example.movieapp.domain.usecase.movie.GetPopularMoviesUseCase
+import com.example.movieapp.domain.usecase.search.GetMoviesByGenreUseCase
 
 class HomeViewModel(
     private val popularMoviesUseCase: GetPopularMoviesUseCase,
@@ -36,6 +37,12 @@ class HomeViewModel(
             is HomeEvent.LoadGenres -> loadGenres()
 
             is HomeEvent.OnToggleFavorite -> {
+                updateState {
+                    copy(popularMovies = popularMovies.map {
+                        if (it.id == event.movie.id) it.copy(isFavorite = !it.isFavorite) else it
+                    })
+                }
+
                 viewModelScope.launch {
                     toggleFavoriteUseCase(event.movie)
                 }
@@ -52,10 +59,20 @@ class HomeViewModel(
             is HomeEvent.OnRefresh -> {
                 updateState { copy(errorType = null, isLoading = true) }
                 val selectedGenre = currentState.selectedGenreId
-                if (currentState.genres.isEmpty()) {
-                    loadGenres()
-                } else {
-                    if (selectedGenre != null) loadMoviesByGenre(selectedGenre) else loadPopularMovies()
+                val genresIsEmpty = currentState.genres.isEmpty()
+
+                viewModelScope.launch {
+                    delay(2000.milliseconds)
+
+                    if (genresIsEmpty) {
+                        loadGenres()
+                    } else {
+                        if (selectedGenre != null) {
+                            loadMoviesByGenre(selectedGenre)
+                        } else {
+                            loadPopularMovies()
+                        }
+                    }
                 }
             }
 
@@ -95,7 +112,7 @@ class HomeViewModel(
             state.map { it.searchQuery }
                 .distinctUntilChanged()
                 .drop(1)
-                .debounce(400L.milliseconds)
+                .debounce(700L.milliseconds)
                 .collectLatest { query ->
                     if (query.isNotBlank()) {
                         searchMovies(query)
@@ -143,7 +160,7 @@ class HomeViewModel(
 
     private fun loadGenres() {
         viewModelScope.launch {
-            getGenresUseCase().collectAsResource(
+            getGenresUseCase(Unit).collectAsResource(
                 onLoading = { loading -> updateState { copy(isGenresLoading = loading) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
                 onSuccess = { data ->

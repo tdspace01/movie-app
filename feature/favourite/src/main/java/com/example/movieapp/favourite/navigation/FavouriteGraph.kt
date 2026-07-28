@@ -1,12 +1,12 @@
 package com.example.movieapp.favourite.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.navigation.NavGraphBuilder
+import androidx.activity.compose.BackHandler
 import androidx.navigation.compose.composable
-import com.example.movieapp.favourite.favouritescreen.FavoriteViewModel
-import com.example.movieapp.favourite.favouritescreen.FavouriteScreen
-import com.example.movieapp.navigation.favourite.FavouriteRoute
 import org.koin.androidx.compose.koinViewModel
+import com.example.movieapp.navigation.favourite.FavouriteRoute
+import com.example.movieapp.favourite.favouritescreen.FavouriteScreen
+import com.example.movieapp.favourite.favouritescreen.FavoriteViewModel
 
 fun NavGraphBuilder.favouriteGraph(
     onNavigateToDetails: (Int, String) -> Unit,

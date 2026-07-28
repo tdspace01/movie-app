@@ -42,7 +42,8 @@ fun MovieAppNavigationButton(
     ) {
         NavTab(
             label = "Home",
-            iconRes = R.drawable.home_marked_icon,
+            selectedIconRes = R.drawable.home_marked_icon,
+            unselectedIconRes = R.drawable.home_unmarked_icon,
             isSelected = currentTab == MovieTab.HOME,
             onClick = { onTabSelected(MovieTab.HOME) },
             modifier = Modifier.weight(1f)
@@ -50,7 +51,8 @@ fun MovieAppNavigationButton(
 
         NavTab(
             label = "Favorites",
-            iconRes = R.drawable.favourite_unmarked_heart_icon,
+            selectedIconRes = R.drawable.favourite_marked_heart_icon,
+            unselectedIconRes = R.drawable.favourite_unmarked_heart_icon,
             isSelected = currentTab == MovieTab.FAVORITES,
             onClick = { onTabSelected(MovieTab.FAVORITES) },
             modifier = Modifier.weight(1f)
@@ -61,7 +63,8 @@ fun MovieAppNavigationButton(
 @Composable
 private fun NavTab(
     label: String,
-    iconRes: Int,
+    selectedIconRes: Int,
+    unselectedIconRes: Int,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -77,7 +80,7 @@ private fun NavTab(
         horizontalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = iconRes),
+            painter = painterResource(id = if (isSelected) selectedIconRes else unselectedIconRes),
             contentDescription = label,
             modifier = Modifier.size(18.dp)
         )
