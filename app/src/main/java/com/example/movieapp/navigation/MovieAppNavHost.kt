@@ -33,7 +33,6 @@ fun MovieAppNavHost(){
             }
         )
 
-
         homeGraph(
             onNavigateToDetail = { id, categoryText ->
                 navController.navigate(
@@ -41,10 +40,11 @@ fun MovieAppNavHost(){
                 )
             },
             onNavigateToFavorite = {
-                navController.navigate(FavouriteRoute.Favourite)
+                navController.navigate(FavouriteRoute.Favourite) {
+                    launchSingleTop = true
+                }
             }
         )
-
 
         favouriteGraph(
             onNavigateToDetails = { id, categoryText ->
@@ -53,14 +53,13 @@ fun MovieAppNavHost(){
                 )
             },
             onNavigateToHome = {
-                navController.navigate(HomeRoute.Home)
+                navController.popBackStack(HomeRoute.Home, inclusive = false)
             }
         )
 
-
         movieDetailGraph(
             onNavigateBack = {
-                navController.navigate(HomeRoute.Home)
+                navController.popBackStack()
             }
         )
     }

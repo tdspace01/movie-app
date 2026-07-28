@@ -8,5 +8,6 @@ data class MovieDetail(
     val backdropUrl: String?,
     val rating: Double,
     val releaseYear: String,
-    val durationFormatted: String
+    val durationFormatted: String,
+    val isFavorite: Boolean = false
 )

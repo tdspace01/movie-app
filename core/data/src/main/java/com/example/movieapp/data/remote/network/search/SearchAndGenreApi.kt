@@ -16,10 +16,4 @@ interface SearchAndGenreApi {
 
     @GET("genre/movie/list")
     suspend fun getGenres(): Response<GenreListResponseDto>
-
-    @GET("discover/movie")
-    suspend fun discoverByGenre(
-        @Query("with_genres") genreId: Int,
-        @Query("page") page: Int = 1,
-    ): Response<PopularMovieResponseDto>
 }
