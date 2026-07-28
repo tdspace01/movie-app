@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.favourite.navigation.favouriteGraph
 import com.example.movieapp.home.navigation.homeGraph
 import com.example.movieapp.moviedetail.navigation.movieDetailGraph
+import com.example.movieapp.navigation.favourite.FavouriteRoute
 import com.example.movieapp.navigation.home.HomeRoute
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import com.example.movieapp.navigation.splash.SplashRoute
@@ -34,15 +35,25 @@ fun MovieAppNavHost(){
 
 
         homeGraph(
-            onNavigateToDetail = { movieId ->
-                navController.navigate(MovieDetailRoute.MovieDetail(movieId))
+            onNavigateToDetail = { id, categoryText ->
+                navController.navigate(
+                    MovieDetailRoute.MovieDetail(movieId = id, category = categoryText)
+                )
+            },
+            onNavigateToFavorite = {
+                navController.navigate(FavouriteRoute.Favourite)
             }
         )
 
 
         favouriteGraph(
-            onNavigateToDetails = { movieId->
-                navController.navigate(MovieDetailRoute.MovieDetail(movieId))
+            onNavigateToDetails = { id, categoryText ->
+                navController.navigate(
+                    MovieDetailRoute.MovieDetail(movieId = id, category = categoryText)
+                )
+            },
+            onNavigateToHome = {
+                navController.navigate(HomeRoute.Home)
             }
         )
 

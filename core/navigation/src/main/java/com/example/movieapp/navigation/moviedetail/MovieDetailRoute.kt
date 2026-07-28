@@ -2,8 +2,10 @@ package com.example.movieapp.navigation.moviedetail
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-sealed class MovieDetailRoute{
+sealed interface MovieDetailRoute {
     @Serializable
-    data class MovieDetail(val movieId:Int): MovieDetailRoute()
+    data class MovieDetail(
+        val movieId: Int,
+        val category: String
+    ) : MovieDetailRoute
 }

@@ -3,16 +3,24 @@ package com.example.movieapp.favourite.navigation
 import androidx.activity.compose.BackHandler
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.movieapp.favourite.favouritescreen.FavoriteViewModel
 import com.example.movieapp.favourite.favouritescreen.FavouriteScreen
 import com.example.movieapp.navigation.favourite.FavouriteRoute
+import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.favouriteGraph(
-    onNavigateToDetails:(Int) -> Unit
-){
+    onNavigateToDetails: (Int, String) -> Unit,
+    onNavigateToHome: () -> Unit
+) {
     composable<FavouriteRoute.Favourite> {
         BackHandler(enabled = true) {}
+
+        val favoriteViewModel: FavoriteViewModel = koinViewModel()
+
         FavouriteScreen(
-            onNavigateToDetails = onNavigateToDetails
+            viewModel = favoriteViewModel,
+            onNavigateToDetails = onNavigateToDetails,
+            onNavigateToHome = onNavigateToHome
         )
     }
 }
