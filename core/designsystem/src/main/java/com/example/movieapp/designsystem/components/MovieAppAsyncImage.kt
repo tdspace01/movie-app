@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppShapes
+import com.example.movieapp.designsystem.design.MovieAppSizing
 
 @Composable
 fun MovieAppAsyncImage(
@@ -30,13 +30,13 @@ fun MovieAppAsyncImage(
     if (imageUrl.isNullOrEmpty()) {
         Box(
             modifier = imageModifier
-                .height(200.dp),
+                .height(MovieAppSizing.size200),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_no_image_placeholder),
                 contentDescription = contentDescription,
-                modifier = Modifier.size(36.dp))
+                modifier = Modifier.size(MovieAppSizing.size36))
         }
     } else {
         AsyncImage(
