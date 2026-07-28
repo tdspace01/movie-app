@@ -11,7 +11,9 @@ val localDataModule = module {
             androidContext(),
             AppDatabase::class.java,
             "movie_app.db"
-        ).build()
+        )
+            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .build()
     }
 
     single { get<AppDatabase>().favouriteMovieDao }

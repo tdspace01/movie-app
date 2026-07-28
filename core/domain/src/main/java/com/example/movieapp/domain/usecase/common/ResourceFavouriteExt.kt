@@ -1,62 +1,47 @@
 package com.example.movieapp.domain.usecase.common
 
-import com.example.movieapp.common.resource.Resource
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.example.movieapp.common.resource.NetworkResource
 import com.example.movieapp.domain.model.movie.MovieDetail
 import com.example.movieapp.domain.model.movie.PopularMovie
 import com.example.movieapp.domain.repository.movie.FavouriteMovieRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
-fun Flow<Resource<List<PopularMovie>>>.withFavouriteState(
-    favouriteMovieRepository: FavouriteMovieRepository
-): Flow<Resource<List<PopularMovie>>> {
-    var lastSuccess: Resource.Success<List<PopularMovie>>? = null
-
-    return combine(this, favouriteMovieRepository.getFavouriteIds()) { resource, favouriteIds ->
-        when (resource) {
-            is Resource.Success -> {
-                lastSuccess = resource
-                Resource.Success(resource.data.map { it.copy(isFavorite = it.id in favouriteIds) })
-            }
-
-            is Resource.Loading -> {
-                if (resource.isLoading) {
-                    resource
-                } else {
-                    lastSuccess?.let { success ->
-                        Resource.Success(success.data.map { it.copy(isFavorite = it.id in favouriteIds) })
-                    } ?: resource
-                }
-            }
-
-            is Resource.Error -> resource
-        }
-    }
+fun Flow<PagingData<PopularMovie>>.withFavouriteState(
+    favouriteIds: Flow<Set<Int>>
+): Flow<PagingData<PopularMovie>> = combine(this, favouriteIds) { pagingData, ids ->
+    pagingData.map { movie -> movie.copy(isFavorite = movie.id in ids) }
 }
 
-fun Flow<Resource<MovieDetail>>.withFavouriteStateForDetail(
+fun Flow<NetworkResource<MovieDetail>>.withFavouriteStateForDetail(
     favouriteMovieRepository: FavouriteMovieRepository
-): Flow<Resource<MovieDetail>> {
-    var lastSuccess: Resource.Success<MovieDetail>? = null
+): Flow<NetworkResource<MovieDetail>> {
+    var lastSuccess: NetworkResource.Success<MovieDetail>? = null
 
-    return combine(this, favouriteMovieRepository.getFavouriteIds()) { resource, favouriteIds ->
+    return combine(this, favouriteMovieRepository.getFavouriteIds())
+    { resource, favouriteIds ->
         when (resource) {
-            is Resource.Success -> {
+            is NetworkResource.Success -> {
                 lastSuccess = resource
-                Resource.Success(resource.data.copy(isFavorite = resource.data.id in favouriteIds))
+                NetworkResource.Success(
+                    resource.data.copy(isFavorite = resource.data.id in favouriteIds))
             }
 
-            is Resource.Loading -> {
+            is NetworkResource.Loading -> {
                 if (resource.isLoading) {
                     resource
                 } else {
                     lastSuccess?.let { success ->
-                        Resource.Success(success.data.copy(isFavorite = success.data.id in favouriteIds))
+                        NetworkResource.Success(
+                            success.data.copy(isFavorite = success.data.id in favouriteIds)
+                        )
                     } ?: resource
                 }
             }
 
-            is Resource.Error -> resource
+            is NetworkResource.Error -> resource
         }
     }
 }

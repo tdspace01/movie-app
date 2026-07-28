@@ -2,10 +2,8 @@ package com.example.movieapp.home.home
 
 import com.example.movieapp.domain.model.movie.PopularMovie
 
-
 sealed interface HomeEvent {
     object OnRefresh : HomeEvent
-    object LoadGenres : HomeEvent
     object OnClearSearch : HomeEvent
     object OnGenreCleared : HomeEvent
     object OnFavoriteClick : HomeEvent

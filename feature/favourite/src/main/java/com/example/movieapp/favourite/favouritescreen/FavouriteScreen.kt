@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -109,23 +110,31 @@ private fun FavouriteScreenContent(
                 state.favoriteMovies.isEmpty() -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(horizontal = 24.dp)
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Image(
-                            painter = painterResource(
-                                com.example.movieapp.designsystem.R.drawable.no_result_icon
-                            ),
-                            contentDescription = null,
-                            modifier = Modifier.size(106.dp)
-                        )
-                        Spacer(modifier = Modifier.height(MovieAppSpacing.spacing12))
-                        MovieAppText(
-                            text = "No favorites added yet",
-                            fontSize = MovieAppFontSize.font16,
-                            color = DarkColorScheme.lightGrey,
-                            fontWeight = FontWeight.Normal
-                        )
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Spacer(modifier = Modifier.width(24.dp))
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Image(
+                                    painter = painterResource(
+                                        com.example.movieapp.designsystem.R.drawable.no_result_icon
+                                    ),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(106.dp)
+                                )
+                                Spacer(modifier = Modifier.height(MovieAppSpacing.spacing12))
+                                MovieAppText(
+                                    text = "No favorites added yet",
+                                    fontSize = MovieAppFontSize.font16,
+                                    color = DarkColorScheme.lightGrey,
+                                    fontWeight = FontWeight.Normal
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(24.dp))
+                        }
                     }
                 }
                 else -> {
@@ -170,7 +179,7 @@ private fun FavouriteScreenContent(
         }
 
         AnimatedVisibility(
-            visible = isHeaderVisible && state.favoriteMovies.isNotEmpty(),
+            visible = isHeaderVisible,
             enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
             exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
             modifier = Modifier

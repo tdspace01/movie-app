@@ -13,7 +13,7 @@ fun NavGraphBuilder.favouriteGraph(
     onNavigateToHome: () -> Unit
 ) {
     composable<FavouriteRoute.Favourite> {
-        BackHandler(enabled = true) {}
+        //BackHandler(enabled = true) {}
 
         val favoriteViewModel: FavoriteViewModel = koinViewModel()
 

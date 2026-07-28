@@ -16,7 +16,7 @@ interface FavouriteMovieDao{
     @Delete
     suspend fun deleteFavourite(movie:FavouriteMovieEntity)
 
-    @Query("SELECT * FROM favourite_movies")
+    @Query("SELECT * FROM favourite_movies ORDER BY addedAt DESC")
     fun getAllFavourites():Flow<List<FavouriteMovieEntity>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM favourite_movies Where id = :movieId)")

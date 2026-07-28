@@ -9,5 +9,6 @@ class FavouriteMovieEntity(
     val title: String,
     val posterUrl: String?,
     val releaseYear: String,
-    val category: String
+    val category: String,
+    val addedAt: Long = 0L
 )

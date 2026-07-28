@@ -13,7 +13,7 @@ fun NavGraphBuilder.movieDetailGraph(
     onNavigateBack: () -> Unit
 ) {
     composable<MovieDetailRoute.MovieDetail> { backStackEntry ->
-        BackHandler(enabled = true) {}
+        //BackHandler(enabled = true) {}
         val detailRoute = backStackEntry.toRoute<MovieDetailRoute.MovieDetail>()
         val viewModel: MovieDetailViewModel = koinViewModel()
         MovieDetailScreen(

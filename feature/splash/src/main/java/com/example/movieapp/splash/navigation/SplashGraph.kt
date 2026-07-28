@@ -12,7 +12,7 @@ fun NavGraphBuilder.splashGraph(
     onNavigateToHome: () -> Unit
 ){
     composable<SplashRoute> {
-        BackHandler(enabled = true) {}
+        //BackHandler(enabled = true) {}
         val viewModel: SplashViewModel = viewModel()
         SplashScreen(
             onNavigateToHome = onNavigateToHome,

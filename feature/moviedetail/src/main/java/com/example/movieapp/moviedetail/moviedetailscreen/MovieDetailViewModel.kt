@@ -12,18 +12,17 @@ import com.example.movieapp.domain.usecase.network.ObserveNetworkStatusUseCase
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import com.example.movieapp.ui.base.BaseViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
 class MovieDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val toggleFavoriteUseCase: ToggleFavouriteUseCase,
     private val observeNetworkStatusUseCase: ObserveNetworkStatusUseCase
-) : BaseViewModel<MovieDetailState, MovieDetailEvent, MovieDetailSideEffect>(MovieDetailState()) {
+) : BaseViewModel
+<MovieDetailState, MovieDetailEvent, MovieDetailSideEffect>(MovieDetailState()) {
 
     private val route = savedStateHandle.toRoute<MovieDetailRoute.MovieDetail>()
     private val movieId = route.movieId
@@ -51,7 +50,9 @@ class MovieDetailViewModel(
             getMovieDetailsUseCase(movieId).collectAsResource(
                 onLoading = { loading -> updateState { copy(isLoading = loading) } },
                 onError = { error -> updateState { copy(isLoading = false, errorType = error) } },
-                onSuccess = { data -> updateState { copy(isLoading = false, movieDetail = data, errorType = null) } }
+                onSuccess = { data -> updateState {
+                    copy(isLoading = false, movieDetail = data, errorType = null) }
+                }
             )
         }
     }
@@ -63,7 +64,12 @@ class MovieDetailViewModel(
                 .distinctUntilChanged()
                 .collectLatest { status ->
                     when (status) {
-                        is NetworkStatus.Available -> {}
+                        is NetworkStatus.Available -> {
+                            if (currentState.errorType == NetworkError.NO_INTERNET) {
+                                updateState { copy(errorType = null, isLoading = true) }
+                                loadMovieDetails()
+                            }
+                        }
                         is NetworkStatus.Unavailable -> {
                             detailsJob?.cancel()
                             updateState {
@@ -91,9 +97,9 @@ class MovieDetailViewModel(
     }
 
     private fun handleRefresh() {
-        updateState { copy(errorType = null, isLoading = true) }
         viewModelScope.launch {
-            delay(2000.milliseconds)
+            if (!observeNetworkStatusUseCase.isConnected()) return@launch
+            updateState { copy(errorType = null, isLoading = true) }
             loadMovieDetails()
         }
     }

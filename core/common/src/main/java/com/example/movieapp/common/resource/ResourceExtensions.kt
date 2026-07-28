@@ -3,30 +3,30 @@ package com.example.movieapp.common.resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-fun <T, R> Resource<T>.map(transform: (T) -> R): Resource<R> {
+fun <T, R> NetworkResource<T>.map(transform: (T) -> R): NetworkResource<R> {
     return when (this) {
-        is Resource.Success -> Resource.Success(transform(data))
-        is Resource.Error -> Resource.Error(errorType,message)
-        is Resource.Loading -> Resource.Loading(isLoading)
+        is NetworkResource.Success -> NetworkResource.Success(transform(data))
+        is NetworkResource.Error -> NetworkResource.Error(errorType,message)
+        is NetworkResource.Loading -> NetworkResource.Loading(isLoading)
     }
 }
 
-fun <T,R> Flow<Resource<T>>.asResource(transform: (T) -> R):Flow<Resource<R>>{
+fun <T,R> Flow<NetworkResource<T>>.asResource(transform: (T) -> R):Flow<NetworkResource<R>>{
     return this.map{ resource->
         resource.map(transform)
     }
 }
 
-suspend fun <T> Flow<Resource<T>>.collectAsResource(
+suspend fun <T> Flow<NetworkResource<T>>.collectAsResource(
     onLoading: (Boolean) -> Unit = {},
     onError: (NetworkError) -> Unit = {},
     onSuccess: (T) -> Unit = {}
 ) {
     this.collect { resource ->
         when (resource) {
-            is Resource.Loading -> onLoading(resource.isLoading)
-            is Resource.Success -> onSuccess(resource.data)
-            is Resource.Error -> onError(resource.errorType)
+            is NetworkResource.Loading -> onLoading(resource.isLoading)
+            is NetworkResource.Success -> onSuccess(resource.data)
+            is NetworkResource.Error -> onError(resource.errorType)
         }
     }
 }

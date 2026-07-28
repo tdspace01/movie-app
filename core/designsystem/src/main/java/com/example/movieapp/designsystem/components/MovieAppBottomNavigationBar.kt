@@ -73,7 +73,10 @@ private fun NavTab(
         modifier = modifier
             .height(38.dp)
             .clip(MovieAppShapes.corner8)
-            .background(if (isSelected) DarkColorScheme.primaryYellow else DarkColorScheme.darkestGrey)
+            .background(
+                if (isSelected) DarkColorScheme.primaryYellow
+                            else DarkColorScheme.darkestGrey
+            )
             .clickable { onClick() }
             .padding(horizontal = 42.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,

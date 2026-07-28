@@ -56,7 +56,10 @@ fun MovieCard(
                         .padding(top = MovieAppSpacing.spacing10, end = MovieAppSpacing.spacing08)
                         .clip(MovieAppShapes.corner50)
                         .background(DarkColorScheme.primaryYellow)
-                        .padding(horizontal = MovieAppSpacing.spacing12, vertical = MovieAppSpacing.spacing04)
+                        .padding(
+                            horizontal = MovieAppSpacing.spacing12,
+                            vertical = MovieAppSpacing.spacing04
+                        )
                 ) {
                     MovieAppText(
                         text = badgeText,

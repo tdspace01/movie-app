@@ -29,7 +29,9 @@ fun MovieAppLoader(
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
-        animationSpec = infiniteRepeatable(animation = tween(durationMillis = 3200, easing = LinearEasing)),
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 3200, easing = LinearEasing)
+        ),
         label = "rotatingAngle"
     )
 

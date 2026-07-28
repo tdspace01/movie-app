@@ -19,6 +19,7 @@ fun PopularMovie.toEntity(): FavouriteMovieEntity{
         title = this.title,
         posterUrl = this.posterUrl,
         releaseYear = this.year,
-        category = this.category
+        category = this.category,
+        addedAt = System.currentTimeMillis()
     )
 }

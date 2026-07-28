@@ -6,7 +6,5 @@ import kotlinx.coroutines.flow.Flow
 class GetFavouriteIdsUseCase(
     private val repository: FavouriteMovieRepository
 ) {
-    operator fun invoke(): Flow<Set<Int>>{
-        return repository.getFavouriteIds()
-    }
+    operator fun invoke(): Flow<Set<Int>> = repository.getFavouriteIds()
 }

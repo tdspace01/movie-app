@@ -13,7 +13,7 @@ fun NavGraphBuilder.homeGraph(
     onNavigateToFavorite: () -> Unit
 ) {
     composable<HomeRoute.Home> {
-        BackHandler(enabled = true) {}
+        //BackHandler(enabled = true) {}
         val viewModel: HomeViewModel = koinViewModel()
         HomeScreen(
             viewModel = viewModel,

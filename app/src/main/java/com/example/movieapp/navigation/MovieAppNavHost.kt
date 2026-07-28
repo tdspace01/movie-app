@@ -12,6 +12,9 @@ import com.example.movieapp.navigation.home.HomeRoute
 import com.example.movieapp.navigation.moviedetail.MovieDetailRoute
 import com.example.movieapp.navigation.splash.SplashRoute
 import com.example.movieapp.splash.navigation.splashGraph
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
+import androidx.navigation.NavOptionsBuilder
 
 @Composable
 fun MovieAppNavHost(){
@@ -25,7 +28,7 @@ fun MovieAppNavHost(){
     ){
         splashGraph(
             onNavigateToHome = {
-                navController.navigate(HomeRoute.Home){
+                navController.navigateSafe(HomeRoute.Home){
                     popUpTo(SplashRoute){
                         inclusive = true
                     }
@@ -35,12 +38,12 @@ fun MovieAppNavHost(){
 
         homeGraph(
             onNavigateToDetail = { id, categoryText ->
-                navController.navigate(
+                navController.navigateSafe(
                     MovieDetailRoute.MovieDetail(movieId = id, category = categoryText)
                 )
             },
             onNavigateToFavorite = {
-                navController.navigate(FavouriteRoute.Favourite) {
+                navController.navigateSafe(FavouriteRoute.Favourite) {
                     launchSingleTop = true
                 }
             }
@@ -48,20 +51,37 @@ fun MovieAppNavHost(){
 
         favouriteGraph(
             onNavigateToDetails = { id, categoryText ->
-                navController.navigate(
+                navController.navigateSafe(
                     MovieDetailRoute.MovieDetail(movieId = id, category = categoryText)
                 )
             },
             onNavigateToHome = {
-                navController.popBackStack(HomeRoute.Home, inclusive = false)
+                navController.popBackStackSafe()
             }
         )
 
         movieDetailGraph(
             onNavigateBack = {
-                navController.popBackStack()
+                navController.popBackStackSafe()
             }
         )
     }
 
+}
+
+fun NavController.navigateSafe(
+    route: Any,
+    builder: NavOptionsBuilder.() -> Unit = {}
+) {
+    if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        navigate(route, builder)
+    }
+}
+
+fun NavController.popBackStackSafe(): Boolean {
+    return if (currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+        popBackStack()
+    } else {
+        false
+    }
 }

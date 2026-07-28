@@ -74,8 +74,10 @@ private fun CategoryChip(
     Box(
         modifier = Modifier
             .clip(MovieAppShapes.corner22)
-            .background(if (selected) DarkColorScheme.primaryYellow else DarkColorScheme.darkestGrey)
-            .then(
+            .background(
+                if (selected) DarkColorScheme.primaryYellow
+                else DarkColorScheme.darkestGrey
+            ).then(
                 if (!selected) Modifier.border(
                     width = 0.5.dp,
                     color = DarkColorScheme.darkGrey,

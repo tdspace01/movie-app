@@ -1,7 +1,7 @@
 package com.example.movieapp.network.apicall
 
 import com.example.movieapp.common.resource.NetworkError
-import com.example.movieapp.common.resource.Resource
+import com.example.movieapp.common.resource.NetworkResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -10,18 +10,18 @@ import java.io.IOException
 
 fun <T> apiCall(
     apiCall: suspend () -> Response<T>
-): Flow<Resource<T>> = flow {
+): Flow<NetworkResource<T>> = flow {
 
-    emit(Resource.Loading(isLoading = true))
+    emit(NetworkResource.Loading(isLoading = true))
 
     val result = runCatching { apiCall() }.fold(
         onSuccess = { response->
           if(response.isSuccessful){
               val body = response.body()
               if(body != null){
-                  Resource.Success(body)
+                  NetworkResource.Success(body)
               }else{
-                  Resource.Error(NetworkError.EMPTY_RESPONSE)
+                  NetworkResource.Error(NetworkError.EMPTY_RESPONSE)
               }
           }else{
                 val errorBody = response.errorBody()?.string()
@@ -30,7 +30,7 @@ fun <T> apiCall(
                     404 -> NetworkError.NOT_FOUND
                     else -> NetworkError.UNKNOWN
                 }
-              Resource.Error(errorType, message = errorBody)
+              NetworkResource.Error(errorType, message = errorBody)
           }
         },
 
@@ -40,10 +40,10 @@ fun <T> apiCall(
                 is HttpException -> NetworkError.SERVER_UNREACHABLE
                 else -> NetworkError.UNKNOWN
             }
-            Resource.Error(errorType, message = e.localizedMessage)
+            NetworkResource.Error(errorType, message = e.localizedMessage)
         }
     )
 
     emit(result)
-    emit(Resource.Loading(isLoading = false))
+    emit(NetworkResource.Loading(isLoading = false))
 }
