@@ -2,7 +2,7 @@ package com.example.movieapp.data.repository.movie
 
 import com.example.movieapp.common.resource.NetworkResource
 import com.example.movieapp.common.resource.asResource
-import com.example.movieapp.data.remote.datasource.repository.movie.MovieDetailRemoteDataSource
+import com.example.movieapp.data.remote.datasource.contract.MovieDetailRemoteDataSource
 import com.example.movieapp.data.remote.mapper.toDomain
 import com.example.movieapp.domain.model.movie.MovieDetail
 import com.example.movieapp.domain.repository.movie.MovieDetailRepository

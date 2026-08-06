@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppSizing
 import com.example.movieapp.designsystem.theme.DarkColorScheme
@@ -39,14 +40,23 @@ fun MovieAppLoader(
     )
 
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(DarkColorScheme.black),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(R.drawable.loader_icon),
             contentDescription = null,
-            modifier = Modifier.size(MovieAppSizing.size96).rotate(angle)
+            modifier = Modifier
+                .size(MovieAppSizing.size96)
+                .rotate(angle)
         )
     }
+}
+
+@Preview
+@Composable
+private fun MovieAppLoaderP(){
+    MovieAppLoader()
 }

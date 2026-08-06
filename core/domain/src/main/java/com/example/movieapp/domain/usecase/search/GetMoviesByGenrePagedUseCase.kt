@@ -6,7 +6,7 @@ import com.example.movieapp.domain.repository.movie.MoviePagingRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetMoviesByGenrePagedUseCase(
-    private val repository: MoviePagingRepository
+    private val repository: MoviePagingRepository,
 ) {
     operator fun invoke(genreId: Int): Flow<PagingData<PopularMovie>> =
         repository.getMoviesByGenrePaged(genreId = genreId)

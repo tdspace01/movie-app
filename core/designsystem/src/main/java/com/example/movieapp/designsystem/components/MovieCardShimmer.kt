@@ -10,46 +10,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.design.MovieAppShapes
 import com.example.movieapp.designsystem.design.MovieAppSizing
+import com.example.movieapp.designsystem.design.MovieAppSpacing
 
 @Composable
 fun MovieCardShimmer(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .clip(MovieAppShapes.corner16)
-            .shimmerBrush()
+        modifier = modifier.fillMaxWidth()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(2f / 3f)
+                .aspectRatio(163.5f / 226f)
+                .clip(MovieAppShapes.corner16)
+                .shimmerBrush()
         )
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = MovieAppSizing.size12)
+                .padding(top = MovieAppSpacing.spacing04)
+                .height(MovieAppSizing.size42)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
-                    .height(16.dp)
+                    .height(MovieAppSizing.size18)
                     .clip(MovieAppShapes.corner50)
                     .shimmerBrush()
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(MovieAppSpacing.spacing04))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
-                    .height(MovieAppSizing.size12)
+                    .height(MovieAppSizing.size16)
                     .clip(MovieAppShapes.corner50)
                     .shimmerBrush()
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieCardShimmerP(){
+    MovieCardShimmer()
 }

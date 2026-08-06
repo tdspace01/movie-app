@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.movieapp.designsystem.R
 import com.example.movieapp.designsystem.design.MovieAppFontSize
 import com.example.movieapp.designsystem.design.MovieAppShapes
@@ -36,7 +37,9 @@ fun MovieAppSearchBar(
     onFilterClick: () -> Unit,
     onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    showDeleteIcon: Boolean = false,
+    onDeleteLastCharacter: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -68,6 +71,7 @@ fun MovieAppSearchBar(
                 decorationBox = { innerTextField ->
 
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(MovieAppSpacing.spacing08)
                     ) {
@@ -79,7 +83,7 @@ fun MovieAppSearchBar(
                         )
 
                         Box(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.weight(1f),
                             contentAlignment = Alignment.CenterStart
                         ) {
 
@@ -91,6 +95,16 @@ fun MovieAppSearchBar(
                                 )
                             }
                             innerTextField()
+                        }
+
+                        if (showDeleteIcon && query.isNotEmpty()) {
+                            Image(
+                                painter = painterResource(id = R.drawable.search_clear_icon),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(MovieAppSizing.size10)
+                                    .clickable(enabled = enabled) { onDeleteLastCharacter() }
+                            )
                         }
                     }
                 },
@@ -134,4 +148,34 @@ fun MovieAppSearchBar(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun MovieAppSearchBarEmptyP() {
+    MovieAppSearchBar(
+        query = "",
+        onQueryChanged = {},
+        placeholder = "Search movies...",
+        isFilterActive = false,
+        onFilterClick = {},
+        onClearClick = {},
+        modifier = Modifier.padding(MovieAppSizing.size16)
+    )
+}
+
+@Preview
+@Composable
+private fun MovieAppSearchBarActiveP() {
+    MovieAppSearchBar(
+        query = "Interstellar",
+        onQueryChanged = {},
+        placeholder = "Search movies...",
+        isFilterActive = true,
+        onFilterClick = {},
+        onClearClick = {},
+        showDeleteIcon = true,
+        onDeleteLastCharacter = {},
+        modifier = Modifier.padding(MovieAppSizing.size16)
+    )
 }

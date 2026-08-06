@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetFavouriteMoviesUseCase(
     private val repository: FavouriteMovieRepository
 ) {
-    operator fun invoke(): Flow<List<PopularMovie>>{
+    operator fun invoke(): Flow<List<PopularMovie>> {
         return repository.getAllFavourites()
     }
 }

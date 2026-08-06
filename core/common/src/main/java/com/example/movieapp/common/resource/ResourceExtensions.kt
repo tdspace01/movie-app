@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.map
 fun <T, R> NetworkResource<T>.map(transform: (T) -> R): NetworkResource<R> {
     return when (this) {
         is NetworkResource.Success -> NetworkResource.Success(transform(data))
-        is NetworkResource.Error -> NetworkResource.Error(errorType,message)
+        is NetworkResource.Error -> NetworkResource.Error(errorType, message)
         is NetworkResource.Loading -> NetworkResource.Loading(isLoading)
     }
 }
 
-fun <T,R> Flow<NetworkResource<T>>.asResource(transform: (T) -> R):Flow<NetworkResource<R>>{
-    return this.map{ resource->
+fun <T, R> Flow<NetworkResource<T>>.asResource(transform: (T) -> R): Flow<NetworkResource<R>> {
+    return this.map { resource ->
         resource.map(transform)
     }
 }

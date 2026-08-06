@@ -5,5 +5,5 @@ import com.example.movieapp.domain.model.movie.MovieDetail
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailRepository {
-    fun getMovieDetails(movieId:Int): Flow<NetworkResource<MovieDetail>>
+    fun getMovieDetails(movieId: Int): Flow<NetworkResource<MovieDetail>>
 }

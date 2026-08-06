@@ -1,8 +1,8 @@
 package com.example.movieapp.data.remote.network.search
 
-import com.example.movieapp.data.remote.model.response_dto.movie.PopularMovieResponseDto
-import com.example.movieapp.data.remote.model.response_dto.search.GenreListResponseDto
-import com.example.movieapp.data.remote.model.response_dto.search.SearchMovieResponseDto
+import com.example.movieapp.data.remote.model.movie.PopularMovieResponseDto
+import com.example.movieapp.data.remote.model.search.GenreListResponseDto
+import com.example.movieapp.data.remote.model.search.SearchMovieResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

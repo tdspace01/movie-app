@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.example.movieapp.ui"
 }
+
+dependencies {
+    implementation(project(":core:common"))
+}
