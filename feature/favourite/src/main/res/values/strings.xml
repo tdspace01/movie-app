@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_favorite">No favorites added yet</string>
+    <string name="favorite_movie">Favorite movies</string>
+    <string name="smooth">SmoothAlpha</string>
+    <string name="list_padding_animation">ListPaddingAnimation</string>
+</resources>

@@ -1,4 +1,7 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -24,3 +27,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "movieapp"
 include(":app")
+include(":core:ui")
+include(":core:data")
+include(":core:common")
+include(":core:domain")
+include(":feature:home:")
+include(":core:network:")
+include(":feature:splash:")
+include(":core:navigation:")
+include(":core:designsystem:")
+include(":feature:favourite:")
+include(":feature:moviedetail:")
